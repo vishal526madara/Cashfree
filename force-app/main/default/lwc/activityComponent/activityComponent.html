@@ -1,0 +1,59 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-grid slds-wrap" if:true={load}>
+
+                <!--FIRST INTERACTION SECTION-->
+                <div class="slds-col slds-size_1-of-2 slds-large-size_2-of-7" style="padding-bottom:7px;">
+                    <p class="slds-text-title field-title">
+                        First Interaction
+                    </p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_2-of-7" style="padding-right:3px;">
+                    <span class="slds-badge slds-badge_lightest slds-align_absolute-center" style="width: 100%;">
+                        <p class="slds-text-title" style="font-size: 9px;color: #1ab9ff;">
+                            {dataWrapper.firstCall}
+                        </p>
+                    </span>
+                </div>
+
+                <!--AGE SECTION-->
+                <div class="slds-col slds-size_1-of-2 slds-large-size_2-of-7" style="padding-bottom:7px;">
+                    <p class="slds-text-title field-title">Age</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-7" style="padding-right:3px;">
+                    <span class="slds-badge slds-badge_lightest slds-align_absolute-center" style="width: 100%;">
+                        <p class="slds-text-title" style="font-size: 9px;color: #1ab9ff;">
+                            {dataWrapper.age}
+                        </p>
+                    </span>
+                </div>
+
+                <!--LAST INTERACTION SECTION-->
+                <div class="slds-col slds-size_1-of-2 slds-large-size_2-of-7" style="padding-bottom:7px;">
+                    <p class="slds-text-title field-title">Last Interaction</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_2-of-7" style="padding-right:3px;">
+                    <span class="slds-badge slds-badge_lightest slds-align_absolute-center" style="width: 100%;">
+                        <p class="slds-text-title" style="font-size: 9px;color: #1ab9ff;">
+                            {dataWrapper.lastCall}
+                        </p>
+                    </span>
+                </div>
+
+                <!--LAST ACTIVITY SINCE SECTION-->
+                <div class="slds-col slds-size_1-of-2 slds-large-size_2-of-7" style="padding-bottom:7px;">
+                    <p class="slds-text-title field-title">Last Activity Since</p>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-7" style="padding-right:3px;">
+                    <span class="slds-badge slds-badge_lightest slds-align_absolute-center" style="width: 100%;">
+                        <p class="slds-text-title" style="font-size: 9px;color: #1ab9ff;">
+                            {dataWrapper.dateSinceLastActivity}
+                        </p>
+                    </span>
+                </div>
+                    
+            </div>
+        </div>
+    </article>
+</template>
