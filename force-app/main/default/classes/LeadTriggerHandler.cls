@@ -11,7 +11,7 @@ public class LeadTriggerHandler {
     
     public static void beforeUpdate(List<Lead> newList,Map<Id,Lead> oldMap){
         updateExternalEmail(newList,oldMap);
-        roundRobinAssignment(newList);
+        //roundRobinAssignment(newList);
     }
     
     
@@ -110,74 +110,24 @@ public class LeadTriggerHandler {
     }
      System.debug('Map Value::::'+ roundRobinFieldDataTypeMap);
     List<Round_Robin__c> roundRobinList = Database.query(finalQuery);
+    System.debug('Length::::'+ roundRobinList.size());
      for(Round_Robin__c roundRobinRecord : roundRobinList){
-        System.debug('Value:::'+ roundRobinRecord);
-       // List<String> mainKeyList = new List<String>();
+        List<String> generateKeyList = generateAllKey(roundRobinRecord, roundRobinFieldList);
+        for(String roundRobinKey : generateKeyList){
+            roundRobinMap.put(roundRobinKey, roundRobinRecord);
+        }
+      
+     }
+
+     System.debug('Map Record Value::::'+ roundRobinMap);
+    for(Lead leadRecord : leadList){
         String tempKey='';
-
-        for(String fieldName : roundRobinFieldList){
-            System.debug('Field Name::::'+ fieldName);
-            List<String> mainKeyList = new List<String>();
-            System.debug('Data Type::::'+ roundRobinFieldDataTypeMap.get(fieldName.toLowerCase()));
-            if(roundRobinFieldDataTypeMap.get(fieldName.toLowerCase()) == 'PICKLIST'){
-                System.debug('If Condition Passed::');
-
-              if(superKeyList.size() != 0){
-                for(String picklistValue : superKeyList){
-                    superKeyList.add(picklistValue + roundRobinRecord.get(fieldName));
-                }
-              }else{
-                superKeyList.add(String.valueOf(roundRobinRecord.get(fieldName)));
-              }
-              mainKeyList = superKeyList.clone();
-
-            }
-            else if(roundRobinFieldDataTypeMap.get(fieldName.toLowerCase()) == 'MULTIPICKLIST'){
-           
-            System.debug('Else Condition Passed::::');
-             List<String> picklistValue = String.valueOf(roundRobinRecord.get(fieldName)).split(';');
-             System.debug('List Data Type:::'+ picklistValue);
-             System.debug('Size::::'+ mainKeyList.size());
-            //  if(superKeyList.size() == 0){
-            //    for(String fieldKeyValue : picklistValue){
-            //     superKeyList.add(fieldKeyValue);
-            //    }
-            //  }
-            //   else{
-             for(Integer i=0; i<mainKeyList.size(); i++){
-                System.debug('Milti Picklist Value:::'+ mainKeyList[i]);
-                List<String> tempKeyList = new List<String>();
-                for(Integer j=0; j<picklistValue.size(); j++){
-                    tempKeyList.add(mainKeyList[i] + picklistValue[j]);
-                }
-                System.debug('Temporary Key List::::'+ tempKeyList);
-             }
-             superKeyList.clear();
-             superKeyList = mainKeyList.clone();
-             mainKeyList.clear();
-            // }
-            }
+        for(String leadKey : leadFieldList){
+           tempKey = tempKey + leadRecord.get(leadKey);
         }
-
-        for(String filedName : roundRobinFieldList){
-            tempKey = tempKey + roundRobinRecord.get(filedName);
-        }
-        if(!roundRobinMap.containsKey(tempKey)){
-           roundRobinMap.put(tempKey, roundRobinRecord);
-        }
-     }
-
-     System.debug('Map Value::::'+ roundRobinMap);
-     System.debug('Key List::::'+ superKeyList);
-
-     for(Lead leadRecord : leadList){
-        String tempLeadKey = '';
-        for(String leadField : leadFieldList){
-            tempLeadKey = tempLeadKey + leadRecord.get(leadField);
-        }
-        System.debug('Custom Key::::'+ tempLeadKey);
-        leadRecord.Temp_Round_Robin_Id__c = roundRobinMap.get(tempLeadKey).Id;
-     }
+        System.debug('Temporary Key:::::'+ tempKey);
+        leadRecord.Temp_Round_Robin_Id__c = roundRobinMap.size() != 0 && roundRobinMap.containsKey(tempKey)?roundRobinMap.get(tempKey).Id:null;
+    }
 
     }
 
@@ -191,5 +141,65 @@ public class LeadTriggerHandler {
             result.put(objectApiName, dataType);
         }
         return result;
+    }
+
+    private static List<String> generateAllKey(Round_Robin__c roundRobinRecord, List<String> roundRobinKeyList){
+        System.debug('Round Robin List:::::'+ roundRobinKeyList);
+        Map<String,List<String>> generateKeyMap = new Map<String,List<String>>();
+        Map<String,String> fieldDataTypeMap = generateRoundRobinFieldDataType();
+        for(String key : fieldDataTypeMap.keySet()){
+            System.debug('Key Value::::'+ key);
+            System.debug('Value Set::::'+ fieldDataTypeMap.get(key));
+        }
+       for(String keyFieldAPI : roundRobinKeyList){
+        if(!fieldDataTypeMap.containsKey(keyFieldAPI)){
+            System.debug('Data Type:::'+ fieldDataTypeMap.get(keyFieldAPI.toLowerCase()));
+           if(fieldDataTypeMap.get(keyFieldAPI.toLowerCase()) == 'PICKLIST'){
+            List<String> normalStringList = new List<String>();
+            normalStringList.add(String.valueOf(roundRobinRecord.get(keyFieldAPI)));
+            generateKeyMap.put(keyFieldAPI, normalStringList);
+           }else if(fieldDataTypeMap.get(keyFieldAPI.toLowerCase()) == 'MULTIPICKLIST'){
+             List<String> multiValueList = generateListofString(String.valueOf(roundRobinRecord.get(keyFieldAPI)));
+             generateKeyMap.put(keyFieldAPI, multiValueList);
+           }
+        }
+        // else{
+        //     fieldDataTypeMap.get
+        // }
+       }
+        System.debug('Generate Map Data::::'+ generateKeyMap);
+       List<String> resultedStringList = new List<String>();
+       for(String keyFieldAPI : roundRobinKeyList){
+           System.debug('Key Value:::::'+ keyFieldAPI);
+           System.debug('Record:::::'+ generateKeyMap.get(keyFieldAPI).size());
+          if(resultedStringList.size() == 0){
+            for(Integer i=0; i<generateKeyMap.get(keyFieldAPI).size(); i++){
+                resultedStringList.add(generateKeyMap.get(keyFieldAPI).get(i));
+            }
+        }
+
+            else{
+                System.debug('Else Field:::'+ generateKeyMap.get(keyFieldAPI).size());
+                List<String> tempList = resultedStringList;
+                System.debug('List Data:::'+ tempList);
+                System.debug('List Data:::'+ resultedStringList);
+                resultedStringList = new List<String>();
+                for(Integer j=0; j<tempList.size(); j++){
+                    for(Integer k=0; k<generateKeyMap.get(keyFieldAPI).size(); k++){
+                        System.debug('Field Value::::'+ tempList[j]);
+                        System.debug('Field Value:::'+ generateKeyMap.get(keyFieldAPI).get(k));
+                        String tempString = tempList[j]+generateKeyMap.get(keyFieldAPI).get(k);
+                        System.debug('List Data:::'+ resultedStringList);
+                        resultedStringList.add(tempString);
+                    }
+                }
+            }
+
+       }
+       return resultedStringList;
+    }
+
+    private static List<String> generateListofString(String fieldValue){
+       return  fieldValue.split(';');
     }
 }

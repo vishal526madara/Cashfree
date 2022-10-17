@@ -1,0 +1,57 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0058n000000WVjbAAG",
+      "createdByName": "Utkarsha Patil (Appstrail)",
+      "createdDate": "2022-08-01T05:07:41.000Z",
+      "fileName": "triggers/WorkOrderTrigger.trigger",
+      "fullName": "WorkOrderTrigger",
+      "id": "01q8n0000008QylAAE",
+      "lastModifiedById": "0058n000000WVjbAAG",
+      "lastModifiedByName": "Utkarsha Patil (Appstrail)",
+      "lastModifiedDate": "2022-08-01T05:07:41.000Z",
+      "manageableState": "unmanaged",
+      "type": "ApexTrigger"
+    },
+    {
+      "createdById": "0058n000000WVjbAAG",
+      "createdByName": "Utkarsha Patil (Appstrail)",
+      "createdDate": "2022-08-26T06:22:50.000Z",
+      "fileName": "triggers/CaseTrigger.trigger",
+      "fullName": "CaseTrigger",
+      "id": "01q8n0000008Qz0AAE",
+      "lastModifiedById": "0058n000000WVjbAAG",
+      "lastModifiedByName": "Utkarsha Patil (Appstrail)",
+      "lastModifiedDate": "2022-09-09T12:31:33.000Z",
+      "manageableState": "unmanaged",
+      "type": "ApexTrigger"
+    },
+    {
+      "createdById": "0058n000000IW14AAG",
+      "createdByName": "Salesforce Admin",
+      "createdDate": "2022-02-15T11:54:40.000Z",
+      "fileName": "triggers/LeadTrigger.trigger",
+      "fullName": "LeadTrigger",
+      "id": "01q8n0000008Q8kAAE",
+      "lastModifiedById": "0058n000000WVjbAAG",
+      "lastModifiedByName": "Utkarsha Patil (Appstrail)",
+      "lastModifiedDate": "2022-05-10T13:18:07.000Z",
+      "manageableState": "unmanaged",
+      "type": "ApexTrigger"
+    },
+    {
+      "createdById": "0058n000000IW14AAG",
+      "createdByName": "Salesforce Admin",
+      "createdDate": "2022-03-24T06:32:46.000Z",
+      "fileName": "triggers/AccountTrigger.trigger",
+      "fullName": "AccountTrigger",
+      "id": "01q8n0000008QJ9AAM",
+      "lastModifiedById": "0058n000000WVjbAAG",
+      "lastModifiedByName": "Utkarsha Patil (Appstrail)",
+      "lastModifiedDate": "2022-05-23T13:25:02.000Z",
+      "manageableState": "unmanaged",
+      "type": "ApexTrigger"
+    }
+  ]
+}
