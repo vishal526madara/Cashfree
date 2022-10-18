@@ -1,3 +1,8 @@
+/**
+ * @author: Vishal Hembrom
+ * @createdDate: 13 Oct,2022
+ *
+ */
 public class LeadTriggerHandler {
     public static Boolean checkStatus = true;
     public static void afterInsert(List<Lead> newList){
@@ -64,11 +69,12 @@ public class LeadTriggerHandler {
     private static void roundRobinAssignment(List<Lead> leadList){
      List<String> leadFieldList = new List<String>();
      List<String> roundRobinFieldList = new List<String>();
+     Map<Id,List<Lead>> leadRoundRobinMap = new Map<Id,List<Lead>>();
 
      //Create Meta Data Round Robin Field Map
      Map<String,Field_Mapping__mdt> fieldMappingMetaDataMap =  new Map<String,Field_Mapping__mdt>();
 
-     Map<String,Round_Robin__c> roundRobinMap = new Map<String,Round_Robin__c>();
+     Map<String,List<Round_Robin__c>> roundRobinMap = new Map<String,List<Round_Robin__c>>();
 
      String dynamicQuery;
 
@@ -99,7 +105,7 @@ public class LeadTriggerHandler {
      }
 
      
-    String finalQuery = 'Select Id, '+ dynamicQuery + ' From Round_Robin__c Where Is_Active__c = true';
+    String finalQuery = 'Select Id,Start_Time__c,End_Time__c, '+ dynamicQuery + ' From Round_Robin__c Where Is_Active__c = true';
     System.debug('Query Value::::'+ finalQuery);
 
 
@@ -114,7 +120,15 @@ public class LeadTriggerHandler {
      for(Round_Robin__c roundRobinRecord : roundRobinList){
         List<String> generateKeyList = generateAllKey(roundRobinRecord, roundRobinFieldList);
         for(String roundRobinKey : generateKeyList){
-            roundRobinMap.put(roundRobinKey, roundRobinRecord);
+            if(!roundRobinMap.containsKey(roundRobinKey)){
+                List<Round_Robin__c> tempList = new List<Round_Robin__c>();
+                tempList.add(roundRobinRecord);
+                roundRobinMap.put(roundRobinKey,tempList);
+            }
+            else{
+                roundRobinMap.get(roundRobinKey).add(roundRobinRecord);
+            }
+            
         }
       
      }
@@ -126,11 +140,36 @@ public class LeadTriggerHandler {
            tempKey = tempKey + leadRecord.get(leadKey);
         }
         System.debug('Temporary Key:::::'+ tempKey);
-        leadRecord.Temp_Round_Robin_Id__c = roundRobinMap.size() != 0 && roundRobinMap.containsKey(tempKey)?roundRobinMap.get(tempKey).Id:null;
+        for(Round_Robin__c  roundRobinRecord : roundRobinMap.get(tempKey)){
+            Integer startTime = generateTimeNumber(roundRobinRecord.Start_Time__c);
+            Integer endTime = generateTimeNumber(roundRobinRecord.End_Time__c);
+            Integer leadRecordTime = generateTimeNumber(generateCurrentTime());
+            if(startTime<= leadRecordTime && leadRecordTime <= endTime){
+                if(!leadRoundRobinMap.containsKey(roundRobinRecord.Id)){
+                    List<Lead> tempLead = new List<Lead>();
+                    tempLead.add(leadRecord);
+                    leadRoundRobinMap.put(roundRobinRecord.Id, tempLead);
+                    //lead record id assignment 
+                    leadRecord.Temp_Round_Robin_Id__c = roundRobinRecord.Id;
+                }else{
+                    leadRoundRobinMap.get(roundRobinRecord.Id).add(leadRecord);
+                    leadRecord.Temp_Round_Robin_Id__c = roundRobinRecord.Id;
+                }
+            }
+        }
     }
+
+    List<Lead> finalLeadList = RoundRobinController.getLeadListWithRoundRobinOwner(leadRoundRobinMap);
+    System.debug('Final Lead List::::'+ finalLeadList);
 
     }
 
+    /**
+     * @description: functionality is used to generate Map of all field which is related to Round
+     *               Robin Object 
+     * @parameter : NA
+     * @return Map of field API and Data Type of the field
+     */
     private static Map<String,String> generateRoundRobinFieldDataType(){
         Map<String,String> result = new Map<String,String>();
         Map<String, Schema.SObjectField> objectFields = Schema.getGlobalDescribe().get('Round_Robin__c').getDescribe().fields.getMap();
@@ -199,7 +238,45 @@ public class LeadTriggerHandler {
        return resultedStringList;
     }
 
+
+    /**
+     * @description: functionlaity is used to create list of string
+     * @parameter: String in semicolon format 
+     *             eg: Inbound;Web (Due to Multipicklist)
+     * @return: List of String 
+     *          eg: --------
+     *              Inbound
+     *              ---------
+     *                Web
+     *              ---------
+     */
     private static List<String> generateListofString(String fieldValue){
        return  fieldValue.split(';');
+    }
+
+
+    /**
+     * @description: Generate time in 12hrs format using system time
+     *               eg: first one be like 5:05 PM
+     *                   second one will be :5:05
+     * @parameter : NA
+     * @return String of Time in AM or PM
+     */
+    private static String generateCurrentTime(){
+        DateTime dtDateTime = system.now();
+        String sTime = dtDateTime.format('h:mm a');
+        String sTime1 = dtDateTime.format('h:mm');
+        return sTime;
+    }
+
+    private static Integer generateTimeNumber(String timeFormat){
+        Integer result;
+       List<String> timeList = timeFormat.split(':');
+       if(timeList[1].contains('PM')){
+        result = Integer.valueOf(timeList[0]) + 12;
+       }else{
+        result = Integer.valueOf(timeList[0]);
+       }
+       return result;
     }
 }
