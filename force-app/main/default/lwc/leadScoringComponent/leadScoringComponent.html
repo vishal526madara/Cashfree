@@ -1,0 +1,246 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 10-18-2022
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   12-27-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+    <article class="slds-card">
+        <div class="slds-grid slds-einstein-header slds-card__header" style="margin-bottom: 0px;
+        border-radius: 3px;
+        "><!--padding: 5px;-->
+          <header class="slds-media slds-media_center slds-has-flexi-truncate">
+
+            <!-- <div class="slds-einstein-header__figure ">
+            </div> -->
+            <!--<div class="slds-size_1-of-6"> 
+                <c-progress-ring-component value={valueOfProgressRing}></c-progress-ring-component>
+            </div>-->
+
+            <div class="slds-grid slds-grid_vertical-align-center slds-size_4-of-6">  
+                <div class="slds-media__body slds-align_absolute-center" style="margin-top:0px;">
+                    <h2 class="slds-truncate" style="color: red; font-size: 15px;">
+                        <b>LEAD SCORE<!--LEAD SCORE INSIGHTS--></b>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="slds-col slds-size_2-of-6 slds-align_absolute-center">
+                <div class="slds-grid slds-wrap slds-align-top">
+                    <!-- <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                        <div class="solutionPenetration" lwc:dom="manual" style="margin:auto"></div>
+                    </div> -->
+                    <!--<div class="slds-col slds-size_1-of-1  slds-align_absolute-center">
+                        <span><strong>Lead Scoring</strong></span>
+                    </div>-->
+                    <div class="slds-col slds-size_1-of-1  slds-align_absolute-center" style="font-size: 15px;">
+                        <span><strong>
+                            {valueOfTotalPoints}/5
+                        </strong></span>
+                    </div>
+                </div>
+            </div>
+                
+                
+ 
+          </header>
+        </div>
+        <!--<div class="slds-card__body slds-card__body_inner">
+            
+            <div class="slds-grid slds-wrap">
+
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom--x-small" >
+                    <div class=" slds-p-left_xx-small" 
+                        style="background-color:rgb(231, 230, 230); padding:5px;">
+                        !--<span class="dot" style="background-color:rgb(7, 102, 7);"></span>--
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-4" >
+                                <div class="slds-p-top_xx-small">
+                                    <span><strong>Field Name</strong></span>
+                                </div>
+                               
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <template if:true={hasBudget}>
+                                    <span><strong>Points</strong></span>
+                                </template>
+                                <template if:false={hasBudget}>
+                                    <span><strong>Points</strong></span>
+                                </template>
+                                
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <template if:true={hasBudget}>
+                                    <span><strong>Percentage</strong></span>
+                                </template>
+                                <template if:false={hasBudget}>
+                                    <span><strong>Percentage</strong></span>
+                                </template>
+                                
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                        </div>
+
+                    </div>               
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom--xxx-small" >
+                    <div class=" slds-p-left_xx-small" 
+                        style="background-color:rgb(231, 230, 230); padding:5px;">
+                        !--<span class="dot" style="background-color:rgb(7, 102, 7);"></span>--
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-4" >
+                                <div class="slds-p-top_xx-small">
+                                    <span><strong>Website</strong></span>
+                                </div>
+                               
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                    <span><strong>{websitePoints}</strong></span>
+                                
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{websitePercentage}%</strong></span>
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                        </div>
+
+                    </div>               
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom--xxx-small" >
+                    <div class=" slds-p-left_xx-small" 
+                        style="background-color:rgb(231, 230, 230); padding:5px;">
+                        !--<span class="dot" style="background-color:rgb(7, 102, 7);"></span>--
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-4" >
+                                <div class="slds-p-top_xx-small">
+                                    <span><strong>Lead Source</strong></span>
+                                </div>
+                               
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{leadSourcePoints}</strong></span>
+                                
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{leadSourcePercentage}%</strong></span>
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                        </div>
+
+                    </div>               
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom--xxx-small" >
+                    <div class=" slds-p-left_xx-small" 
+                        style="background-color:rgb(231, 230, 230); padding:5px;">
+                        !--<span class="dot" style="background-color:rgb(7, 102, 7);"></span>--
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-4" >
+                                <div class="slds-p-top_xx-small">
+                                    <span><strong>Campaign Type</strong></span>
+                                </div>
+                               
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{campaignTypePoints}</strong></span>
+                                
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{campaignTypePercentage}%</strong></span>
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                        </div>
+
+                    </div>               
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom--xxx-small" >
+                    <div class=" slds-p-left_xx-small" 
+                        style="background-color:rgb(231, 230, 230); padding:5px;">
+                        !--<span class="dot" style="background-color:rgb(7, 102, 7);"></span>--
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-4" >
+                                <div class="slds-p-top_xx-small">
+                                    <span><strong>Action-Type</strong></span>
+                                </div>
+                               
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{actionTypePoints}</strong></span>
+                                
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{actionTypePercentage}%</strong></span>
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                        </div>
+
+                    </div>               
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom--xxx-small" >
+                    <div class=" slds-p-left_xx-small" 
+                        style="background-color:rgb(231, 230, 230); padding:5px;">
+                        !--<span class="dot" style="background-color:rgb(7, 102, 7);"></span>--
+
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_2-of-4" >
+                                <div class="slds-p-top_xx-small">
+                                    <span><strong>Campaign Sub-Type</strong></span>
+                                </div>
+                               
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{campaignSubTypePoints}</strong></span>
+                                
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <span><strong>{campaignSubTypePercentage}%</strong></span>
+                                !--<div class="hasBudgetChart" lwc:dom="manual" style="margin:auto"></div>--
+                            </div>
+                        </div>
+
+                    </div>               
+                </div>
+                !--<div class="slds-col slds-size_1-of-1" >
+                    <div class="slds-p-left_xx-small" 
+                        style="background-color:rgb(231, 230, 230); padding:5px;">
+                        <span class="dot" style="background-color:rgb(196, 23, 23);"></span>
+                        <span><strong>&nbsp;&nbsp;Top Negatives</strong></span>
+                    </div>               
+                </div>
+
+                <div class="slds-col slds-size_1-of-1" >
+                    <div class="slds-m-top_small slds-m-bottom_small slds-p-left_x-small">
+                        <h1 class="slds-m-top_small">Discovery is <b>False</b></h1>
+                        <h1 class="slds-m-top_x-small">Decision Maker is <b>No</b></h1>
+                    </div>               
+                </div>--
+
+            </div>
+
+        </div>-->
+      </article>
+</template>

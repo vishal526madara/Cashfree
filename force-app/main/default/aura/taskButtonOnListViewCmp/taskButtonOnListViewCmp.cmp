@@ -1,0 +1,33 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction,lightning:actionOverride" access="global">
+    <aura:html tag="style">
+        .slds-modal__content{
+
+            overflow-x:hidden !important;
+            padding:0;
+            margin:0;
+            height : unset !important; 
+            max-height: unset !important;
+
+            }
+
+            .slds-modal__container {
+
+            margin: 0 auto; !important;
+
+            max-width: 90rem !important;
+            height:auto;
+
+            width:80% !important;
+
+            min-width: 640px; !important;
+
+            }
+            .cuf-content {
+                 padding: 0 !important; 
+            }
+    </aura:html>
+
+    <!-- Add your Custom component Here....-->
+    <c:taskListButtonComponent />
+
+</aura:component>

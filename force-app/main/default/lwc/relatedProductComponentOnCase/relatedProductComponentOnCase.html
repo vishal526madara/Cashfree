@@ -1,0 +1,370 @@
+<!--
+    @description       : Lighting web Component for opportunity product related list
+    @author            : Kartik Patkar, Appstrail             
+    @last modified on  : 02-12-2021
+    @last modified by  : Kartik Patkar, Appstrail
+    Modifications Log 
+    Ver   Date         Author          Modification
+    1.0   02-12-2021   Kartik Patkar   Initial Version
+-->
+<template>
+    <article class="slds-card slds-card_boundary">
+
+        <!--HEADER START-->
+        <div class="slds-card__header slds-grid slds-theme_shade" style="padding-bottom: 10px;">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+
+                <!--HEADER ICON-->
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-account" title="account">
+                        <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                            <use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+                        </svg>
+                        <span class="slds-assistive-text">Opportunity Product</span>
+                    </span>
+                </div>
+
+                <!--HEADER TITLE-->
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="#" class="slds-card__header-link slds-truncate" title="Product Details">
+                            <span>Product Details</span>
+                        </a>
+                    </h2>
+                </div>
+
+                <!--ACTION BUTTONS-->
+                <div class="slds-no-flex">
+                    <div class="slds-button-group" role="group">
+                        <template if:true={showInitiateOnBoardButton}>
+                        <button if:true={bankOpsField} class="slds-button slds-button_neutral" onclick={handleInitiateBankOpsOpen}>Initiate Bank Ops</button>
+                       </template>
+                        <template if:true={childCaseModal}>
+                            <!--call child component-->
+                            <c-initiate-bank-ops-component onclose={handleInitiateBankOpsClose} parent-case-record-id={recordId} opp-id={opportunityRecordId}></c-initiate-bank-ops-component>
+                        </template>
+                        <!--button if:true={noProduct} class="slds-button slds-button_neutral" onclick={handleAddProduct}>Add Product</button>
+                        <button if:false={noProduct} class="slds-button slds-button_neutral" onclick={handleEditProduct}>Edit Product</button>
+                        <button if:false={noProduct} class="slds-button slds-button_neutral" onclick={handleConfirmReset}>Reset Product</button-->
+                    </div>
+                </div>
+            </header>
+        </div>
+        <!--HEADER END-->
+        
+        <!--BODY START-->
+        <div class="slds-card__body slds-card__body_inner">
+
+            <!--SPINNER-->
+            <div if:true={load}>
+                <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+            </div>
+
+             <!--ILLUSTRATION-->
+             <div if:true={noProduct}>
+                <c-illustration-component display-text="No Product Found"></c-illustration-component>
+            </div>
+
+            <div class="slds-grid slds-wrap" if:false={noProduct}>
+
+                <!--SELECTED PRODUCT START-->
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="slds-visual-picker slds-visual-picker_vertical product-option">
+                        <input type="radio" id={oppProduct.OppPro.Id} checked/>
+                        <label for={oppProduct.OppPro.Name}>
+                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center product-option"
+                                style="padding:5px;">
+
+                                <!--PRODUCT IMAGE-->
+                                <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
+                                    <span style="width: 40px;height:40px;">
+                                        <lightning-formatted-rich-text value={oppProduct.OppPro.ProductImage}></lightning-formatted-rich-text>
+                                    </span>
+                                </div>
+
+                                <!--PRODUCT NAME-->
+                                <div class="slds-media__body slds-border_left slds-p-left--small">
+                                    <h2 class="slds-truncate slds-text-heading_small">{oppProduct.OppPro.Name}</h2>
+                                    <p class="slds-m-top_small"></p>
+                                </div>
+                            </span>
+                            <span class="slds-icon_container slds-visual-picker__text-check">
+                                <svg class="slds-icon slds-icon-text-check slds-icon_x-small" aria-hidden="true">
+                                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                </svg>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <!--SELECTED PRODUCT END-->
+
+                <div class="slds-col slds-size_1-of-1" style="overflow-x: auto;"><!--slds-scrollable-->
+                    <!--COVERAGE RECORD TABLE START-->
+                    <table class="slds-table slds-table_bordered slds-table_col-bordered slds-card_boundary">
+                        <thead>
+                            <tr>
+                                <th class="slds-text-title_caps" scope="col" rowspan="2">
+                                    <div class="slds-truncate slds-align--absolute-center" title="Coverage">
+                                        Coverage
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-align--absolute-center" title="List Price">
+                                        List Price
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-align--absolute-center" title="Add-On">
+                                        Add-On
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps" scope="col" colspan="2">
+                                    <div class="slds-truncate slds-align--absolute-center" title="Actual Price">
+                                        Actual Sales Price
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="slds-text-title_caps remove-width left-border" scope="col">
+                                    <div class="slds-truncate slds-align--absolute-center type-header field-percent" title="TDR(%)">
+                                        TDR(%)
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps remove-width" scope="col">
+                                    <div class="slds-truncate slds-align--absolute-center type-header field-currency" title="Fixed Price(₹)">
+                                        Fixed Price(₹)
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps remove-width left-border" scope="col">
+                                    <div class="slds-truncate slds-align--absolute-center type-header field-percent" title="TDR(%)">
+                                        TDR(%)
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps remove-width" scope="col">
+                                    <div class="slds-truncate slds-align--absolute-center type-header field-currency" title="Fixed Price(₹)">
+                                        Fixed Price(₹)
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps remove-width" scope="col">
+                                    <div class="slds-truncate slds-align--absolute-center type-header field-percent" title="TDR(%)">
+                                        TDR(%)
+                                    </div>
+                                </th>
+                                <th class="slds-text-title_caps remove-width" scope="col">
+                                    <div class="slds-truncate slds-align--absolute-center type-header field-currency" title="Fixed Price(₹)">
+                                        Fixed Price(₹)
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--ADDED LIST START-->
+                        <template for:each={recordList} for:item="commercial">
+                                    <tr class="slds-hint-parent" key={commercial.Id}>
+                                        <th scope="row">
+                                            <!-- <div class="slds-truncate">
+                                                <div class="slds-grid slds-wrap">
+                                                    <div class="slds-col slds-size--3-of-5 slds-truncate" title={commercial.Name}>
+                                                        <a href={commercial.nameUrl}>{commercial.Name}</a>
+                                                    </div>
+                                                    <div class="slds-col slds-size--2-of-5 slds-float__right"> 
+                                                        <span class="slds-badge modes-badge">{commercial.ModeName}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>-->
+                                            <div style="width: 17rem;">
+                                                <!-- <div class="slds-grid slds-wrap"> -->
+                                                    <div class="inline-section" style="width: 50%;" title={commercial.Name}>
+                                                        <a href={commercial.nameUrl}>{commercial.Name}</a>
+                                                    </div>
+                                                    <div class="slds-float_right inline-section"> 
+                                                        <span class="slds-badge modes-badge">{commercial.ModeName}</span>
+                                                    </div>
+                                                <!-- </div> -->
+                                                
+                                            </div>
+                                      </th>
+                                      <th scope="row">
+                                            <lightning-formatted-number value={commercial.CommPercent}>
+                                            </lightning-formatted-number>                                        
+                                        </th>
+                                        <th scope="row">
+                                            <lightning-formatted-number value={commercial.CommPrice} format-style="currency" currency-code="INR">
+                                            </lightning-formatted-number>
+                                        </th>
+                                        <th scope="row">
+                                            <lightning-formatted-number value={commercial.Add_On__c}>
+                                            </lightning-formatted-number>  
+                                        </th>
+                                        <th scope="row">
+                                            <lightning-formatted-number value={commercial.Add_On_Price__c} format-style="currency" currency-code="INR">
+                                            </lightning-formatted-number>
+                                        </th>
+                                        <th scope="row">
+                                            <lightning-formatted-number value={commercial.Actual_Price_Percent__c}>
+                                            </lightning-formatted-number> 
+                                        </th>
+                                        <th scope="row">
+                                            <lightning-formatted-number value={commercial.Actual_Price__c} format-style="currency" currency-code="INR">
+                                            </lightning-formatted-number>
+                                        </th>
+                                    </tr>
+                            </template> 
+                            <!--ADDED LIST END-->
+
+                            <!--SETTLEMENT LIST START-->
+                            <template for:each={selectedSettlementList} for:item="settle">
+                                <tr class="slds-hint-parent settlement-row" key={settle.Id}>
+                                    <th scope="row">
+                                        <!--<div class="slds-truncate">
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size--3-of-5 slds-truncate">
+                                                    <a href={settle.nameUrl}>{settle.Name}</a>
+                                                </div>
+                                                <div class="slds-col slds-size--2-of-5 slds-float__right"> 
+                                                    <span class="slds-badge modes-badge">Settlement</span>
+                                                </div>
+                                            </div> 
+                                        </div>-->
+                                        <div style="width: 17rem;">
+                                            <!-- <div class="slds-grid slds-wrap"> -->
+                                                <div class="slds-truncate inline-section" style="width: 50%;" title={settle.Name}>
+                                                    <a href={settle.nameUrl}>{settle.Name}</a>
+                                                </div>
+                                                <div class="slds-float_right inline-section"> 
+                                                    <span class="slds-badge modes-badge">{settle.ModeName}</span>
+                                                </div>
+                                            <!-- </div> -->
+                                            
+                                        </div>
+                                    </th>
+                                    <th scope="row">
+                                        <lightning-formatted-number value={settle.Commercial__c}>
+                                        </lightning-formatted-number> 
+                                    </th>
+                                    <th scope="row">
+                                        <lightning-formatted-number value={settle.Commercial_Price__c} format-style="currency" currency-code="INR">
+                                        </lightning-formatted-number>
+                                    </th>
+                                    <th scope="row" colspan="4">
+                                         
+                                    </th>
+                                </tr>
+                            </template>
+                            <!--SETTLEMENT LIST END-->
+
+                        </tbody>
+                    </table>
+                    <!--COVERAGE RECORD TABLE END-->
+                </div>
+            </div>
+        </div>
+        <!--BODY END-->
+    </article>
+
+    <!--ADD PRODUCT MODAL START-->
+    <template if:true={addProductModel}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <!--HEADER START-->
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <!--CLOSED BUTTON-->
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Close" onclick={handleCancel}>
+                        <lightning-icon icon-name="utility:close" 
+                            variant="inverse" 
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <!--HEADER END-->
+
+                <!--BODY START-->
+                <div class="slds-modal__content slds-p-around_medium modal-body slds-p-around--none">
+                    <!--ADD PRODUCT COMPONENT-->
+                    <c-product-component record-id={recordId} oncallpasstoparent={handleCancel}>
+                    </c-product-component>
+                </div>
+            </div>
+        </section>
+        <!--BACKGROUND BLUR-->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--ADD PRODUCT MODAL END-->
+
+    <!--EDIT PRODUCT MODAL START-->
+    <template if:true={editProductModel}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <!--HEADER START-->
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <!--CLOSED BUTTON-->
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Close" onclick={handleCancel}>
+                        <lightning-icon icon-name="utility:close" 
+                            variant="inverse" 
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <!--HEADER END-->
+
+                <!--BODY START-->
+                <div class="slds-modal__content slds-p-around_medium modal-body slds-p-around--none">
+                    <!--ADD PRODUCT COMPONENT-->
+                    <c-edit-product-component record-id={recordId} oncallpasstoparent={handleCancel}>
+                    </c-edit-product-component>
+                </div>
+            </div>
+        </section>
+        <!--BACKGROUND BLUR-->
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--EDIT PRODUCT MODAL END-->
+
+    <!--CONFIRM RESET POPOVER START-->
+    <template if:true={showConfirmPopOver}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container modal-width">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Close" onclick={handleCancelReset}>
+                        <lightning-icon icon-name="utility:close" 
+                            variant="inverse" 
+                            size="small" title="Close">
+                        </lightning-icon>
+                    </button>
+                    <h2 class="slds-modal__title slds-hyphenate">Delete Product</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium overflow-unset loading-section">
+                    <!--LOAD SECTION-->
+                    <div if:true={load}>
+                        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+                    </div>
+
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                            Are you sure you want to delete this Product?
+                        </div>
+                    </div>
+                    
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={handleCancelReset}>
+                        Cancel
+                    </button>
+                    <button class="slds-button slds-button_brand" onclick={handleReset}>
+                        Delete
+                    </button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--CONFIRM RESET POPOVER END-->
+    
+</template>

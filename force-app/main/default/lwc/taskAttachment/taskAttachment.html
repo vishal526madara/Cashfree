@@ -1,0 +1,65 @@
+<!--
+  @description       : 
+  @author            : Prakalathan
+  @group             : PK Group
+  @last modified on  : 24-01-2023
+  @last modified by  : Prakalathan
+  Modifications Log
+  Ver   Date         Author           Modification
+  1.0   23-01-2023   Prakalathan  Initial Version
+-->
+<template>    
+    <article class="slds-card " style="width: 99%; border:0ch">        
+        <div if:true={load}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+        <div class="slds-is-relative ">
+           
+                <div class="slds-grid" style="padding-top: 15px;">
+                    <div class="slds-col slds-size--3-of-6">
+                <div style="padding-bottom:5px; padding-left:20px;">
+                    <span style="font-weight: bold;">Attachment</span>
+                </div> 
+                </div>           
+                        <div class="slds-col slds-size--2-of-6" style="width: 150px; font-size:13px;padding-bottom:5px;">  
+                            <p style="color: rgb(145,145,145);font-weight:500">Add Attachment Here</p>
+                        </div>                      
+                        <div class="slds-col slds-size--1-of-6;" style="padding-bottom:5px;">
+                        <input type="file" class="fileUpload" style="display: none;"  onchange={openfileUpload}/>
+                        <lightning-icon icon-name ="utility:upload" size="small" onclick={handleClick}></lightning-icon>
+                    </div>
+                </div>                                              
+                
+                <div class="slds-scrollable">
+                <div style="font-weight: bold;font-size:14px;margin-left:15px;border-top: 1px solid #c4bcbc !important;">Uploaded</div>
+                <div style = "height:170px;" class = "slds-var-m-around_medium">
+                    <div if:true={doComments}>
+                    <template if:true={doComments} for:each={documentId} for:item="document">
+                        <div key ={document.Id}>                            
+                            <div class="demo-only demo-only--sizing slds-grid slds-wrap">
+                                <div class="slds-col slds-size--3-of-5">                                   
+                                 <lightning-icon icon-name ="utility:attach" size ="x-small" ></lightning-icon> <span style = "padding-left:10px"><a data-id={document.Id} onclick={redirectToContentDocument}>{document.returnedresult}</a></span> 
+                                </div> 
+                                <div style="padding-left:70px">
+                                   <span   class="slds-col slds-size--1-of-8">
+                                          {document.size}MB 
+                                   </span>
+                                   <span class="slds-col slds-size--1-of-4">
+                           <lightning-button-icon  style ="--lwc-colorTextIconDefault: red;" icon-name="utility:close"  size="x-small"
+                                data-id={document.Id} class="slds-p-left_xx-small"
+                                onclick={handledelete}>
+                            </lightning-button-icon>
+                        </span>
+                            </div>
+                            
+                            </div>
+                        </div>
+                                           
+                    </template>
+                </div>
+                </div>
+            </div>
+                       
+        </div>
+    </article>
+</template>

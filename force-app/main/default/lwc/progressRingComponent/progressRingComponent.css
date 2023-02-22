@@ -1,0 +1,18 @@
+:host{
+    --text-value-color:black;
+}
+
+.ring-section{
+    --lwc-progressRingWidth: 4px;
+    --lwc-squareIconUtilityLarge: 60px;
+}
+
+.ring-section-size{
+    height: 60px;
+    width: 61px;
+}
+
+.ring-section-value{
+    font-size: 15px;
+    color: var(--text-value-color);
+}

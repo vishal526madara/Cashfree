@@ -1,0 +1,347 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <article class="slds-card">
+        <div class="slds-grid slds-wrap">
+            <!--TO DO SECTION START-->
+            <div class="slds-col slds-size_2-of-6 slds-p-right_x-small">
+                <div class="slds-box slds-box--x-small slds-p-around_none">
+                    <div class="slds-grid slds-wrap">
+                        <div
+                            class="slds-col slds-size_1-of-1 slds-border--bottom slds-p-bottom_x-small slds-theme_shade">
+                            <h1 class="checklist-task">Your Tasks - To Do</h1>
+                        </div>
+
+
+                        <div class="slds-col slds-size_1-of-1 slds-p-around_x-small slds-border_bottom">
+
+                            <table class="slds-table slds-table_bordered">
+                                <tbody class="checklist-table">
+                                    <template for:each={checklistList} for:item="check">
+                                        <tr class="slds-hint-parent row-section" key={check.Id}
+                                            onclick={handleChecklistTab} data-id={check.Id} data-taskname={check.Name}>
+                                            <td style="cursor: pointer;">
+                                                <div class="slds-media slds-media_center">
+                                                    <div class="slds-media__figure slds-align_absolute-center">
+                                                        <div class="slds-progress-ring  slds-progress-ring_large">
+                                                            <div class="slds-progress-ring__progress" role="progressbar"
+                                                                aria-valuemin="0" aria-valuemax="100"
+                                                                aria-valuenow="100">
+                                                                <svg viewBox="-1 -1 2 2">
+                                                                    <path class="slds-progress-ring__path"
+                                                                        id={check.Name.Id}
+                                                                        d="M 1 0 A 1 1 0 0 1 1.00 0.00 L 0 0"></path>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="slds-progress-ring__content">
+                                                                <lightning-icon if:false={check.Completed__c}
+                                                                    icon-name="utility:chevronright"
+                                                                    alternative-text="Warning!" size="large"
+                                                                    title="Warning"
+                                                                    style="--sds-c-icon-color-foreground-default: #dddbda;">
+                                                                </lightning-icon>
+                                                                <lightning-icon class="my-icon"
+                                                                    if:true={check.Completed__c}
+                                                                    icon-name="action:check" alternative-text="Warning!"
+                                                                    size="xx-small" title="Warning">
+                                                                </lightning-icon>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <div class="slds-grid slds-grid_vertical">
+                                                            <div class="slds-col"
+                                                                style="font-size: 0.8rem;color:#126669;font-weight: 500;">
+                                                                {check.Name}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--TO DO SECTION END-->
+
+            <div class="slds-col slds-size_4-of-6 slds-box slds-p-around_none">
+                <div class="slds-card__header slds-grid slds-theme_shade">
+                    <header class="slds-has-flexi-truncate slds-p-around_small">
+                        <div class="slds-media__body"></div>
+                        <div class="slds-no-flex slds-float_right">
+                            <button class="slds-button slds-button_neutral slds-m-left_x-small"
+                                onclick={handleApproval}>
+                                Approval
+                            </button>
+                            <button class="slds-button slds-button_neutral slds-m-left_x-small"
+                                onclick={handleNewChecklist}>
+                                New Checklist
+                            </button>
+                            <button class="slds-button slds-button_neutral slds-m-left_x-small" onclick={handleNewTask}>
+                                Add Task
+                            </button>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner slds-p-horizontal_x-small">
+
+                    <div class="slds-grid slds-wrap" if:true={currentChecklist}>
+                        <div class="slds-col slds-size_1-of-1 slds-p-around--small slds-border--bottom">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_3-of-5 slds-align-content-center">
+                                    <h2 class="slds-text-heading_medium slds-truncate">{currentChecklist.Name}</h2>
+                                </div>
+                                <div class="slds-col slds-size_2-of-5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-1 slds-border--bottom">
+                            <!--<font size="3" face="Arial" > -->
+                            <table class="slds-table slds-table_bordered" style="width: 100%!important;">
+                                <thead style="width: 100%!important;">
+                                    <tr class="slds-line-height_reset" style="width: 100%!important;">
+
+                                        <th class="" scope="col">
+
+                                        </th>
+                                        <th class="" scope="col" style="width: 30%!important;">
+                                            <div class="slds-truncate slds-text-title_caps checklist-descrption"
+                                                title="Action">Action</div>
+                                        </th>
+
+                                        <th class="" scope="col" style="width: 30%!important;">
+                                            <div class="slds-truncate slds-text-title_caps checklist-descrption"
+                                                title="Link" style="width:100px;">Link</div>
+                                        </th>
+                                        <th class="" scope="col" style="width: 15%!important;">
+                                            <div class="slds-truncate slds-text-title_caps checklist-descrption"
+                                                title="Status">Status</div>
+                                        </th>
+                                        <th class="" scope="col" style="width: 20%!important;">
+
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={currentChecklist.Tasks} for:item="task">
+                                        <tr class="slds-hint-parent" key={task.Id} style="width: 100%!important;">
+                                            <td>
+                                                <div>
+                                                    <lightning-input type="checkbox" variant="label-hidden"
+                                                        name={task.Id} onchange={handleTaskSelect} checked={task.select}
+                                                        disabled>
+                                                    </lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-truncate"
+                                                style="word-wrap:break-word; white-space: normal;">
+                                                <div if:true={task.taskEdit} class={task.taskClass}
+                                                    title={task.Subject}>
+                                                    <lightning-input variant="label-hidden" name={task.Id}
+                                                        field-name="Subject" onchange={handleSubjectValue} 
+                                                        value={task.Subject}>
+                                                    </lightning-input>
+                                                </div>
+                                                <div if:false={task.taskEdit} class={task.taskClass}
+                                                    title={task.Subject}>{task.Subject}</div>
+                                            </td>
+                                            <!-- <td>
+                                                <div class="slds-truncate" title={task.ownerName}>{task.ownerName}</div>
+                                            </td> -->
+                                            <!-- <td>
+                                                <div class="slds-truncate">
+                                                    <lightning-formatted-date-time value=''>
+                                                    </lightning-formatted-date-time>
+                                                </div>
+                                            </td> -->
+                                            <td>
+                                                <div if:true={task.taskEdit} style="margin-bottom: 15px;">
+                                                    <lightning-input type="url" lable="Add Link" value={task.Link__c}
+                                                        onchange={handlePickListValue} data-id={task.Id} name="link">
+                                                    </lightning-input>
+                                                </div>
+
+                                                <div if:false={task.taskEdit} class="slds-truncate" title={task.Link__c}
+                                                    style="width: 100px;">
+                                                    <a href={task.Link__c} name={task.Id}>{task.Link__c}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div if:true={task.taskEdit}>
+                                                    <lightning-combobox variant="label-hidden" value={task.Status}
+                                                        onchange={handlePickListValue} options={taskPickList}
+                                                        data-id={task.Id} name="PickListValue">
+                                                    </lightning-combobox>
+                                                </div>
+
+                                                <div if:false={task.taskEdit} class="slds-truncate" title={task.Status}>
+                                                    {task.Status}
+                                                </div>
+                                            </td>
+                                            <td style="text-align: end; ">
+                                                <ul class="slds-list_horizontal slds-has-inline-block-links_space slds-float_right">
+                                                    <li if:true={showiploadandprev}>
+                                                        <!-- <div class="slds-float_left"> -->
+                                                            <!-- <div class=" slds-p-right_xxx-small"> -->
+                                                                <div if:true={task.showpreview} class="slds-float_right">
+                                                                    <lightning-button-icon icon-name="utility:preview"
+                                                                        size="x-small" data-id={task.Id} name={task.Id} 
+                                                                        class="slds-p-horizontal_xxx-small "
+                                                                        data-contentdocid={task.ContentDocumentId}
+                                                                        onclick={handlepreviewdoc}>
+                                                                    </lightning-button-icon>
+                                                                </div>
+
+                                                                <div if:true={task.showupload} class="slds-float_left">
+                                                                    <lightning-button-icon icon-name="utility:upload"
+                                                                        size="x-small"
+                                                                        class="slds-p-left_xxx-small slds-p-horizontal_xxx-small"
+                                                                        data-contentdocid={task.ContentDocumentId}
+                                                                        data-id={task.Id} name={task.Id}
+                                                                        onclick={handleuploaddoc}>
+                                                                    </lightning-button-icon>
+                                                                </div>
+                                                            <!-- </div> -->
+                                                        <!-- </div> -->
+                                                    </li>
+                                                    <li >
+                                                        <div if:false={task.taskEdit} class="slds-float_right">
+                                                            <lightning-button-icon icon-name="utility:edit"
+                                                                size="x-small" data-id={task.Id} name={task.Id}
+                                                                onclick={handleTaskEdit}>
+                                                            </lightning-button-icon>
+                                                            <lightning-button-icon icon-name="utility:delete"
+                                                                size="x-small" class="slds-p-horizontal_xxx-small"
+                                                                data-id={task.Id} name={task.Id}
+                                                                onclick={handleTaskDelete}>
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                    </li>
+                                                    <li >
+                                                        <div class="slds-float_right" if:true={task.taskEdit}>
+                                                            <lightning-button-icon icon-name="utility:save"
+                                                                variant="border-filled" title="Save" size="small"
+                                                                onclick={UpdateSingleTask} name={task.Id}
+                                                                data-id={task.Id}>
+                                                            </lightning-button-icon>
+
+                                                            <lightning-button-icon icon-name="utility:close"
+                                                                variant="border-filled" title="Cancel"
+                                                                class="slds-p-horizontal_xxx-small" size="small"
+                                                                data-id={task.Id} name={task.Id}
+                                                                onclick={handleTaskCancelEdit}>
+                                                            </lightning-button-icon>
+
+                                                            <!-- <lightning-button-icon icon-name="utility:close" size="small" data-id={task.Id}  class="slds-p-horizontal_xxx-small"                                                       name={task.Id} onclick={handleTaskCancelEdit}>
+                                                    </lightning-button-icon> -->
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-card__footer">
+
+                </footer>
+            </div>
+        </div>
+    </article>
+
+    <c-upload-file-on-task-component oncancelmodelpop={cancelmodel} load={load} taskid={taskid}
+        deletedocverid={deletedocverid} showupload-model={showuploadModel}>
+
+    </c-upload-file-on-task-component>
+
+    <!--CREATE NEW CHECKLIST POPOVER STAR-->
+    <template if:true={showPopover}>
+        <section class="slds-popover slds-popover_prompt slds-popover_prompt_top popover-position" role="dialog">
+            <!--CLOSE BUTTON-->
+            <button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
+                title="Close dialog" onclick={handleCancelPopover}>
+                <svg class="slds-button__icon">
+                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Close dialog</span>
+            </button>
+
+            <!--POPOVER BODY SECTION START-->
+            <div class="slds-popover__body loading-section">
+                <!--LOAD SECTION-->
+                <div if:true={load}>
+                    <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+                </div>
+                <div class="slds-media">
+                    <div class="slds-media__body">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container">
+                                    <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                        <use
+                                            xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#prompt">
+                                        </use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+                            </div>
+                            <div class="slds-media__body" if:true={showNewChecklist}>
+                                <h2 class="slds-popover_prompt__heading">New Checklist</h2>
+                                <lightning-input label="Name" value={newChecklist.Name} onchange={handleChecklistName}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-media__body" if:true={showApprovalPopover}>
+                                <h2 class="slds-popover_prompt__heading">Send Approval</h2>
+                                <br>
+                                <lightning-combobox label="Select Approval" placeholder="Choose Approval Type"
+                                    options={approvalPicklist} onchange={handleApprovalChange} variant="label-hidden"
+                                    value=''>
+                                </lightning-combobox>
+                                <lightning-textarea placeholder="" label="Approval Comments" maxlength="200"
+                                    message-when-too-long="A maximum of 200 characters are allowed in a tweet."
+                                    message-when-value-missing="An empty comment cannot be posted."
+                                    onchange={handleCaseApprovalComment}>
+                                </lightning-textarea>
+                            </div>
+                            <div class="slds-media__body" if:true={showAddTask}>
+                                <h2 class="slds-popover_prompt__heading">New Task</h2>
+                                <lightning-input label="Subject" value={newTaskSubject} name="subject"
+                                    onchange={handleAddTaskFieldEdit}></lightning-input>
+                                <lightning-input label="Due Date" type="date" value={newTaskDuedate}
+                                    onchange={handleAddTaskFieldEdit} name="duedate"></lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--POPOVER BODY SECTION END-->
+
+            <!--POPOVER FOOTER SECTION START-->
+            <footer class="slds-popover__footer">
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <button class="slds-button slds-button_neutral slds-col_bump-right" onclick={handleCancelPopover}>
+                        Cancel
+                    </button>
+                    <button class="slds-button slds-button_brand" if:true={showNewChecklist}
+                        onclick={handleNewChecklistSave}>Save</button>
+                    <button class="slds-button slds-button_brand" if:true={showApprovalPopover}
+                        onclick={handleSendApproval}>Send</button>
+                    <button class="slds-button slds-button_brand" if:true={showAddTask}
+                        onclick={handleSaveAddTask}>Save</button>
+                </div>
+            </footer>
+            <!--POPOVER FOOTER SECTION END-->
+        </section>
+    </template>
+</template>

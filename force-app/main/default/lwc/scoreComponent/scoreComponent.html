@@ -1,0 +1,109 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__body slds-card__body_inner" style="margin: 0px;padding: 0px;">
+            <div class="slds-grid slds-wrap" if:true={load}>
+                <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_10-of-12" style="padding: 8px 0px 8px 8px;">
+                                <div class="slds-grid slds-wrap">
+
+                                    <!--BUDGET CONFIRMED SECTION-->
+                                    <div class="slds-col slds-size_3-of-8" style="padding-bottom: 6px;">
+                                        <div class="slds-media slds-media_center">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name="utility:moneybag" size="x-small">
+                                                </lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p class="slds-text-title field-title">Budget Confirmed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-8">
+                                        <span class="slds-badge slds-badge_lightest">
+                                            <p class="slds-text-title" style="font-size: 10px;color: #1ab9ff;">
+                                            <lightning-formatted-number value={dataWrapper.budgetConfirm} 
+                                                format-style="decimal" minimum-integer-digits="2">
+                                            </lightning-formatted-number>
+                                            </p>
+                                        </span>
+                                    </div>
+
+                                    <!--DECISION MAKER SECTION-->
+                                    <div class="slds-col slds-size_3-of-8">
+                                        <div class="slds-media slds-media_center">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name="utility:signpost" size="x-small">
+                                                </lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p class="slds-text-title field-title">Decision Maker</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-8">
+                                        <span class="slds-badge slds-badge_lightest">
+                                            <p class="slds-text-title" style="font-size: 10px;color: #1ab9ff;">
+                                            <lightning-formatted-number value={dataWrapper.decisionMaker} 
+                                                format-style="decimal" minimum-integer-digits="2">
+                                            </lightning-formatted-number>
+                                            </p>
+                                        </span>
+                                    </div>
+
+                                    <!--QUOTE CLOSE DATE SECTION-->
+                                    <div class="slds-col slds-size_3-of-8">
+                                        <div class="slds-media slds-media_center">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name="utility:date_time" size="x-small">
+                                                </lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p class="slds-text-title field-title">Time Frame</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-8">
+                                        <span class="slds-badge slds-badge_lightest"> 
+                                            <p class="slds-text-title" style="font-size: 10px;color: #1ab9ff;">
+                                            <lightning-formatted-number value={dataWrapper.timeLine} 
+                                                format-style="decimal" minimum-integer-digits="2">
+                                            </lightning-formatted-number>
+                                            </p>
+                                        </span>
+                                    </div>
+
+                                    <!--RATING SECTION-->
+                                    <div class="slds-col slds-size_3-of-8">
+                                        <div class="slds-media slds-media_center">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name="utility:favorite" size="x-small">
+                                                </lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p class="slds-text-title field-title">Rating</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-8">
+                                        <span class="slds-badge slds-badge_lightest">
+                                            <p class="slds-text-title" style="font-size: 10px;color: #1ab9ff;">
+                                            <lightning-formatted-number value={dataWrapper.rating} 
+                                                format-style="decimal" minimum-integer-digits="2">
+                                            </lightning-formatted-number>
+                                            </p>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_2-of-12 score-block">
+                                <p class="score-text">Score</p>
+                                <div class="solutionPenetration" lwc:dom="manual"></div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </article>
+</template>

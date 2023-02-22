@@ -1,0 +1,327 @@
+<!--
+  @description       : 
+  @author            : Appstrail Developer
+  @group             : SK Group
+  @last modified on  : 03-01-2023
+  @last modified by  : Saurav Kashyap
+  Modifications Log
+  Ver   Date         Author           Modification
+  1.0   22-12-2022   Saurav Kashyap   Initial Version
+-->
+<template>
+    <div style="position: relative;">
+        <lightning-spinner if:true={spinnerOn} alternative-text="Loading" size="small"></lightning-spinner>
+       
+        <!--<div class="slds-grid slds-wrap ">!--slds-grid_vertical slds-gutters_xx-small--
+            <template for:each={documentList} for:item="documentListVar">
+                <div class="slds-col slds-size_1-of-2" key={documentListVar.masterId} style="padding: 5px;">
+                    <div class="slds-box slds-box_small" style="height: 110px;">
+                        <div class="slds-grid slds-grid_vertical">
+                            <div class="slds-col">
+                                {documentListVar.documentText}
+                            </div>
+                            <div class="slds-col" style="height: 6px;"></div>
+                            <div class="slds-col">
+                                <template if:true={documentListVar.uploadedDocumentId}>
+                                    <lightning-button-group>
+                                        <lightning-button 
+                                            label="Preview"
+                                            data-docid={documentListVar.uploadedDocumentId}
+                                            onclick={filePreview}>
+                                        </lightning-button>
+                                        <lightning-button 
+                                            label="Delete"
+                                            data-docid={documentListVar.uploadedDocumentId}
+                                            data-recid={documentListVar.uploadedDocumentParentId}
+                                            onclick={handleDeleteFile}>
+                                        </lightning-button>
+                                    </lightning-button-group>
+                                </template>
+                                <template if:false={documentListVar.uploadedDocumentId}>
+                                    <lightning-file-upload
+                                        label="Upload Here"
+                                        name="fileUploader"
+                                        record-id={recordId}
+                                        data-documenttext={documentListVar.documentText}
+                                        data-recid={documentListVar.uploadedDocumentParentId}
+                                        data-accid={documentListVar.accId}
+                                        onuploadfinished={handleUploadFinished}>
+                                    </lightning-file-upload>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                !--<div class="slds-col" style="height: 6px;" key={documentListVar.masterId}>
+                </div>--
+            </template>
+        </div>-->
+        <table style="width: 100%" class="slds-table slds-table_bordered" aria-labelledby="element-with-table-label other-element-with-table-label">
+            
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col" >
+                        <div class="slds-truncate" title=""></div>
+                    </th>
+                    <th class="" scope="col" >
+                        <div class="slds-truncate" title="File Name" >File Name</div>
+                    </th>
+                    <th class="" scope="col" >
+                        <div class="slds-truncate" title="Close Date" >Created Date</div>
+                    </th>
+                    <template if:true={caseObject}>
+                        <th class="" scope="col" >
+                            <div class="slds-truncate" title="Decision" >Doc Status</div>
+                        </th>
+                        <th class="" scope="col" >
+                            <div class="slds-truncate" title="Comments" style="width:8rem">Comments</div>
+                        </th>
+                    </template>
+                    <th class="" scope="col" >
+                        <div class="slds-truncate" title="Stage" >Actions</div>
+                    </th>
+                    <th class="" scope="col" style="text-align:center" >
+                        <div class="slds-truncate" title="Status">Status</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={documentList} for:item="documentListVar" for:index="index">
+                    <tr class="slds-hint-parent" key={documentListVar.masterId}>
+                        <th data-label="Icon" scope="row">
+                            <div class="slds-truncate" title="Icon">
+                                <lightning-icon icon-name="doctype:gdoc" size="x-small"></lightning-icon>
+                            </div>
+                        </th>
+                        <td data-label="Document Name">
+                            <div class="slds-truncate" title={documentListVar.documentText} style="width:13rem;overflow-wrap: break-word;white-space: break-spaces;">
+                                {documentListVar.documentText}
+                            </div>
+                        </td>
+                        <td data-label="Created Date">
+                            <div class="slds-truncate" title={documentListVar.createdDate}>
+                                {documentListVar.createdDate}
+                            </div>
+                        </td>
+                        <template if:true={caseObject}>
+                            <td data-label="Decision" style="text-align:center">
+                                
+                                <lightning-combobox
+                                        name="progress"
+                                        if:true={enableEditOfStatus}
+                                        label="Status"
+                                        variant="label-hidden"
+                                        data-uploadeddocumentparentid={documentListVar.uploadedDocumentParentId}
+                                        data-masterid={documentListVar.masterId}
+                                        value={documentListVar.decisionAction}
+                                        placeholder="Make Decision"
+                                        options={fieldPicklistValueList}
+                                        onchange={handleChangeDecision}
+                                        disabled={documentListVar.uploadedDocumentParentIdInverse}>
+                                    </lightning-combobox>
+                                 <template if:false={enableEditOfStatus}>
+                                        {documentListVar.decisionAction}
+                                 </template>
+                            </td>
+                            <td data-label="Comments" >
+                                <div class="slds-truncate" title={documentListVar.comments} style="width:7.5rem;overflow-wrap: break-word;white-space: break-spaces;">
+                                    <lightning-input 
+                                        type="text" 
+                                        variant="label-hidden"
+                                        if:true={enableEditOfStatus}
+                                        data-uploadeddocumentparentid={documentListVar.uploadedDocumentParentId}
+                                        data-masterid={documentListVar.masterId}
+                                        label="Enter some text"
+                                        placeholder="Comments"
+                                        value={documentListVar.comments}
+                                        onchange={handleChangeComments}
+                                        disabled={documentListVar.uploadedDocumentParentIdInverse}>
+                                    </lightning-input>
+                                    <template if:false={enableEditOfStatus}>
+                                        {documentListVar.comments}
+                                 </template>
+                                </div>
+                            </td>
+                        </template>
+                        <td data-label="Prospecting">
+                            <div class="slds-truncate" title="Prospecting">
+                                <!-- <template if:true={documentListVar.uploadedDocumentId}>
+                                    <lightning-button-icon 
+                                        icon-name="utility:preview" 
+                                        variant="border-filled" 
+                                        title="View"
+                                        size="small" 
+                                        class="slds-p-right--xxx-small" 
+                                        data-docid={documentListVar.uploadedDocumentId}
+                                        onclick={filePreview}>
+                                    </lightning-button-icon>
+                                    
+                                    <lightning-button-icon 
+                                        icon-name="utility:preview" 
+                                        variant="border-filled" 
+                                        title="View"
+                                        size="small" 
+                                        class="slds-p-right--xxx-small" 
+                                        data-docid={index}
+                                        data-acc={documentListVar.accId}
+                                        data-doc={documentListVar.doctype}
+                                        data-merch={documentListVar.merchId}
+                                        onclick={previewFile}>
+                                    </lightning-button-icon>
+                                    
+                                    <lightning-button-icon 
+                                        icon-name="utility:delete"
+                                        variant="border-filled" 
+                                        title="Delete"
+                                        size="small" 
+                                        class="slds-p-right--xxx-small"
+                                        data-docid={documentListVar.uploadedDocumentId}
+                                        data-recid={documentListVar.uploadedDocumentParentId}
+                                        onclick={handleDeleteFile}>
+                                    </lightning-button-icon>
+                                </template> -->
+                                <!-- <template if:false={documentListVar.uploadedDocumentId}> -->
+                                 <template if:true={documentListVar.allowUpload}>   
+                                        <lightning-button-icon 
+                                            icon-name="utility:upload" 
+                                            variant="border-filled" 
+                                            title="Upload File"
+                                            class="slds-p-right--xxx-small" 
+                                            size="small"
+                                            record-id={recordId}
+                                            data-documenttext={documentListVar.documentText}
+                                            data-recid={documentListVar.uploadedDocumentParentId}
+                                            data-acc={documentListVar.accId}
+                                            data-doc={documentListVar.doctype}
+                                            data-merch={documentListVar.merchId}
+                                            onclick={handleOpenUpload}>
+                                        </lightning-button-icon>
+                                    </template>
+                                    
+                                    <lightning-button-icon 
+                                    if:true={documentListVar.uploadedBoolean}
+                                    icon-name="utility:preview" 
+                                    variant="border-filled" 
+                                    title="View"
+                                    size="small" 
+                                    class="slds-p-right--xxx-small" 
+                                    data-docid={index}
+                                    data-acc={documentListVar.accId}
+                                    data-doc={documentListVar.doctype}
+                                    data-merch={documentListVar.merchId}
+                                    onclick={previewFile}>
+                                </lightning-button-icon>
+                                <!-- </template> -->
+                            </div>
+                        </td>
+                         <td data-label="Doc Status" style="text-align:center">
+                                <div class="slds-truncate" title={documentListVar.decisionAction}>
+                                    <img src={documentListVar.statusImage} style="height: 25px;width: 25px;"/>
+                                </div>
+                            </td>
+
+                        
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+      
+
+    </div>
+
+    <template if:true={openUploadSection}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 400px;">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                        title="Close" onclick={handleCloseUpload}>
+                        <lightning-icon icon-name="utility:close" 
+                            variant="inverse" 
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_none" style="height:auto; position: relative;">
+                    <lightning-spinner if:true={spinnerOn} alternative-text="Loading" size="small"></lightning-spinner>
+                    <h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate slds-align_absolute-center"
+                        style=" border-bottom: 2px solid #dddbda; height: 60px;" >
+                        {documentTextVarTemp}
+                    </h2>
+                    <div class="slds-scrollable slds-col">
+                        <!-- <div class="slds-align_absolute-center" style="height: 90px;">
+                            <lightning-file-upload
+                                label="Upload Here"
+                                name="fileUploader"
+                                record-id={recordId}
+                                data-documenttext={documentTextVarTemp}
+                                data-recid={recIdVarTemp}
+                                data-accid={accIdVarTemp}
+                                onuploadfinished={handleUploadFinished}>
+                            </lightning-file-upload>
+                        </div> -->
+                        <div class="slds-align_absolute-center" style="padding-bottom: 10px;">
+                            <!-- <lightning-button label="Document Upload file" onclick={handledocfile}></lightning-button> -->
+                            <!-- Using lightning upload for Testing the functionality ...>>> -->
+                            <lightning-file-upload
+                                label="Document Upload file"
+                                name="fileUploader"
+                                record-id={recordId}
+                                data-documenttext={documentTextVarTemp}
+                                data-recid={recIdVarTemp}
+                                data-accid={accIdVarTemp}
+                                onuploadfinished={handleuploadfile}>
+                            </lightning-file-upload>
+
+                        <!--  -->
+                        <!-- <lightning-input
+                            type="file"
+                            label="Attachment"
+                            accept=".zip, .png, .doc, .pdf, .jpg , .jpeg , .jfif , .pjpeg , .pjp "
+                            onchange={handleuploadfile}
+                            
+                            multiple
+                        >
+                        </lightning-input> -->
+
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={handleCloseUpload}>
+                            Close
+                        </button>  
+                    </footer>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Start of the  Preview Component Pops Up when Clicked on View icon next to document -->
+    <template if:true={previewComponent}>
+        
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 50rem;height: 38.5rem;padding: 0;margin-top:10px;max-width:75rem;max-height:75rem">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleClose}>
+                    <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                        <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Document</h1>
+                </div>
+                <div class="slds-modal__content " id="modal-content-id-1" style="height:50rem;width:50rem;position: relative;">
+                    <lightning-spinner if:true={spinnerOn} alternative-text="Loading" size="small"></lightning-spinner>
+                    <img if:false={spinnerOn}  src={image_url} style="height:100% !important;width:100%;"></img>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick={handleClose} aria-label="Cancel and close">Cancel</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        <!-- <c-file-preview-custom-component image-url={image_url}></c-file-preview-custom-component> -->
+    </template>
+    <!-- End of the  Preview Component Pops Up when Clicked on View icon next to document -->
+</template>

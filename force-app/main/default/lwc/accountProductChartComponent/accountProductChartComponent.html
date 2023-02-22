@@ -1,0 +1,112 @@
+<!--
+    @description       : Lighting web Component for Account Product
+    @author            : Kartik Patkar, Appstrail             
+    @last modified on  : 08-12-2021
+    @last modified by  : Kartik Patkar, Appstrail
+    Modifications Log 
+    Ver   Date         Author          Modification
+    1.0   08-12-2021   Kartik Patkar   Initial Version
+-->
+<template>
+    <article class="slds-card slds-card_boundary">
+
+        <!--HEADER START-->
+        <div class="slds-card__header slds-grid slds-theme_shade" style="padding-bottom: 10px;">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+
+                <!--HEADER ICON-->
+                <!-- <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-account" title="account">
+                        <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                            <use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+                        </svg>
+                        <span class="slds-assistive-text">Product</span>
+                    </span>
+                </div> -->
+
+                <!--HEADER TITLE-->
+                <div class="slds-media__body slds-align_absolute-center">
+                    <h2 class="slds-card__header-title">
+                        <span class="slds-card__header-link slds-truncate" title="Current Prodcuts">
+                            <span>Current Products</span>
+                        </span>
+                    </h2>
+                </div>
+
+            </header>
+        </div>
+        <!--HEADER END-->
+        
+        <!--BODY START-->
+        <div class="slds-card__body slds-card__body_inner slds-p-around--none">
+
+            <!--SPINNER-->
+            <div if:true={load}>
+                <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+            </div>
+
+             <!--ILLUSTRATION-->
+             <div if:true={noProduct}>
+                <c-illustration-component display-text="No Product Found"></c-illustration-component>
+            </div>
+
+            <div class="slds-grid slds-wrap" if:false={noProduct}>
+
+                <!--SELECTED PRODUCT START-->
+                <template for:each={oppPro} for:item="product">
+                    <div class="slds-col slds-size_1-of-4" key={product.Id}>
+
+                        <!-- <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                                <div class={product.circleClass}>
+                                    <span class={product.class}>
+                                        <lightning-formatted-rich-text value={product.productImage}></lightning-formatted-rich-text>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center product-name">
+                                {product.productName}
+                            </div>
+                        </div> -->
+
+                            <!-- <div class={product.class}>
+                                <div class="slds-col slds-size_1-of-2 slds-align_absolute-center" style="height: 70%;">
+                                    <div>
+                                        <span>
+                                            <img class="icon-style" src={product.iconUrl}/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-align_absolute-center" style="height: 70%;">
+                                    <h1 class="count-text">{product.count}</h1>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center product-name" style="height: 30%;">
+                                    {product.productName}
+                                </div>
+                            </div> -->
+
+                        <div style="margin: 5px 0;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                                    <div>
+                                        <span class={product.class} style={product.productColor}>
+                                            <lightning-icon icon-name={product.iconUrl}  size="small" variant="inverse"></lightning-icon>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                                    <span class="product-name">
+                                        <h1 class={product.effect} style={product.textColor}>{product.productName}</h1>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </template>
+                
+            </div>
+        </div>
+        <!--BODY END-->
+    </article>
+</template>

@@ -1,0 +1,140 @@
+.product-option {
+  width: 100%;
+  height: 25% !important;
+}
+
+.extra-product-padding {
+  padding: 5px 10px;
+}
+
+.mode-option {
+  width: 100%;
+  height: 25px;
+}
+
+.product-page {
+  width: 100%;
+}
+
+.modal-body-height {
+  max-height: 24rem !important;
+}
+
+.td-height {
+  height: 30px;
+}
+
+.coverage-box {
+  background-color: #f7f9fb;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.left-border {
+  border-left: 1px solid #dddbda;
+}
+
+.top-border-remove {
+  border-top: var(--lwc-borderWidthThin, 1px) solid
+    var(--lwc-colorBorder, white);
+}
+
+.mode-name {
+  color: #1b96ff;
+}
+
+.remove-width {
+  width: 0px;
+}
+
+.modes-badge {
+  float: right;
+  --sds-c-badge-line-height: 5px;
+  --sds-c-badge-font-size: 9px;
+}
+
+.type-header {
+  font-size: 9px;
+}
+
+.field-percent {
+  width: 65px;
+}
+
+.field-currency {
+  width: 80px;
+}
+
+.settlement-name {
+  font-weight: 700;
+  color: #1b96ff;
+}
+
+.settlement-row {
+  background-color: #dddbda;
+}
+
+.checkbox-section-title {
+  text-align: center;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.inline-section {
+  display: inline-block;
+}
+.tableFixHead {
+  overflow: auto;
+}
+
+.tableFixHead table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableFixHead th {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+/* thead th, thead td {
+        position: sticky;
+        top: 0;
+        background: #eee;
+        z-index: 2000;
+        } */
+
+thead tr.first th,
+thead tr.first td {
+  position: sticky;
+  top: 0;
+  background: #eee;
+  z-index: 2000;
+}
+
+thead tr.second th,
+thead tr.second td {
+  position: sticky;
+  top: 20px;
+  background: #eee;
+  z-index: 2000;
+}
+.accordian-alignment {
+  padding-right: var(
+    --slds-c-accordion-section-spacing-inline-end,
+    var(
+      --sds-c-accordion-section-spacing-inline-end,
+      var(--lwc-spacingSmall, 0.75rem)
+    )
+  );
+  padding-left: var(
+    --slds-c-accordion-section-spacing-inline-start,
+    var(
+      --sds-c-accordion-section-spacing-inline-start,
+      var(--lwc-spacingSmall, 0.75rem)
+    )
+  );
+  --lwc-spacingSmall: 0;
+}

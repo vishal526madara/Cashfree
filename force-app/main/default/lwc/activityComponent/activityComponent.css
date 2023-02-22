@@ -1,0 +1,29 @@
+.field-title {
+    padding-top: 3px;
+}
+
+.box-extra {
+    padding: 0px;
+}
+
+.activity-fields {
+    text-align: center;
+}
+
+.score-text {
+    text-align: center;
+    font-weight: 500;
+}
+
+.score-block {
+    text-align: center;
+    padding: 10px 0px;
+    border-left: 1px solid #dddbda;
+    padding: 5px;
+}
+
+.slds-badge {
+    border-color: #1ab9ff;
+    font-size: 7px;
+    color: #1ab9ff;
+}

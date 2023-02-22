@@ -1,0 +1,68 @@
+<template>
+    <div>
+        <div class="slds-form-element">
+            <label if:true={inputLabel} class="slds-form-element__label" for="text-input-id-1"
+                style="font-size:13px;">{inputLabel}</label>
+            <div class="slds-form-element__control">
+                <div class="slds-combobox_container">
+                    <div id="box" class={boxClass} aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                            role="none">
+                            <template if:true={isValueSelected}>
+                                <div class="slds-box" style="padding:0px;">
+                                    <div id="lookup-pill" class="slds-pill-container" style="line-height:21px;">
+                                        <span class="slds-pill slds-theme_shade" style="height:31px;">
+                                            <span class="slds-pill__icon_container">
+                                                <span class="slds-icon_container" title={objName}>
+                                                    <lightning-icon icon-name={iconName}
+                                                        alternative-text={objName}></lightning-icon>
+                                                    <span class="slds-assistive-text">{objName}</span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-pill__label">{selectedName}</span>
+                                            <button
+                                                class="slds-button slds-button_icon slds-button_icon slds-pill__remove"
+                                                title="Remove" name={selectedName} onclick={handleRemovePill}
+                                                disabled={disabled}>
+                                                <lightning-icon icon-name="utility:close"
+                                                    alternative-text="Remove"></lightning-icon>
+                                                <span class="slds-assistive-text">Remove</span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:false={isValueSelected}>
+                                <div class="slds-p-top_none">
+                                    <lightning-input class={inputClass} type="search" id="input" value={searchTerm}
+                                        onclick={handleClick} onblur={onBlur} onchange={onChange} variant="label-hidden"
+                                        autocomplete="off" placeholder={searchPlaceholder}
+                                        style="line-height: var(--lwc-lineHeightButton,1.875rem);min-height: calc(2.125rem + 2px);"
+                                        disabled={disabled}>
+                                    </lightning-input>
+                                </div>
+                            </template>
+                        </div>
+                        <div id="listbox-id-1"
+                            class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <template for:each={records} for:item="record">
+                                    <li key={record.Id} onclick={onSelect} data-id={record.Id} role="presentation"
+                                        data-name={record.Name} data-phone={record.Phone}>
+                                        <span class="slds-lookup__item-action slds-lookup__item-action--label"
+                                            role="option">
+                                            <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default"
+                                                icon-name={iconName} alternative-text={objName}
+                                                size="small"></lightning-icon>
+                                            <span class="slds-truncate">{record.Name} - {record.Phone}</span>
+                                        </span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

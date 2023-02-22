@@ -1,0 +1,116 @@
+.project-header{
+    font-size:15px;
+    font-weight: 600;
+    /* color:#22a3a7; */
+}
+
+.stage-number{
+    width: 35px;
+    background: #126669;
+    border-radius: 50%;
+    height: 35px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+}
+
+.checklist-name{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.checklist-descrption{
+    font-weight: 500;
+}
+
+.next-stage{
+    opacity: 0.5;
+}
+
+.checklist-task{
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 10px;
+}
+
+.task-name{
+    color: #126669;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.task-detail-field{
+    color: grey;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.task-line-through{
+    text-decoration: line-through;
+}
+
+.column-checklist{
+    font-size: 9px;
+    color: #475F7B;
+    font-weight: 700;
+    --lwc-colorTextLabel: #475F7B;
+    --lwc-fontSize3: 12px;
+}
+
+.open-data{
+    background-color: #fff;
+    color: #2E78BF;
+    border: #2E78BF solid 1px;
+    border-radius: 10px;
+    width: 30px;
+    height: 15px;
+    margin: auto;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.inprogress-data{
+    background-color: #2E78BF;
+    border: #2E78BF solid 1px;
+    color: #fff;
+    border-radius: 10px;
+    width: 30px;
+    height: 15px;
+    margin: auto;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.complete-data{
+    border: #09d009 solid 1px;
+    color: #09d009;
+    border-radius: 10px;
+    width: 30px;
+    height: 15px;
+    margin: auto;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.checklist-table{
+    font-size: 10px;
+    line-height: 25px;
+}
+
+.row-section{
+    background-color: white;
+}
+
+.row-section:hover{
+    background-color: rgb(199, 229, 253);
+}
+.my-icon{
+    --sds-c-icon-color-background:#126669;
+}
+
+.tdbreak{
+    word-break: break-all;
+}

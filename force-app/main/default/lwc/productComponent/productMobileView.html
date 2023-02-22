@@ -1,0 +1,336 @@
+<template>
+    <article class="slds-card">
+        <!--HEADER START-->
+        <header class="slds-modal__header" if:true={screens.productPage}> 
+            <h2 class="slds-modal__title slds-hyphenate">
+                Select A Product
+            </h2>
+        </header>
+        <header class="slds-modal__header" if:true={screens.modePage}>
+            <h2 class="slds-modal__title slds-hyphenate">
+                &nbsp;
+            </h2>
+        </header>
+        <!--HEADER END-->
+
+        <!--LOAD SPINNER-->
+        <div if:true={load}>
+            <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+        </div>
+
+        <!--BODY START PAGE 1-->
+        <div class="slds-card__body slds-card__body_inner slds-scrollable" if:true={screens.productPage}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1" 
+                    if:true={screens.productPage}>
+                    <fieldset class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-wrap"> 
+                                <template for:each={productList} for:item="product" for:index="index">
+                                    <div class="slds-col slds-size_1-of-1 extra-product-padding" key={product.Id}>
+                                        
+                                        <!--PRODUCT TILE START-->
+                                        <div class="slds-visual-picker slds-visual-picker_vertical product-option" key={product.Id}>
+                                            <input type="radio" value={product.Name} id={product.Id} name="Product" onclick={handleProductSelect} checked={product.check} title={product.Name}/>
+                                            <label for={product.Id}>
+                                                <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center product-option">
+                                                    <!--PRODUCT IMAGE-->
+                                                    <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
+                                                        <span style="width: 50px;height:50px;">
+                                                            <lightning-formatted-rich-text value={product.Product_Image__c}></lightning-formatted-rich-text>
+                                                        </span>
+                                                    </div>
+
+                                                    <!--PRODUCT DETAILS-->
+                                                    <div class="slds-media__body slds-border_left slds-p-left--small">
+                                                        <h2 class="slds-truncate slds-text-heading_small">{product.Name}</h2>
+                                                        <p class="slds-m-top_small">{product.Description__c}</p>
+                                                    </div>
+
+                                                </span>
+                                                <span class="slds-icon_container slds-visual-picker__text-check">
+                                                    <svg class="slds-icon slds-icon-text-check slds-icon_x-small" aria-hidden="true">
+                                                        <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                                    </svg>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!--PRODUCT TILE END-->
+
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+        </div>
+        <!--BODY END PAGE 1-->
+
+        <!--BODY START PAGE 2-->
+        <div class="slds-card__body slds-card__body_inner modal-body-height slds-m-around--none slds-scrollable" if:true={screens.modePage}>
+            <div class="slds-grid slds-wrap slds-p-left--small">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-5 slds-scrollable">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-p-top--xx-small">
+
+                            <!--SELECTED PRODUCT TILE-->
+                            <div class="slds-visual-picker slds-visual-picker_vertical product-option">
+                                <input type="radio" id={selectedProduct.Id} checked/>
+                                <label for={selectedProduct.Name}>
+                                    <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center product-option"
+                                        style="padding:5px;">
+                                        <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
+                                            <span style="width: 40px;height:40px;">
+                                                <lightning-formatted-rich-text value={selectedProduct.Product_Image__c}></lightning-formatted-rich-text>
+                                            </span>
+                                        </div>
+                                        <div class="slds-media__body slds-border_left slds-p-left--small">
+                                            <h2 class="slds-truncate slds-text-heading_small">{selectedProduct.Name}</h2>
+                                            <p class="slds-m-top_small"></p>
+                                        </div>
+                                    </span>
+                                    <span class="slds-icon_container slds-visual-picker__text-check">
+                                        <svg class="slds-icon slds-icon-text-check slds-icon_x-small" aria-hidden="true">
+                                            <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                        </svg>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!--MODES CHECKBOX LIST-->
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="coverage-box slds-box slds-m-top--xx-small">
+                                <section class={accordianClass.mode}>
+                                    <div class="slds-accordion__summary">
+                                        <h2 class="slds-accordion__summary-heading">
+                                            <button class="slds-button slds-button_reset slds-accordion__summary-action" title="Modes"
+                                                data-id={accordianClass.mode} name='modes' onclick={handleAccordian}>
+                                                <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left">
+                                                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                                                </svg>
+                                                <span class="slds-accordion__summary-content">{selectedProduct.Mode_Label__c}</span>
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div class="slds-accordion__content">
+                                        <template for:each={modesOptions.modesList} for:item="modes">
+                                            <div class="slds-form-element" key={modes.Id}>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-checkbox">
+                                                        <input type="checkbox" name={modes.Id} id={modes.Id} onclick={handleNavigation}/>
+                                                        <label class="slds-checkbox__label" for={modes.Id}>
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-form-element__label">{modes.Name}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <!--SETTLEMENT CYCLE CHECKBOX LIST-->
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="coverage-box slds-box slds-m-top--xx-small">
+                                <section class={accordianClass.settle}>
+                                    <div class="slds-accordion__summary">
+                                        <h2 class="slds-accordion__summary-heading">
+                                            <button class="slds-button slds-button_reset slds-accordion__summary-action" title="Settlements"
+                                                data-id={accordianClass.settle} name='settle' onclick={handleAccordian}>
+                                                <svg class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left">
+                                                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                                                </svg>
+                                                <span class="slds-accordion__summary-content">{selectedProduct.Settlement_Cycle_Label__c}</span>
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div class="slds-accordion__content">
+                                        <template for:each={modesOptions.settlementList} for:item="settlement">
+                                            <div class="slds-form-element" key={settlement.Id}>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-checkbox">
+                                                        <input type="checkbox" name={settlement.Name} value={settlement.Id} id={settlement.Id} 
+                                                            onclick={handleSettlement} checked={settlement.check} data-id={settlement.Commercial__c}/>
+                                                        <label class="slds-checkbox__label" for={settlement.Id}>
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-form-element__label">{settlement.Name}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_4-of-5">
+                    <!--ILLUSTRATION-->
+                    <div if:true={selectModeIllustration}>
+                        <c-illustration-component display-text="Select Modes"></c-illustration-component>
+                    </div>
+
+                    <div class="slds-m-around--xx-small slds-p-around_none" if:false={selectModeIllustration}>
+                        <template for:each={commercialList} for:item="commercial">
+                            <div class="slds-col slds-size_1-of-1 slds-p-top_xx-small slds-p-bottom_xx-small" key={commercial.Id}>
+        
+                                <div class="slds-box">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_1-of-1 box-border-bottom">
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size--1-of-6">
+                                                    <lightning-input type="checkbox" variant="label-hidden" name={commercial.Id} 
+                                                        onclick={handleRecordSelect} checked={commercial.check}>
+                                                    </lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size--5-of-6" title={commercial.Name}>
+                                                    <div class="slds-grid slds-wrap">
+                                                        <div class="slds-col slds-size--1-of-1 slds-truncate">
+                                                            {commercial.Name}
+                                                        </div>
+                                                        <div class="slds-col slds-size--1-of-1">
+                                                            <span class="slds-badge modes-badge">{commercial.modeName}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <div class="field-style"><h1 class="field-label">List Price</h1></div>
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-input type="number" variant="label-hidden" step="0.01" 
+                                                            value={commercial.Commercials__c} readonly>
+                                                        </lightning-input>
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-input type="number" variant="label-hidden" formatter="currency" step="0.01"
+                                                            value={commercial.Commercial_Price__c} readonly>
+                                                        </lightning-input>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="field-style"><h1 class="field-label">Add-On</h1></div>
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-input type="number" variant="label-hidden" step="0.01" data-id={commercial.Id}
+                                                            value={commercial.Add_On__c} name="addOn" onchange={handleFieldChange}>
+                                                        </lightning-input>
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-input type="number" variant="label-hidden" formatter="currency" step="0.01" data-id={commercial.Id}
+                                                            value={commercial.Add_On_Price__c} name="addOnPrice" onchange={handleFieldChange}>
+                                                        </lightning-input>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="field-style"><h1 class="field-label">Sales Price</h1></div>
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-input type="number" variant="label-hidden" step="0.01" name="actualPricePercent"
+                                                            value={commercial.actualPricePercent} data-id={commercial.Id} onchange={handleFieldChange}>
+                                                        </lightning-input>
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-input type="number" variant="label-hidden" formatter="currency" step="0.01" name="actualPrice"
+                                                            value={commercial.actualPrice} data-id={commercial.Id} onchange={handleFieldChange}>
+                                                        </lightning-input>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!--SETTLEMENT LIST START-->
+                        <template for:each={settlementList} for:item="settle">
+                            <div class="slds-col slds-size_1-of-1 slds-p-top_xx-small slds-p-bottom_xx-small" key={settle.Id}>
+
+                                <div class="slds-box">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_1-of-1 box-border-bottom">
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size--1-of-6">
+                                                    <lightning-input type="checkbox" variant="label-hidden" name={settle.Id} 
+                                                        checked={settle.check} disabled>
+                                                    </lightning-input>
+                                                </div>
+                                                <div class="slds-col slds-size--5-of-6" title={settle.Name}>
+                                                    <div class="slds-grid slds-wrap">
+                                                        <div class="slds-col slds-size--1-of-1 slds-truncate">
+                                                            {settle.Name}
+                                                        </div>
+                                                        <div class="slds-col slds-size--1-of-1">
+                                                            <span class="slds-badge modes-badge">Settlement</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--LIST PRICE-->
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <div class="field-style"><h1 class="field-label">List Price</h1></div>
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-formatted-number value={settle.Commercial__c}>
+                                                        </lightning-formatted-number>%
+                                                    </td>
+                                                    <td class="table-data-center">
+                                                        <lightning-formatted-number value={settle.Commercial_Price__c} 
+                                                            format-style="currency" currency-code="INR">
+                                                        </lightning-formatted-number>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <!--SETTLEMENT LIST END-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--BODY END PAGE 2-->
+
+        <!--FOOTER-->
+        <footer class="slds-modal__footer slds-modal__footer_directional extra-product-padding">
+            <button class="slds-button slds-button_neutral" onclick={handleCancel}
+                if:true={screens.productPage}>
+                Cancel
+            </button>
+            <button class="slds-button slds-button_brand" disabled={disableNext} onclick={handleNext}
+                if:true={screens.productPage}>
+                Next
+            </button>
+            <button class="slds-button slds-button_neutral" onclick={handleBack} if:true={screens.modePage}>
+                Back
+            </button>
+            <button class="slds-button slds-button_brand" onclick={handleSave} if:true={screens.modePage}>
+                Save
+            </button>
+        </footer>
+
+    </article>
+</template>

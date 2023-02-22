@@ -1,0 +1,397 @@
+<!--
+  @description       : 
+  @author            :
+  @group             : 
+  @last modified on  : 28-12-2022
+  @last modified by  : Saurav Kashyap
+  Modifications Log
+  Ver   Date         Author           Modification
+  1.0   28-12-2022   Saurav Kashyap   Initial Version
+-->
+<template>
+    <div style="position: relative;" if:false={componentHide}>
+        <lightning-spinner if:true={spinnerOn} alternative-text="Loading" size="small"></lightning-spinner>
+        <template if:true={templateBodyShow}>
+            <template if:true={showBoth}>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_2-of-3" style="padding-right: 10px;">
+                        <article class="slds-card slds-card_boundary slds-theme_shade">
+                            <div class="slds-card__header slds-grid">
+                                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container slds-icon-standard-account" title="Documents">
+                                            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                                <use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#file"></use>
+                                            </svg>
+                                            <span class="slds-assistive-text">Documents</span>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <h2 class="slds-card__header-title">
+                                            <a href="#" class="slds-card__header-link slds-truncate" title="Documents" onclick={getAccountIdFunction}>
+                                                <span>Documents</span>
+                                            </a>
+                                        </h2>
+                                    </div>
+                                </header>
+                            </div>
+                            <div class="slds-card__body slds-card__body_inner" style="margin-bottom: 5px;">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <template for:each={kycTypeList} for:item="kycType">
+                                        <div key={kycType.kycCategoryValue} class="slds-col">
+                                            <c-document-management-component-new-level-two
+                                                kyc-category-value={kycType.kycCategoryValue}
+                                                record-id={recordId}
+                                                oneventtwo={handleRefreshComponent}
+                                                file-size-upload={fileSizeUpload}
+                                                object-api-name={objectApiName}>
+                                            </c-document-management-component-new-level-two>
+                                        </div>
+                                        <!--<div key={kycType.kycCategoryValue} class="slds-col">
+                                            <div class="slds-box slds-box_x-small" style="background: white;">
+                                                <div class="slds-grid slds-grid_vertical">
+                                                    <div class="slds-col">
+                                                        <div class="slds-grid slds-gutters">
+                                                            <div class="slds-col slds-align_absolute-center" style="width: 8%; padding-left: 20px;">
+                                                                <lightning-button-icon if:false={kycType.drop}
+                                                                    icon-name="utility:right"  
+                                                                    variant="bare"
+                                                                    alternative-text="Open" 
+                                                                    title="Open"
+                                                                    data-kycvalue={kycType.kycCategoryValue}
+                                                                    onclick={handleShowKycCategory}>
+                                                                </lightning-button-icon>
+                                                                <lightning-button-icon if:true={kycType.drop}
+                                                                    icon-name="utility:down"  
+                                                                    variant="bare"
+                                                                    alternative-text="Close" 
+                                                                    title="Close"
+                                                                    data-kycvalue={kycType.kycCategoryValue}
+                                                                    onclick={handleHideKycCategory}>
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <div class="slds-col" style="width: 92%;">
+                                                                <img src={folderIcon} style="height: 30px;"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <a href="javascript:void(0);" 
+                                                                    name={kycType.kycCategoryValue}
+                                                                    onclick={handleKycClick}>
+                                                                    {kycType.kycCategoryValue} Specific KYC
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col" if:true={kycType.drop}>
+                                                        <div style="padding: 10px 5px 3px 5px;">
+                                                            <c-document-management-component-new-level-two
+                                                                kyc-category-value={kycType.kycCategoryValue}
+                                                                record-id={recordId}
+                                                                file-size-upload={fileSizeUpload}>
+                                                            </c-document-management-component-new-level-two>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div key={kycType} class="slds-col" style="height: 6px;"></div>-->
+                                    </template>
+                                </div>
+                            </div>
+                            <footer class="slds-card__footer"></footer>
+                        </article>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3 slds-card_boundary">
+                        <article class="slds-card">
+                            <div style="padding: 0px;">
+                                <div class="slds-card__header slds-m-around--none slds-theme_shade" style="height:33px; border-radius: 4px 4px 0px 0px">
+                                    <h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate " style="padding-bottom: 7px;
+                                    font-size: 11px;
+                                    font-weight: 100;">
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-align_absolute-center" style="width: 70%;">
+                                                COLLECTED DOCUMENTS
+                                            </div>
+                                            <div class="slds-col" style="width: 30%;">
+                                                <div style="float: right;">
+                                                    <img src={pin} style="height: 20px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </h2>
+                                </div>
+                            </div>
+                            <table class="slds-m-around--x-small" style="margin-left: 15px;">
+                                <thead class="checklist-table">
+                                    <tr>
+                                    </tr>
+                                </thead>
+                                <tbody class="checklist-table">
+                                    <!--template for:each={regularListMap} for:item="regular">
+                                        <div key={regular.key}>
+                                            {regular.key}
+                                            {regular.value}
+                                        </div>
+                                    </template-->
+                                    <!-- <template for:each={dataStructure} for:item="data">
+                                        <th key={data.Key}>{data.Key}</th>
+                                        <template for:each={data.value} for:item="dataValue">
+                                            <td key={dataValue.Id}>{dataValue.Label}</td>
+                                        </template>
+                                    </template> -->
+                                    <template if:true={regularTrue}>
+                                        <span style="font-weight: bold; color: rgba(35, 118, 204, 1)">Regular KYC Specific - {regularCategory}</span><br/>
+                                    </template>
+                                    <template for:each={regularListMap} for:item="regularMap">
+                                        <div key={regularMap} style="padding-left: 10px; margin-top: 10px;">
+                                            <lightning-icon icon-name="utility:level_down" size="x-small" alternative-text={regularMap.key} title="Level Down" key={regularMap} style="padding-right: 5px;"></lightning-icon><span style="font-weight: bold;">{regularMap.key}</span>
+                                            <template for:each={regularMap.value} for:item="regular">
+                                                <tr key={regular}>
+                                                    <td style="text-align: left; padding-top: 5px;">
+                                                        <div class="slds-p-bottom__xx-small" style="padding-left: 20px;">
+                                                        <lightning-input type="checkbox" label={regular} name={regular}
+                                                            checked class="column-checklist" disabled>
+                                                        </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <!-- <template for:each={regularListMap} for:item="regularMap">
+                                        <template for:each={regularMap.key} for:item="regular">
+                                            <tr key={regularMap.key}>
+                                                <td style="text-align: left;">
+                                                    {regular.key}
+                                                    {regular.value}
+                                                    <div class="slds-p-bottom__xx-small">
+                                                    <lightning-input type="checkbox" label={regular.value} name={regular.value}
+                                                        checked class="column-checklist" disabled>
+                                                    </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </template> -->
+                                </tbody>
+                            </table>
+                            <table class="slds-m-around--x-small" style="margin-top: 20px; margin-left: 15px;">
+                                <thead class="checklist-table">
+                                    <tr>
+                                    </tr>
+                                </thead>
+                                <tbody class="checklist-table">
+                                    <template if:true={lobTrue}>
+                                        <span style="font-weight: bold; color: rgba(35, 118, 204, 1)">LOB KYC Specific - {lobCategory}</span><br/>
+                                    </template>
+                                    <template for:each={lobListMap} for:item="lobMap">
+                                        <div key={lobMap} style="padding-left: 10px; margin-top: 10px;">
+                                            <lightning-icon icon-name="utility:level_down" size="x-small" alternative-text={lobMap.key} title="Level Down" style="padding-right: 5px;"></lightning-icon><span style="font-weight: bold;">{lobMap.key}</span>
+                                            <template for:each={lobMap.value} for:item="lob">
+                                                <tr key={lob}>
+                                                    <td style="text-align: left; padding-top: 5px;">
+                                                        <div class="slds-p-bottom__xx-small" style="padding-left: 20px;">
+                                                        <lightning-input type="checkbox" label={lob} name={lob}
+                                                            checked class="column-checklist" disabled>
+                                                        </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </article>
+                    </div>
+                </div>
+            </template>
+            <template if:true={showLeftOnly}>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_3-of-3">
+                        <article class="slds-card slds-card_boundary slds-theme_shade">
+                            <div class="slds-card__header slds-grid">
+                                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container slds-icon-standard-account" title="Documents">
+                                            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                                <use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#file"></use>
+                                            </svg>
+                                            <span class="slds-assistive-text">Documents</span>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <h2 class="slds-card__header-title">
+                                            <a href="#" class="slds-card__header-link slds-truncate" title="Documents" onclick={getAccountIdFunction}>
+                                                <span>Documents</span>
+                                            </a>
+                                        </h2>
+                                    </div>
+                                </header>
+                            </div>
+                            <div class="slds-card__body slds-card__body_inner" style="margin-bottom: 5px;">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <template for:each={kycTypeList} for:item="kycType">
+                                        <div key={kycType.kycCategoryValue} class="slds-col">
+                                            <c-document-management-component-new-level-two
+                                                kyc-category-value={kycType.kycCategoryValue}
+                                                record-id={recordId}
+                                                oneventtwo={handleRefreshComponent}
+                                                file-size-upload={fileSizeUpload}
+                                                object-api-name={objectApiName}>
+                                            </c-document-management-component-new-level-two>
+                                        </div>
+                                        <!--<div key={kycType.kycCategoryValue} class="slds-col">
+                                            <div class="slds-box slds-box_x-small" style="background: white;">
+                                                <div class="slds-grid slds-grid_vertical">
+                                                    <div class="slds-col">
+                                                        <div class="slds-grid slds-gutters">
+                                                            <div class="slds-col slds-align_absolute-center" style="width: 8%; padding-left: 20px;">
+                                                                <lightning-button-icon if:false={kycType.drop}
+                                                                    icon-name="utility:right"  
+                                                                    variant="bare"
+                                                                    alternative-text="Open" 
+                                                                    title="Open"
+                                                                    data-kycvalue={kycType.kycCategoryValue}
+                                                                    onclick={handleShowKycCategory}>
+                                                                </lightning-button-icon>
+                                                                <lightning-button-icon if:true={kycType.drop}
+                                                                    icon-name="utility:down"  
+                                                                    variant="bare"
+                                                                    alternative-text="Close" 
+                                                                    title="Close"
+                                                                    data-kycvalue={kycType.kycCategoryValue}
+                                                                    onclick={handleHideKycCategory}>
+                                                                </lightning-button-icon>
+                                                            </div>
+                                                            <div class="slds-col" style="width: 92%;">
+                                                                <img src={folderIcon} style="height: 30px;"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <a href="javascript:void(0);" 
+                                                                    name={kycType.kycCategoryValue}
+                                                                    onclick={handleKycClick}>
+                                                                    {kycType.kycCategoryValue} Specific KYC
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col" if:true={kycType.drop}>
+                                                        <div style="padding: 10px 5px 3px 5px;">
+                                                            <c-document-management-component-new-level-two
+                                                                kyc-category-value={kycType.kycCategoryValue}
+                                                                record-id={recordId}
+                                                                file-size-upload={fileSizeUpload}>
+                                                            </c-document-management-component-new-level-two>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div key={kycType} class="slds-col" style="height: 6px;"></div>-->
+                                    </template>
+                                </div>
+                            </div>
+                            <footer class="slds-card__footer"></footer>
+                        </article>
+                    </div>
+                </div>
+            </template>
+            <template if:true={showRightOnly}>
+                <div class="slds-grid slds-wrap">
+                    
+                    <div class="slds-col slds-size_3-of-3 slds-card_boundary">
+                        <article class="slds-card">
+                            <div style="padding: 0px;">
+                                <div class="slds-card__header slds-m-around--none slds-theme_shade" style="height:33px">
+                                    <h2 id="modal-heading-05" class="slds-modal__title slds-hyphenate slds-align_absolute-center" style="padding-bottom: 7px;
+                                    font-size: 11px;
+                                    font-weight: 600;">
+                                        COLLECTED DOCUMENTS
+                                    </h2>
+                                </div>
+                            </div>
+                            <table class="slds-m-around--x-small" style="margin-left: 15px;">
+                                <thead class="checklist-table">
+                                    <tr>
+                                    </tr>
+                                </thead>
+                                <tbody class="checklist-table">
+                                    <!--template for:each={regularListMap} for:item="regular">
+                                        <div key={regular.key}>
+                                            {regular.key}
+                                            {regular.value}
+                                        </div>
+                                    </template-->
+                                    <!-- <template for:each={dataStructure} for:item="data">
+                                        <th key={data.Key}>{data.Key}</th>
+                                        <template for:each={data.value} for:item="dataValue">
+                                            <td key={dataValue.Id}>{dataValue.Label}</td>
+                                        </template>
+                                    </template> -->
+                                    <template if:true={regularTrue}>
+                                        <span style="font-weight: bold; color: rgba(35, 118, 204, 1)">Regular KYC Specific - Public Limited</span><br/>
+                                    </template>
+                                    <template for:each={regularListMap} for:item="regularMap">
+                                        <div key={regularMap} style="padding-left: 10px; margin-top: 10px;">
+                                            <lightning-icon icon-name="utility:level_down" size="x-small" alternative-text={regularMap.key} title="Level Down" key={regularMap} style="padding-right: 5px;"></lightning-icon><span style="font-weight: bold;">{regularMap.key}</span>
+                                            <template for:each={regularMap.value} for:item="regular">
+                                                <tr key={regular}>
+                                                    <td style="text-align: left; padding-top: 5px;">
+                                                        <div class="slds-p-bottom__xx-small" style="padding-left: 20px;">
+                                                        <lightning-input type="checkbox" label={regular} name={regular}
+                                                            checked class="column-checklist" disabled>
+                                                        </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <!-- <template for:each={regularListMap} for:item="regularMap">
+                                        <template for:each={regularMap.key} for:item="regular">
+                                            <tr key={regularMap.key}>
+                                                <td style="text-align: left;">
+                                                    {regular.key}
+                                                    {regular.value}
+                                                    <div class="slds-p-bottom__xx-small">
+                                                    <lightning-input type="checkbox" label={regular.value} name={regular.value}
+                                                        checked class="column-checklist" disabled>
+                                                    </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </template> -->
+                                </tbody>
+                            </table>
+                            <table class="slds-m-around--x-small" style="margin-top: 20px; margin-left: 15px;">
+                                <thead class="checklist-table">
+                                    <tr>
+                                    </tr>
+                                </thead>
+                                <tbody class="checklist-table">
+                                    <template if:true={lobTrue}>
+                                        <span style="font-weight: bold; color: rgba(35, 118, 204, 1)">LOB KYC Specific - Education</span><br/>
+                                    </template>
+                                    <template for:each={lobListMap} for:item="lobMap">
+                                        <div key={lobMap} style="padding-left: 10px; margin-top: 10px;">
+                                            <lightning-icon icon-name="utility:level_down" size="x-small" alternative-text={lobMap.key} title="Level Down" style="padding-right: 5px;"></lightning-icon><span style="font-weight: bold;">{lobMap.key}</span>
+                                            <template for:each={lobMap.value} for:item="lob">
+                                                <tr key={lob}>
+                                                    <td style="text-align: left; padding-top: 5px;">
+                                                        <div class="slds-p-bottom__xx-small" style="padding-left: 20px;">
+                                                        <lightning-input type="checkbox" label={lob} name={lob}
+                                                            checked class="column-checklist" disabled>
+                                                        </lightning-input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </article>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>
