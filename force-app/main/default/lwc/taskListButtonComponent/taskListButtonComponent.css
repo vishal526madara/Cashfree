@@ -7,3 +7,7 @@ div .LARGE {
 div .SMALL {
     width: 15rem;
 }
+
+.related_object-icon-color{
+    --slds-c-icon-color-foreground: white;
+}
