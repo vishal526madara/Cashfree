@@ -68,9 +68,41 @@
                               <div data-id="tasktype"
                                 class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
                                 <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+
                                   <button type="button" data-id="tasktypebuttonfocus"
-                                    class="slds-input_faux slds-combobox__input" onclick={handleTaskTypeClick}
-                                    >{SALESFORCE_TASK_RECORD.taskType}</button>
+                                    class="slds-input_faux slds-combobox__input" onclick={handleTaskTypeClick}>
+
+                                    <div class="slds-media">
+                                      <span class="slds-media__figure">
+                                        <span class="slds-media__figure ">
+                                          <template if:true={SALESFORCE_TASK_RECORD.taskType}>
+                                            <span class="slds-icon_container slds-icon-standard-sossession">
+                                              <svg class="slds-icon slds-icon_small">
+                                                <use xlink:href={currentTaskIconName}>
+                                                </use>
+                                              </svg>
+                                            </span>
+                                          </template>
+                                        </span>
+                                      </span>
+                                      <span class="slds-media__body">
+                                        {SALESFORCE_TASK_RECORD.taskType}
+                                      </span>
+
+                                    </div>
+                                    <!-- <span
+                                    class="slds-icon-standard-account slds-current-color">
+                                    <svg class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                      aria-hidden="true">
+                                      <use
+                                        xlink:href={currentIconName}>
+                                      </use>
+                                    </svg>
+                                  </span>
+
+                                    <span>{SALESFORCE_TASK_RECORD.taskType}</span> -->
+
+                                  </button>
                                   <!-- <input type="text" class="slds-input slds-combobox__input slds-has-focus" /> -->
                                   <span
                                     class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
@@ -86,25 +118,25 @@
                                 <div class="slds-dropdown slds-dropdown_length-with-icon-3 slds-dropdown_fluid">
                                   <ul class="slds-listbox slds-listbox_vertical">
                                     <template for:each={taskTypeList} for:item="taskItem">
-                                      <li key={taskItem.label} class="slds-listbox__item"  data-value={taskItem.value} onblur={handleRemoveTaskTypeClick} onclick={handleFieldPartChange}>
+                                      <li key={taskItem.label} class="slds-listbox__item" data-value={taskItem.value}
+                                        onblur={handleRemoveTaskTypeClick} onclick={handleFieldPartChange}>
                                         <div
                                           class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
                                           <span class="slds-media__figure slds-listbox__option-icon">
                                             <span class="slds-icon_container slds-icon-standard-sossession">
                                               <svg class="slds-icon slds-icon_small">
-                                                <use
-                                                  xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call">
+                                                <use xlink:href={taskItem.icon_name}>
                                                 </use>
                                               </svg>
                                             </span>
                                           </span>
                                           <!-- <a data-value={taskItem.value} onclick={handleFieldPartChange}> -->
                                           <span class="slds-media__body">
-                                            <span 
+                                            <span
                                               class="slds-listbox__option-text slds-listbox__option-text_entity">{taskItem.value}</span>
                                           </span>
-                                        <!-- </a> -->
-                                        
+                                          <!-- </a> -->
+
                                         </div>
                                       </li>
                                     </template>
@@ -192,35 +224,42 @@
                                         aria-haspopup="true" aria-expanded="true" title="Show More">
                                         <!-- <lightning-icon icon-name="utility:down" size="small"></lightning-icon>
                                         <span class="slds-assistive-teemarksxt"></span> -->
-                                        <span class="slds-icon_container slds-icon-standard-account slds-current-color" title="Please Select Related Object">
-                                          <svg class="slds-icon slds-icon_small related-object_icon__color" aria-hidden="true">
-                                            <use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+                                        <span class="slds-icon_container slds-icon-standard-account slds-current-color"
+                                          title="Please Select Related Object">
+                                          <svg class="slds-icon slds-icon_small related-object_icon__color"
+                                            aria-hidden="true">
+                                            <use
+                                              xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account">
+                                            </use>
                                           </svg>
                                         </span>
-                                          <span class="slds-icon_container slds-icon-utility-down slds-current-color" title="Please Select Related Object">
+                                        <span class="slds-icon_container slds-icon-utility-down slds-current-color"
+                                          title="Please Select Related Object">
                                           <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
-                                            <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#down"></use>
+                                            <use
+                                              xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#down">
+                                            </use>
                                           </svg>
                                           <span class="slds-assistive-text">Please Select Related Object</span>
                                         </span>
                                       </button>
 
 
-                                     <div class="slds-dropdown slds-dropdown_actions  slds-dropdown_left">
-                                      <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
-                                        <template for:each={relatedObjectList} for:item="objectName">
-                                          <li key={objectName.value} class="slds-dropdown__item slds-is-selected"
-                                            role="presentation">
-                                            <!-- <a aria-checked="true" href="#" role="menuitemcheckbox" tabindex="0"> -->
-                                            <a onclick={handleSelectRelatedObjectName} data-id={objectName.value}>
-                                              <span class="slds-truncate" title={objectName.value}>
-                                                <lightning-icon class="slds-m-right_x-small"
-                                                  icon-name={objectName.iconName}></lightning-icon>{objectName.value}</span>
-                                            </a>
-                                          </li>
-                                        </template>
-                                      </ul>
-                                    </div>
+                                      <div class="slds-dropdown slds-dropdown_actions  slds-dropdown_left">
+                                        <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                                          <template for:each={relatedObjectList} for:item="objectName">
+                                            <li key={objectName.value} class="slds-dropdown__item slds-is-selected"
+                                              role="presentation">
+                                              <!-- <a aria-checked="true" href="#" role="menuitemcheckbox" tabindex="0"> -->
+                                              <a onclick={handleSelectRelatedObjectName} data-id={objectName.value}>
+                                                <span class="slds-truncate" title={objectName.value}>
+                                                  <lightning-icon class="slds-m-right_x-small"
+                                                    icon-name={objectName.iconName}></lightning-icon>{objectName.value}</span>
+                                              </a>
+                                            </li>
+                                          </template>
+                                        </ul>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>

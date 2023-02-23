@@ -169,6 +169,7 @@ public without sharing class TaskListButtonController  {
         public class TaskTypePickListWrapper{
             @AuraEnabled public String label{get;set;}
             @AuraEnabled public String value{get;set;}
+            @AuraEnabled public String icon_name = null;
         }
 
         public class TaskRecordCreationWraper{

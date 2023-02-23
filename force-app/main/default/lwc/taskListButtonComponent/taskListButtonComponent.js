@@ -17,26 +17,44 @@ import insertTaskRecord from '@salesforce/apex/TaskListButtonController.insertTa
 import bulkRemarkInsertion from '@salesforce/apex/TaskRemarksCustomController.bulkRemarkInsertion';
 import bulkUploadAttachment from '@salesforce/apex/TaskListButtonController.bulkUploadAttachment';
 
+
+
+
+
+
 export default class TaskListButtonComponent extends NavigationMixin(LightningElement) {
+
+
+
+    TASK_CALL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+    TASK_MEET = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+    TASK_EMAIL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#email";
+    TASK_INTERNAL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+    TASK_NOTE = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#note";
+
+
+
+
+
     @api recordId;
     @track isModalOpen = true;
     @track load = false;
     @track isMainPageVisible = false;
     @api flexipageRegionWidth = 'slds-col ' + 'CLASSIC'; // default to classic. If its lightning, framework will set the value
-    @api strOutput=false;
-    fileSize =[];
+    @api strOutput = false;
+    fileSize = [];
 
     /*******************************************************************************/
-   
+
     @track taskTypeList;
 
 
-    @track relatedObjectList = [{ label: 'Lead', value: 'Lead', iconName:'standard:lead' }, { label: 'Account', value: 'Account', iconName:'standard:account' }, { label: 'Opportunity', value: 'Opportunity', iconName:'standard:opportunity'}];
+    @track relatedObjectList = [{ label: 'Lead', value: 'Lead', iconName: 'standard:lead' }, { label: 'Account', value: 'Account', iconName: 'standard:account' }, { label: 'Opportunity', value: 'Opportunity', iconName: 'standard:opportunity' }];
 
 
     contactId = null;
 
-    relatedOjectName='Account';
+    relatedOjectName = 'Account';
     relatedObjectIconName = 'standard:account';
     defaultRelatedObjectRecordName = '';
     defaultContactObjectRecordName = '';
@@ -91,16 +109,16 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
     attachmentFileArray = [];
 
-    attachmentFile={
-        'filename':null,
+    attachmentFile = {
+        'filename': null,
         'base64': null,
-        'recordId':null
+        'recordId': null
     }
 
 
     showAttachments = false;
-    get reminderMessage(){
-        return this.SALESFORCE_TASK_RECORD.dueDate != null ? "You will be reminded on "+ `${this.SALESFORCE_TASK_RECORD.dueDate}` + " at 10:00 AM" : "No Reminder has been set yet";
+    get reminderMessage() {
+        return this.SALESFORCE_TASK_RECORD.dueDate != null ? "You will be reminded on " + `${this.SALESFORCE_TASK_RECORD.dueDate}` + " at 10:00 AM" : "No Reminder has been set yet";
     }
     //reminderMessage = "You will be reminded at "+ this.SALESFORCE_TASK_RECORD.dueDate + " at 10:00 AM";
 
@@ -109,7 +127,9 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
     hasRendered = true;
     IsRemarksVisible = true;
-    
+
+    currentTaskIconName = '';
+
     connectedCallback() {
         const dateV = new Date();
         this.list(dateV);
@@ -117,20 +137,20 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
 
     get acceptedFormats() {
-        return ['.pdf', '.png','.jpg'];
+        return ['.pdf', '.png', '.jpg'];
     }
 
     handleUploadFinished(event) {
         this.showAttachments = false;
-        console.log('File Date:::'+ JSON.stringify(event.detail.files));
+        console.log('File Date:::' + JSON.stringify(event.detail.files));
         // Get the list of uploaded files
         const uploadedFiles = event.detail.files[0];
         this.attachmentFileArray.push(uploadedFiles);
         this.showAttachments = true;
-        console.log('Array List:::'+ JSON.stringify(this.attachmentFileArray));
+        console.log('Array List:::' + JSON.stringify(this.attachmentFileArray));
         this.getFileSize();
     }
-   
+
 
     @track newValue;
     @track belowTemplate = true;
@@ -146,8 +166,9 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     handleFieldPartChange(event) {
         this.handleRemoveTaskTypeClick();
         console.log('Test::::');
-        console.log('Value::::::'+ event.currentTarget.dataset.value);
+        console.log('Value::::::' + event.currentTarget.dataset.value);
         let parentPicklistValue = event.currentTarget.dataset.value;
+        this.currentTaskIconName = this.checkTaskType(parentPicklistValue);
         //this.template.querySelector(`[data-id="tasksubtypepicklist"]`).disabled = true;
         this.deplendentPicklistValue = '';
         this.SALESFORCE_TASK_RECORD.taskType = parentPicklistValue
@@ -173,7 +194,7 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         //message-when-value-missing={priorityErrorMessage}
     }
 
-  
+
 
     handleTaskSubject(event) {
         this.SALESFORCE_TASK_RECORD.taskSubject = event.detail.value;
@@ -206,7 +227,7 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     handleRemarksCommentChange(event) {
         this.remarkObject = {
             'remarkIdWrap': Math.random(),
-            'createdByName':  this.formatDate(new Date()),
+            'createdByName': this.formatDate(new Date()),
             'Comment': event.detail.value
         }
     }
@@ -217,10 +238,10 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         var ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
-        minutes = minutes < 10 ? '0'+minutes : minutes;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
         var strTime = hours + ':' + minutes + ' ' + ampm;
-        return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
-      }
+        return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+    }
 
     handleRemarksComment(event) {
         this.showRemarks = false;
@@ -244,50 +265,50 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     }
 
 
-    handleSelectRelatedObjectValue(event){
+    handleSelectRelatedObjectValue(event) {
         console.log('Function Called::::');
         //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger');
         //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger_click');
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-is-open');
     }
 
-    handleSelectRelatedObjectName(event){
+    handleSelectRelatedObjectName(event) {
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
         //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
-        let objectEvent = new CustomEvent ("",{
-            detail:{
+        let objectEvent = new CustomEvent("", {
+            detail: {
                 value: event.currentTarget.dataset.id
             },
         });
         this.handleObjectSelect(objectEvent);
-        console.log('Value::::',event.currentTarget.dataset.id);
+        console.log('Value::::', event.currentTarget.dataset.id);
     }
 
-    handleRemoveRelatedObject(){
+    handleRemoveRelatedObject() {
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
     }
 
     taskTypePopUpOpen = true;
-    handleTaskTypeClick(event){
+    handleTaskTypeClick(event) {
         console.log('Clicked::::');
-        if(this.taskTypePopUpOpen){
-        this.template.querySelector(`[data-id="tasktype"]`).classList.add('slds-is-open');
-        this.taskTypePopUpOpen = false;
+        if (this.taskTypePopUpOpen) {
+            this.template.querySelector(`[data-id="tasktype"]`).classList.add('slds-is-open');
+            this.taskTypePopUpOpen = false;
         }
-        else if(!this.taskTypePopUpOpen){
+        else if (!this.taskTypePopUpOpen) {
             this.template.querySelector(`[data-id="tasktype"]`).classList.remove('slds-is-open');
             this.taskTypePopUpOpen = true;
         }
         this.template.querySelector(`[data-id="tasktypebuttonfocus"]`).classList.add('slds-has-focus');
     }
 
-    handleRemoveTaskTypeClick(event){
+    handleRemoveTaskTypeClick(event) {
         console.log('Function Called:::');
         this.template.querySelector(`[data-id="tasktype"]`).classList.remove('slds-is-open');
         this.template.querySelector(`[data-id="tasktypebuttonfocus"]`).classList.remove('slds-has-focus');
     }
-         
+
 
     list(dateV) {
         this.taskCom.createddate = dateV;
@@ -298,9 +319,13 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     fetchTaskTypePickListValues() {
         this.load = true;
         this.isMainPageVisible = false;
-        fetchTaskType()
+         fetchTaskType()
             .then(result => {
                 this.taskTypeList = result;
+                for (let i = 0; i < this.taskTypeList.length; i++) {
+                     this.taskTypeList[i].icon_name = this.checkTaskType(this.taskTypeList[i].value); 
+                     console.log('Icon Name:::::'+ this.taskTypeList[i].icon_name);  
+                }
                 this.isMainPageVisible = true;
                 this.load = false;
                 //this.fetchSubTaskTypePicklistValues();
@@ -312,6 +337,23 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
                 this.showToastMessage('Error...', error.body.message, 'error', 'pester');
                 console.log('Error:::::', error);
             })
+    }
+
+    checkTaskType(taskType){
+                    /*TASK_CALL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+                    TASK_MEET = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+                    TASK_EMAIL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#email";
+                    TASK_INTERNAL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+                    TASK_NOTE = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#note";
+                    */
+                    switch (taskType) {
+                        case 'Call': return this.TASK_CALL;
+                        case 'Meet': return  this.TASK_MEET;
+                        case 'Email': return  this.TASK_EMAIL;
+                        case 'Internal': return  this.TASK_INTERNAL;
+                        case 'Note': return  this.TASK_NOTE;
+                    }
+
     }
 
     fetchSubTaskTypePicklistValues(parentPicklistValue) {
@@ -399,16 +441,16 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
 
     closeModal() {
-        this.isModalOpen = false;              
-        if(this.strOutput == false){
+        this.isModalOpen = false;
+        if (this.strOutput == false) {
             this.handleListViewNavigation();
-            }
-            if(this.strOutput == true){
-                console.log('strOutput::true')
-               this.navigateToOnboardingDetail();
-               const closeQA = new CustomEvent('save');
-                this.dispatchEvent(closeQA);
-            }
+        }
+        if (this.strOutput == true) {
+            console.log('strOutput::true')
+            this.navigateToOnboardingDetail();
+            const closeQA = new CustomEvent('save');
+            this.dispatchEvent(closeQA);
+        }
 
     }
 
@@ -448,23 +490,23 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     handleUploadFile(event) {
         console.log('Value::::');
         let cuurentFile = event.target.files[0];
-        console.log('File Record:::'+ JSON.stringify(event.target.files[0]));
+        console.log('File Record:::' + JSON.stringify(event.target.files[0]));
         reader.onload = () => {
-        let  base64 = reader.result.split(',')[1];
-        this.attachmentFile = {
-            'filename': cuurentFile.name,
-            'base64': base64,
-            'recordId': Math.random()
+            let base64 = reader.result.split(',')[1];
+            this.attachmentFile = {
+                'filename': cuurentFile.name,
+                'base64': base64,
+                'recordId': Math.random()
+            }
         }
-    }
-    reader.readAsDataURL(cuurentFile);
+        reader.readAsDataURL(cuurentFile);
         this.attachmentFileArray.push(this.attachmentFile);
-        console.log('File Attachment::::',this.attachmentFileArray);
+        console.log('File Attachment::::', this.attachmentFileArray);
 
     }
 
 
-    handleAddFile(event){
+    handleAddFile(event) {
         this.template.querySelector(`[data-id="uploadattachment"]`).click();
     }
 
@@ -486,38 +528,38 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
     handleSave() {
         this.load = true;
-         
+
         /** 
          * @description: custom validation of Priority field
          */
-         if(this.SALESFORCE_TASK_RECORD.priority == '' || this.SALESFORCE_TASK_RECORD.priority == undefined || this.SALESFORCE_TASK_RECORD.priority == null){
-            this.showEventMessage('Record Field','Please Select Priority', 'warning', 'pester');
+        if (this.SALESFORCE_TASK_RECORD.priority == '' || this.SALESFORCE_TASK_RECORD.priority == undefined || this.SALESFORCE_TASK_RECORD.priority == null) {
+            this.showEventMessage('Record Field', 'Please Select Priority', 'warning', 'pester');
             this.template.querySelector(`[data-id="priorityinput"]`).messageWhenValueMissing = "Please Select Priority";
             this.template.querySelector(`[data-id="priorityinput"]`).reportValidity();
             this.load = false;
             return;
-         }
+        }
 
-         /**
-          * @description: custom validation of Owner Field
-          */
-          console.log('Value:::'+ this.SALESFORCE_TASK_RECORD.assigneeRecordId);
-         if(this.SALESFORCE_TASK_RECORD.assigneeRecordId == '' || this.SALESFORCE_TASK_RECORD.assigneeRecordId == undefined ||this.SALESFORCE_TASK_RECORD.assigneeRecordId == null){
-           
+        /**
+         * @description: custom validation of Owner Field
+         */
+        console.log('Value:::' + this.SALESFORCE_TASK_RECORD.assigneeRecordId);
+        if (this.SALESFORCE_TASK_RECORD.assigneeRecordId == '' || this.SALESFORCE_TASK_RECORD.assigneeRecordId == undefined || this.SALESFORCE_TASK_RECORD.assigneeRecordId == null) {
+
             this.template.querySelector(`[data-id="taskowner"]`).classList.add('slds-has-error');
-            
-            
-            console.log('Return::::'+ this.load);
-            this.showEventMessage('Record Field','Please Select Owner', 'warning', 'pester');
+
+
+            console.log('Return::::' + this.load);
+            this.showEventMessage('Record Field', 'Please Select Owner', 'warning', 'pester');
             this.load = false;
             return;
-         }
-        console.log('Final List::::'+ JSON.stringify(this.SALESFORCE_TASK_RECORD));
+        }
+        console.log('Final List::::' + JSON.stringify(this.SALESFORCE_TASK_RECORD));
         insertTaskRecord({ jsonInput: JSON.stringify(this.SALESFORCE_TASK_RECORD) })
             .then(result => {
                 this.handleNewRemarkCreation(result);
                 //this.template.querySelector('c-task-lis-button-component').remove('c-task-lis-button-component');
-               // this.closeQuickAction();
+                // this.closeQuickAction();
             })
             .catch(error => {
                 console.log('Error::' + JSON.stringify(error));
@@ -529,16 +571,16 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     }
 
     handleNewRemarkCreation(newTaskId) {
-        if(this.remarksList.length == 0){
+        if (this.remarksList.length == 0) {
             this.SALESFORCE_TASK_RECORD = {};
             this.load = false;
-            if(this.strOutput == false){
-            this.navigateToTaskPage(newTaskId);
+            if (this.strOutput == false) {
+                this.navigateToTaskPage(newTaskId);
             }
-            if(this.strOutput == true){
+            if (this.strOutput == true) {
                 console.log('strOutput::true')
-               this.navigateToOnboardingDetail();
-               const closeQA = new CustomEvent('save');
+                this.navigateToOnboardingDetail();
+                const closeQA = new CustomEvent('save');
                 this.dispatchEvent(closeQA);
             }
 
@@ -547,7 +589,7 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
         bulkRemarkInsertion({ taskId: newTaskId, jsonRemarksList: JSON.stringify(this.remarksList) })
             .then(result => {
-              this.handleSaveAllAttachment(newTaskId);
+                this.handleSaveAllAttachment(newTaskId);
             })
             .catch(error => {
                 console.log('Error::' + JSON.stringify(error));
@@ -555,61 +597,61 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
                 console.log('Error Message:::' + typeof error.body.message);
                 this.showEventMessage('Error!!!!', error.message.body, 'warning', 'pester');
             })
-            
+
     }
-    getFileSize(){
+    getFileSize() {
         bulkUploadAttachment()
-        .then(result=>{
-            console.log('Result::::'+ JSON.stringify(result));
-            // result.filter(el=>{
-            //     this.fileSize= el.ContentDocument.ContentSize;
-            // })
-            // console.log('this.fileSize::'+this.fileSize);
-        })
+            .then(result => {
+                console.log('Result::::' + JSON.stringify(result));
+                // result.filter(el=>{
+                //     this.fileSize= el.ContentDocument.ContentSize;
+                // })
+                // console.log('this.fileSize::'+this.fileSize);
+            })
     }
 
-    handleSaveAllAttachment(newTaskId){
-        console.log('taskId::',newTaskId);
-        if(this.attachmentFileArray.length == 0){
+    handleSaveAllAttachment(newTaskId) {
+        console.log('taskId::', newTaskId);
+        if (this.attachmentFileArray.length == 0) {
             this.SALESFORCE_TASK_RECORD = {};
             this.load = false;
             this.navigateToTaskPage(newTaskId);
             return;
         }
-        let documentList=[];
+        let documentList = [];
 
-        console.log('Final Function Call:::'+ this.attachmentFileArray.length);
-        for(let i=0; i<this.attachmentFileArray.length; i++){
-            console.log('Number::::'+ i);
-           documentList.push(this.attachmentFileArray[i].documentId);
+        console.log('Final Function Call:::' + this.attachmentFileArray.length);
+        for (let i = 0; i < this.attachmentFileArray.length; i++) {
+            console.log('Number::::' + i);
+            documentList.push(this.attachmentFileArray[i].documentId);
         }
-        bulkUploadAttachment({taskId:newTaskId, jsonAttachmentList:documentList})
-        .then(result =>{
-            this.SALESFORCE_TASK_RECORD = {};
-            this.load = false;
-            this.navigateToTaskPage(newTaskId);
-        })
-        .catch(error => {
-            console.log('Error::' + JSON.stringify(error));
-            this.load = false;
-            console.log('Error Message:::' + typeof error.body.message);
-            this.showEventMessage('Error!!!!', error.message.body, 'warning', 'pester');
-        })
+        bulkUploadAttachment({ taskId: newTaskId, jsonAttachmentList: documentList })
+            .then(result => {
+                this.SALESFORCE_TASK_RECORD = {};
+                this.load = false;
+                this.navigateToTaskPage(newTaskId);
+            })
+            .catch(error => {
+                console.log('Error::' + JSON.stringify(error));
+                this.load = false;
+                console.log('Error Message:::' + typeof error.body.message);
+                this.showEventMessage('Error!!!!', error.message.body, 'warning', 'pester');
+            })
 
     }
 
     // method to close the modal pop-up 
     handleCancel() {
         this.updateRecordView();
-        console.log('strOutput::'+this.strOutput);
-       if(this.strOutput == false){
-        this.handleListViewNavigation();
-       }
-       if(this.strOutput == true){
-        this.navigateToOnboardingDetail();
-       }
-       const closeQA = new CustomEvent('close');
-       this.dispatchEvent(closeQA);
+        console.log('strOutput::' + this.strOutput);
+        if (this.strOutput == false) {
+            this.handleListViewNavigation();
+        }
+        if (this.strOutput == true) {
+            this.navigateToOnboardingDetail();
+        }
+        const closeQA = new CustomEvent('close');
+        this.dispatchEvent(closeQA);
     }
 
     /**
@@ -625,13 +667,13 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     /*
         Function to show toast message 
     */
-  
+
 
     showEventMessage(title, message, variant, mode) {
-        console.log('Function Called::'+title);
-        console.log('Function Called::'+message);
-        console.log('Function Called::'+variant);
-        console.log('Function Called::'+mode);
+        console.log('Function Called::' + title);
+        console.log('Function Called::' + message);
+        console.log('Function Called::' + variant);
+        console.log('Function Called::' + mode);
 
         let evt = new ShowToastEvent({
             title: title,
