@@ -141,16 +141,18 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         "createddate": null,
         "remarkIdWrap": "2364"
     };
-    handlefieldchange() {
 
-    }
 
     handleFieldPartChange(event) {
+        this.handleRemoveTaskTypeClick();
+        console.log('Test::::');
+        console.log('Value::::::'+ event.currentTarget.dataset.value);
+        let parentPicklistValue = event.currentTarget.dataset.value;
         //this.template.querySelector(`[data-id="tasksubtypepicklist"]`).disabled = true;
         this.deplendentPicklistValue = '';
-        this.SALESFORCE_TASK_RECORD.taskType = event.detail.value;
-        this.fetchSubTaskTypePicklistValues(event.detail.value);
-        console.log('Picklsit Value::::' + typeof event.detail.value);
+        this.SALESFORCE_TASK_RECORD.taskType = parentPicklistValue
+        this.fetchSubTaskTypePicklistValues(parentPicklistValue);
+        console.log('Picklsit Value::::' + typeof parentPicklistValue);
 
     }
 
@@ -243,14 +245,15 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
 
     handleSelectRelatedObjectValue(event){
-       // this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger');
-        this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger_click');
+        console.log('Function Called::::');
+        //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger');
+        //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger_click');
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-is-open');
     }
 
     handleSelectRelatedObjectName(event){
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
-        this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
+        //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
         let objectEvent = new CustomEvent ("",{
             detail:{
                 value: event.currentTarget.dataset.id
@@ -264,6 +267,27 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
     }
+
+    taskTypePopUpOpen = true;
+    handleTaskTypeClick(event){
+        console.log('Clicked::::');
+        if(this.taskTypePopUpOpen){
+        this.template.querySelector(`[data-id="tasktype"]`).classList.add('slds-is-open');
+        this.taskTypePopUpOpen = false;
+        }
+        else if(!this.taskTypePopUpOpen){
+            this.template.querySelector(`[data-id="tasktype"]`).classList.remove('slds-is-open');
+            this.taskTypePopUpOpen = true;
+        }
+        this.template.querySelector(`[data-id="tasktypebuttonfocus"]`).classList.add('slds-has-focus');
+    }
+
+    handleRemoveTaskTypeClick(event){
+        console.log('Function Called:::');
+        this.template.querySelector(`[data-id="tasktype"]`).classList.remove('slds-is-open');
+        this.template.querySelector(`[data-id="tasktypebuttonfocus"]`).classList.remove('slds-has-focus');
+    }
+         
 
     list(dateV) {
         this.taskCom.createddate = dateV;

@@ -47,60 +47,69 @@
                     <div class="slds-grid slds-wrap">
                       <!-- Segment-1 Starts Here-->
                       <!-- Row-1 and Col-1 -->
-                      <div
-                        class="slds-col slds-size--1-of-1 slds-m-top_medium slds-p-bottom_small slds-section-title slds-theme_shade">
-                        <p class="slds-m-left--medium slds-m-top--x-small">
+                      <!-- <div
+                        class="slds-col slds-size--1-of-1 slds-m-top_medium slds-p-bottom_small slds-section-title slds-theme_shade"> -->
+                      <!-- <p class="slds-m-left--medium slds-m-top--x-small">
                           Task Information
                         </p>
-                      </div>
+                      </div> -->
 
                       <!-- Task Type Information-->
                       <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
-                        <lightning-combobox name="taskType" label="Task Type" value={SALESFORCE_TASK_RECORD.taskType}
-                          options={taskTypeList} onchange={handleFieldPartChange}>
-                        </lightning-combobox>
-                      </div>
+                        <!-- <lightning-combobox name="taskType" label="Task Type" value={SALESFORCE_TASK_RECORD.taskType}
+                            options={taskTypeList} onchange={handleFieldPartChange}>
+                          </lightning-combobox>
+                        </div> -->
 
-                      <div class="slds-form-element">
-                        <label class="slds-form-element__label">Task Type</label>
-                        <div class="slds-form-element__control">
-                          <div class="slds-combobox_container">
-                            <div data-id="tasktype" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
-                              <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
-                                <input type="text" class="slds-input slds-combobox__input slds-has-focus" />
-                                <span class="slds-icon_container slds-input__icon slds-input__icon_right">
-                                  <svg class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
-                                    aria-hidden="true">
-                                    <use
-                                      xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#down">
-                                    </use>
-                                  </svg>
-                                </span>
-                              </div>
+                        <div class="slds-form-element">
+                          <label class="slds-form-element__label">Task Type</label>
+                          <div class="slds-form-element__control">
+                            <div class="slds-combobox_container">
+                              <div data-id="tasktype"
+                                class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                  <button type="button" data-id="tasktypebuttonfocus"
+                                    class="slds-input_faux slds-combobox__input" onclick={handleTaskTypeClick}
+                                    >{SALESFORCE_TASK_RECORD.taskType}</button>
+                                  <!-- <input type="text" class="slds-input slds-combobox__input slds-has-focus" /> -->
+                                  <span
+                                    class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                                    <svg class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default"
+                                      aria-hidden="true">
+                                      <use
+                                        xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#down">
+                                      </use>
+                                    </svg>
+                                  </span>
+                                </div>
 
-                              <div class="slds-dropdown slds-dropdown_length-with-icon-3 slds-dropdown_fluid">
-                                <ul class="slds-listbox slds-listbox_vertical">
-                                  <template for:each={taskTypeList} for:item="taskItem">
-                                    <li key={taskItem.label} class="slds-listbox__item">
-                                      <div
-                                        class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
-                                        <span class="slds-media__figure slds-listbox__option-icon">
-                                          <span class="slds-icon_container slds-icon-standard-action-list-component">
-                                            <svg class="slds-icon slds-icon_small">
-                                              <use
-                                                xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call">
-                                              </use>
-                                            </svg>
+                                <div class="slds-dropdown slds-dropdown_length-with-icon-3 slds-dropdown_fluid">
+                                  <ul class="slds-listbox slds-listbox_vertical">
+                                    <template for:each={taskTypeList} for:item="taskItem">
+                                      <li key={taskItem.label} class="slds-listbox__item"  data-value={taskItem.value} onblur={handleRemoveTaskTypeClick} onclick={handleFieldPartChange}>
+                                        <div
+                                          class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta">
+                                          <span class="slds-media__figure slds-listbox__option-icon">
+                                            <span class="slds-icon_container slds-icon-standard-sossession">
+                                              <svg class="slds-icon slds-icon_small">
+                                                <use
+                                                  xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call">
+                                                </use>
+                                              </svg>
+                                            </span>
                                           </span>
-                                        </span>
-                                        <span class="slds-media__body">
-                                          <span
-                                            class="slds-listbox__option-text slds-listbox__option-text_entity">{taskItem.value}</span>
-                                        </span>
-                                      </div>
-                                    </li>
-                                  </template>
-                                </ul>
+                                          <!-- <a data-value={taskItem.value} onclick={handleFieldPartChange}> -->
+                                          <span class="slds-media__body">
+                                            <span 
+                                              class="slds-listbox__option-text slds-listbox__option-text_entity">{taskItem.value}</span>
+                                          </span>
+                                        <!-- </a> -->
+                                        
+                                        </div>
+                                      </li>
+                                    </template>
+                                  </ul>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -174,31 +183,48 @@
                             <div class="slds-col slds-size--1-of-1" style="width: 100%">
                               <div style="display: flex">
                                 <!--New Segment slds-dropdown-trigger-->
-                                <div class="slds-dropdown-trigger" data-id="iconrelatedobject">
-                                  <button class="slds-button slds-button_icon slds-button_icon-border-filled"
-                                    onclick={handleSelectRelatedObjectValue} onblur={handleRemoveRelatedObject}
-                                    aria-haspopup="true" aria-expanded="true" title="Show More">
-                                    <lightning-icon icon-name="utility:chevrondown" size="small"></lightning-icon>
-                                    <!-- <span class="slds-assistive-teemarksxt">Select Related</span> -->
-                                    <span class="slds-assistive-teemarksxt"></span>
-                                  </button>
+                                <div class="slds-form-element__control">
+                                  <div class="slds-combobox_container">
+                                    <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+                                      data-id="iconrelatedobject">
+                                      <button class="slds-button slds-button_icon slds-button_icon-border-filled"
+                                        onclick={handleSelectRelatedObjectValue} onblur={handleRemoveRelatedObject}
+                                        aria-haspopup="true" aria-expanded="true" title="Show More">
+                                        <!-- <lightning-icon icon-name="utility:down" size="small"></lightning-icon>
+                                        <span class="slds-assistive-teemarksxt"></span> -->
+                                        <span class="slds-icon_container slds-icon-standard-account slds-current-color" title="Please Select Related Object">
+                                          <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                            <use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
+                                          </svg>
+                                        </span>
+                                          <span class="slds-icon_container slds-icon-utility-down slds-current-color" title="Please Select Related Object">
+                                          <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                            <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#down"></use>
+                                          </svg>
+                                          <span class="slds-assistive-text">Please Select Related Object</span>
+                                        </span>
+                                      </button>
 
-                                  <div class="slds-dropdown slds-dropdown_actions slds-dropdown_left">
-                                    <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
-                                      <template for:each={relatedObjectList} for:item="objectName">
-                                        <li key={objectName.value} class="slds-dropdown__item slds-is-selected"
-                                          role="presentation">
-                                          <!-- <a aria-checked="true" href="#" role="menuitemcheckbox" tabindex="0"> -->
-                                          <a onclick={handleSelectRelatedObjectName} data-id={objectName.value}>
-                                            <span class="slds-truncate" title={objectName.value}>
-                                              <lightning-icon class="slds-m-right_x-small"
-                                                icon-name={objectName.iconName}></lightning-icon>{objectName.value}</span>
-                                          </a>
-                                        </li>
-                                      </template>
-                                    </ul>
+
+                                     <div class="slds-dropdown slds-dropdown_actions  slds-dropdown_left">
+                                      <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                                        <template for:each={relatedObjectList} for:item="objectName">
+                                          <li key={objectName.value} class="slds-dropdown__item slds-is-selected"
+                                            role="presentation">
+                                            <!-- <a aria-checked="true" href="#" role="menuitemcheckbox" tabindex="0"> -->
+                                            <a onclick={handleSelectRelatedObjectName} data-id={objectName.value}>
+                                              <span class="slds-truncate" title={objectName.value}>
+                                                <lightning-icon class="slds-m-right_x-small"
+                                                  icon-name={objectName.iconName}></lightning-icon>{objectName.value}</span>
+                                            </a>
+                                          </li>
+                                        </template>
+                                      </ul>
+                                    </div>
+                                    </div>
                                   </div>
                                 </div>
+
 
                                 <!--New Segment -->
                                 <div style="width: 100%">
