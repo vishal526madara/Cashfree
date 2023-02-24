@@ -32,6 +32,11 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     TASK_INTERNAL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
     TASK_NOTE = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#note";
 
+    ACCOUNT_ICON = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account";
+    OPPORTUNITY_ICON = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#opportunity";
+    LEAD_ICON = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#lead";
+
+
 
 
 
@@ -91,7 +96,8 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         'relatedToId': null,
         'contactRecordId': null,
         'assigneeRecordId': null,
-        'taskReminder': false
+        'taskReminder': false,
+        'eventCreation': false
     }
 
 
@@ -356,6 +362,22 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
     }
 
+
+    handleCreateEvent(event){
+        console.log('Test::::');
+        console.log('Boolean Value:::'+ event.target.checked);
+        console.log('Boolean Data::::'+  this.SALESFORCE_TASK_RECORD.eventCreation);
+        let eventUserInput = event.target.checked;
+        if(eventUserInput){
+            this.SALESFORCE_TASK_RECORD.eventCreation = true;
+            console.log('Condition Passed:::'+ this.SALESFORCE_TASK_RECORD.eventCreation);
+            this.template.querySelector(`[data-id="startdateerror"]`).disabled = true;
+        }
+        if(!eventUserInput){
+            this.SALESFORCE_TASK_RECORD.eventCreation = false;
+        }
+    }
+
     fetchSubTaskTypePicklistValues(parentPicklistValue) {
         console.log('Function Callled:::');
         fetchSubTypePicklist({ parentPicklist: parentPicklistValue })
@@ -390,6 +412,9 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     *@description:  Select Related Object Value from user 
     * @value: Lead, Account And Contact
     * */
+
+
+    relatedIconButtonName = this.ACCOUNT_ICON;
     handleObjectSelect(event) {
         console.log('Event Detail::::' + JSON.stringify(event.detail));
         this.relatedObjectValue = event.detail.value;
@@ -400,10 +425,31 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
         if (this.relatedOjectName == 'Account') {
             this.relatedObjectIconName = 'standard:account';
+            this.relatedIconButtonName = this.ACCOUNT_ICON;
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-opportunity');
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-lead');
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.add('slds-icon-standard-account');
+
         } else if (this.relatedOjectName == 'Opportunity') {
             this.relatedObjectIconName = 'standard:opportunity';
+            this.relatedIconButtonName = this.OPPORTUNITY_ICON;
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-lead');
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-account');
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.add('slds-icon-standard-opportunity');
+
+            console.log('Funnction Passed::::');
+
+             
+            //relativeiconcolor
+            //slds-icon-standard-opportunity
         } else if (this.relatedOjectName == 'Lead') {
             this.relatedObjectIconName = 'standard:lead';
+            this.relatedIconButtonName = this.LEAD_ICON;
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-opportunity');
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-account');
+            this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.add('slds-icon-standard-lead');
+           
+            //slds-icon-standard-lead
         }
         this.template.querySelector(`[data-id="relatedCustomLookup"]`).handleRemovePill();
 

@@ -68,18 +68,15 @@
                               <div data-id="tasktype"
                                 class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
                                 <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
-
                                   <button type="button" data-id="tasktypebuttonfocus"
                                     class="slds-input_faux slds-combobox__input" onclick={handleTaskTypeClick}>
-
                                     <div class="slds-media">
                                       <span class="slds-media__figure">
-                                        <span class="slds-media__figure ">
+                                        <span class="slds-media__figure">
                                           <template if:true={SALESFORCE_TASK_RECORD.taskType}>
                                             <span class="slds-icon_container slds-icon-standard-sossession">
                                               <svg class="slds-icon slds-icon_small">
-                                                <use xlink:href={currentTaskIconName}>
-                                                </use>
+                                                <use xlink:href={currentTaskIconName}></use>
                                               </svg>
                                             </span>
                                           </template>
@@ -88,7 +85,6 @@
                                       <span class="slds-media__body">
                                         {SALESFORCE_TASK_RECORD.taskType}
                                       </span>
-
                                     </div>
                                     <!-- <span
                                     class="slds-icon-standard-account slds-current-color">
@@ -101,7 +97,6 @@
                                   </span>
 
                                     <span>{SALESFORCE_TASK_RECORD.taskType}</span> -->
-
                                   </button>
                                   <!-- <input type="text" class="slds-input slds-combobox__input slds-has-focus" /> -->
                                   <span
@@ -125,8 +120,7 @@
                                           <span class="slds-media__figure slds-listbox__option-icon">
                                             <span class="slds-icon_container slds-icon-standard-sossession">
                                               <svg class="slds-icon slds-icon_small">
-                                                <use xlink:href={taskItem.icon_name}>
-                                                </use>
+                                                <use xlink:href={taskItem.icon_name}></use>
                                               </svg>
                                             </span>
                                           </span>
@@ -136,7 +130,6 @@
                                               class="slds-listbox__option-text slds-listbox__option-text_entity">{taskItem.value}</span>
                                           </span>
                                           <!-- </a> -->
-
                                         </div>
                                       </li>
                                     </template>
@@ -190,14 +183,14 @@
                       </div>
                       <!-- Row-4 and Col-1 -->
                       <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
-                        <lightning-input type="date" name="startDate" label="Start Date"
+                        <lightning-input type="datetime" name="startDate" label="Start Date" data-error="startdateerror"
                           value={SALESFORCE_TASK_RECORD.startDate} onchange={handleStartDate}>
                         </lightning-input>
                       </div>
                       <!-- <div class="slds-col slds-size--1-of-12" style="padding: 0px 0px 10px 0px"></div> -->
                       <!-- Row-4 and Col-2 -->
                       <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
-                        <lightning-input type="date" name="endDate" label="End Date" onchange={handleEndDate}>
+                        <lightning-input type="datetime" name="endDate" label="End Date" onchange={handleEndDate}>
                         </lightning-input>
                       </div>
 
@@ -221,17 +214,19 @@
                                       data-id="iconrelatedobject">
                                       <button class="slds-button slds-button_icon slds-button_icon-border-filled"
                                         onclick={handleSelectRelatedObjectValue} onblur={handleRemoveRelatedObject}
-                                        aria-haspopup="true" aria-expanded="true" title="Show More">
+                                        aria-haspopup="true" aria-expanded="true" title="Show More"
+                                        style="width: 53px; padding-top: 8px">
                                         <!-- <lightning-icon icon-name="utility:down" size="small"></lightning-icon>
                                         <span class="slds-assistive-teemarksxt"></span> -->
-                                        <span class="slds-icon_container slds-icon-standard-account slds-current-color"
-                                          title="Please Select Related Object">
-                                          <svg class="slds-icon slds-icon_small related-object_icon__color"
-                                            aria-hidden="true">
-                                            <use
-                                              xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account">
-                                            </use>
-                                          </svg>
+                                        <span class="slds-avatar">
+                                          <span class="slds-icon_container slds-current-color"
+                                            title="Please Select Related Object">
+                                            <svg
+                                              class="slds-icon slds-icon_small related-object_icon__color slds-icon-standard-account"
+                                              aria-hidden="true" data-icon-color="relativeiconcolor">
+                                              <use xlink:href={relatedIconButtonName}></use>
+                                            </svg>
+                                          </span>
                                         </span>
                                         <span class="slds-icon_container slds-icon-utility-down slds-current-color"
                                           title="Please Select Related Object">
@@ -244,8 +239,7 @@
                                         </span>
                                       </button>
 
-
-                                      <div class="slds-dropdown slds-dropdown_actions  slds-dropdown_left">
+                                      <div class="slds-dropdown slds-dropdown_actions slds-dropdown_left">
                                         <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
                                           <template for:each={relatedObjectList} for:item="objectName">
                                             <li key={objectName.value} class="slds-dropdown__item slds-is-selected"
@@ -263,7 +257,6 @@
                                     </div>
                                   </div>
                                 </div>
-
 
                                 <!--New Segment -->
                                 <div style="width: 100%">
@@ -333,6 +326,18 @@
                         </div>
                       </div>
                       <!--Phone Number Record Section-->
+
+                      <!-- Craete Event Section -->
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-large">
+                        <div class="slds-form-element__control">
+                          <span class="slds-checkbox slds-checkbox_standalone">
+                            <input type="checkbox" onchange={handleCreateEvent} name="label" value="option" />
+                            <span class="slds-checkbox_faux"></span>
+                          </span>
+                          <label class="slds-form-element__label">Create Event</label>
+                        </div>
+                      </div>
+                      <!-- End Of Craete Event Section-->
                       <!-- default-name="Cashfree" -->
 
                       <!-- Segment-2 ends Here-->
@@ -379,15 +384,16 @@
                               </header>
                             </div>
 
-                            <div class="slds-card__body slds-card__body_inner" style="padding: 0">
-                              <div if:true={belowTemplate} style="
+                            <div class="slds-box slds-card__body slds-card__body_inner" style="padding: 0">
+                              <div class="slds-p-left--x-small" if:true={belowTemplate} style="
                                   font-weight: bold;
                                   font-size: 12px;
                                   margin-bottom: 10px;
                                 ">
                                 Current Remarks
                               </div>
-                              <div if:true={belowTemplate} class="slds-scrollable--y" style="height: 173px">
+                              <div if:true={belowTemplate} class="slds-p-left--x-small slds-scrollable--y"
+                                style="height: 173px">
                                 <!-- When No Data Available ..... >>>>  -->
                                 <div if:false={showRemarks} class="slds-text-longform">
                                   <c-illustration-component display-text="NO REMARKS"></c-illustration-component>
@@ -396,7 +402,8 @@
                                 <div if:true={showRemarks}>
                                   <template for:each={remarksList} for:item="comment">
                                     <div key={comment.remarkIdWrap}>
-                                      <div class="slds-grid slds-gutters slds-wrap" style="margin-bottom: 2px">
+                                      <div class="slds-grid slds-gutters slds-wrap slds-p-bottom--small"
+                                        style="margin-bottom: 2px">
                                         <!-- name -->
 
                                         <!-- remarks -->
@@ -415,7 +422,8 @@
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="slds-col slds-size--4-of-12" style="padding-left: 43px">
+                                        <div class="slds-col slds-size--4-of-12">
+                                          <!-- style="padding-left: 43px" -->
                                           <div style="color: grey; font-size: 12px">
                                             <p>{comment.createdByName}</p>
                                           </div>
