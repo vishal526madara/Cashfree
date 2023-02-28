@@ -1,69 +1,69 @@
-.icon-circle{
-    height: 60px;
-    width: 60px;
-    border: 2px solid white;
-    border-radius: 100%;
-    /* background-color: #0e9cf5; */
+.icon-circle {
+  height: 60px;
+  width: 60px;
+  border: 2px solid white;
+  border-radius: 100%;
+  /* background-color: #0e9cf5; */
 }
 
-.icon-style{
-    /* height: 35px; */
-    height: 35px;
-    width: 35px;
-    /* background: #0e9cf5; */
+.icon-style {
+  /* height: 35px; */
+  height: 35px;
+  width: 35px;
+  /* background: #0e9cf5; */
 }
 
-.icon-square{
-    border: 2px solid white;
-    margin: 2px;
-    height: 70px;
-    /* border-radius: 100%; */
+.icon-square {
+  border: 2px solid white;
+  margin: 2px;
+  height: 70px;
+  /* border-radius: 100%; */
 }
 
-.icon-circle-blue{
-    border: 2px solid #bcddf1;
-    /* background-color: #0e9cf5; */
-    /* border-top: 4px solid #1baf1b; */
-    border-top: 4px solid #22a3a7;
+.icon-circle-blue {
+  border: 2px solid #bcddf1;
+  /* background-color: #0e9cf5; */
+  /* border-top: 4px solid #1baf1b; */
+  border-top: 4px solid #22a3a7;
 }
 
-.icon-circle-grey{
-    border: 2px solid #f0b3b3;
-    /* background-color: #737475; */
-    border-top: 4px solid #c51f1f;
+.icon-circle-grey {
+  border: 2px solid #f0b3b3;
+  /* background-color: #737475; */
+  border-top: 4px solid #c51f1f;
 }
 
-.count-text{
-    color:rgb(0, 0, 0);
-    font-size: 25px;
-    padding-bottom:4px;
+.count-text {
+  color: rgb(0, 0, 0);
+  font-size: 25px;
+  padding-bottom: 4px;
 }
 
-.image-style{
-    width: 35px;
-    height:35px;
+.image-style {
+  width: 35px;
+  height: 35px;
 }
 
-.product-name{
-    text-align: center;
-    font-size: 11px;
-    font-weight: 500;
-    color: #0e9cf5;
-    /* border-top: 1px solid rgb(0, 0, 0); */
-    /* padding: 5px 0; */
+.product-name {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: #0e9cf5;
+  /* border-top: 1px solid rgb(0, 0, 0); */
+  /* padding: 5px 0; */
 }
 
-.blur-effect{
-    filter: blur(2px);
+.blur-effect {
+  filter: blur(2px);
 }
 
-.inactive-effect{
-    opacity: .5;
-    color: #b8c3ce;
+.inactive-effect {
+  opacity: 0.5;
+  color: #b8c3ce;
 }
 
-.inactive-background{
-    background-color: #b8c3ce;
+.inactive-background {
+  background-color: #b8c3ce;
 }
 /*
 .active-background{
@@ -71,6 +71,6 @@
     //background-color: #0e9cf5;
 }
 */
-.active-effect{
-    opacity: 1;
+.active-effect {
+  opacity: 1;
 }

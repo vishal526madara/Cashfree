@@ -130,7 +130,6 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
     this.screen.firstPage = true;
   }
 
-
   @wire(getRecord, {
     recordId: "$recordId",
     fields: ["Id", "Opportunity.Name", "Opportunity.Account.Name"]
@@ -161,13 +160,9 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
     }
   }
 
-
-
   connectedCallback() {
     this.createCaseAccountRecord();
   }
-
-
 
   createSubjectForCase() {
     console.log("funtion Called::" + this.stopOnboardingComponent);
@@ -180,9 +175,6 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
     this.load = false;
   }
 
-
-
- 
   async getOpportunityData() {
     console.log("this.recordId::", JSON.stringify(this.caseRec));
     this.load = true;
@@ -214,7 +206,6 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
         this.caseRec.OnboardingTemplateName =
           this.opportunityData.onboardingTemplateList[0].Name;
         this.createSubjectForCase();
-
       })
       .catch((error) => {
         this.load = false;
@@ -224,12 +215,9 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
   }
   @track Questionaire = false;
 
-
   opportunityProductName() {
     getPaymentGatewayProduct({ recordId: this.recordId })
-      .then((result) => {
-
-      })
+      .then((result) => {})
       .catch((error) => {
         this.load = false;
         console.log("error::", error);
@@ -248,7 +236,7 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
         //     this.accountRecordHolder.businessEmail = '';
         //   }
         console.log("File Connect::::", this.accountRecordHolder);
-        if (this.accountRecordHolder.mid != '') {
+        if (this.accountRecordHolder.mid != "") {
           this.caseRec.MID__c = this.accountRecordHolder.mid;
         } else {
           this.caseRec.MID__c = null;
@@ -336,7 +324,7 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
     }*/
 
   handleContactNext() {
-    console.log('Case Record::::', this.caseRec);
+    console.log("Case Record::::", this.caseRec);
     this.getTemplateCheckList();
     this.screen.firstPage = false;
     this.screen.secondPage = true;
@@ -492,27 +480,20 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
   //   }
   // }
 
-
-
   handleFieldChange(event) {
     console.log("Default Value:::" + JSON.stringify(this.caseRec));
     var fieldName = event.target.name;
     var value = event.target.value;
 
-
-
     this.projectChange = event.target.value;
 
-    if (this.projectChange != '' && this.handlenextbutton != false) {
+    if (this.projectChange != "" && this.handlenextbutton != false) {
       this.disableNext = false;
-    }
-    else {
+    } else {
       this.disableNext = true;
     }
 
-
-
-    console.log('2projectChange>>', this.projectChange);
+    console.log("2projectChange>>", this.projectChange);
 
     // if(fieldName == 'Subject'){
     //    this.caseRec[fieldName] = this.defaultProjectName;
@@ -641,30 +622,30 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
             "Records created successfully.",
             "success"
           );
-
         }
         this.createOnBoard();
-
       })
       .catch((error) => {
         this.load = false;
         console.log("error::" + error);
         this.showToastMessage("Error", error.body.message, "error");
       });
-
   }
   createOnBoard() {
-    createOnBoardResponseRecord({ onboardList: this.answerresult, recordId: this.recordId })
-      .then(result => {
-        if (result == 'success') {
-          console.log('result:::', result);
+    createOnBoardResponseRecord({
+      onboardList: this.answerresult,
+      recordId: this.recordId
+    })
+      .then((result) => {
+        if (result == "success") {
+          console.log("result:::", result);
           this.handleCancel();
           this.load = false;
         }
       })
       .catch((error) => {
         console.log("error::" + JSON.stringify(error));
-      })
+      });
   }
   //handle case type picklist
   handleCaseType(event) {
@@ -691,18 +672,19 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
   handleContactChange(event) {
     this.handlenextbutton = event.detail;
 
-    if (this.projectChange != '' && this.handlenextbutton != false) {
+    if (this.projectChange != "" && this.handlenextbutton != false) {
       this.disableNext = false;
-    }
-    else {
+    } else {
       this.disableNext = true;
     }
-    console.log('Function Called::::' + JSON.stringify(event.detail));
+    console.log("Function Called::::" + JSON.stringify(event.detail));
     if (!event.detail) {
       this.caseRec.ContactName = null;
       this.caseRec.ContactId = null;
       this.handlenextbutton = false;
-      console.log('Case Data inside :::' + JSON.stringify(this.handlenextbutton));
+      console.log(
+        "Case Data inside :::" + JSON.stringify(this.handlenextbutton)
+      );
       return;
     }
 
@@ -710,17 +692,11 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
     //   this.contactName=true;
     // }
 
-
-
-
-    console.log('Event Data:::', event.detail);
+    console.log("Event Data:::", event.detail);
     let contactRec = event.detail;
     this.caseRec.ContactName = contactRec.Name;
     this.caseRec.ContactId = contactRec.Id;
-    console.log('Case Data:::' + JSON.stringify(this.handlenextbutton));
-
-
-
+    console.log("Case Data:::" + JSON.stringify(this.handlenextbutton));
 
     fetchContactRecord({ contactId: contactRec.Id })
       .then((result) => {
@@ -769,7 +745,6 @@ export default class InitialOnBoardingComponent extends NavigationMixin(
     });
   }
 
-  
   selectedNavHandler(event) {
     for (let i = 0; i < event.size; i++) {
       console.log("394: " + JSON.stringify(event.detail[i]));

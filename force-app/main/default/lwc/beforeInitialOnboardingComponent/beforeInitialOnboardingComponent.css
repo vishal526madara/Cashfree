@@ -1,32 +1,32 @@
-.checklist-task{
-    font-size: 15px;
-    font-weight: 700;
-    padding: 14px 10px;
+.checklist-task {
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 10px;
 }
-.checklist-table{
-    font-size: 10px;
-    line-height: 25px;
+.checklist-table {
+  font-size: 10px;
+  line-height: 25px;
 }
-.my-icon{
-    --sds-c-icon-color-background:#126669;
-    padding: 0.32rem;
-} 
-.font-style{
-    color:#126669;
+.my-icon {
+  --sds-c-icon-color-background: #126669;
+  padding: 0.32rem;
 }
-.approval-badge{
-    width: 80px;
-    height:20px;
+.font-style {
+  color: #126669;
 }
-.accBold:hover{
-    text-decoration: underline;
-    text-decoration: bold;
+.approval-badge {
+  width: 80px;
+  height: 20px;
 }
-.checkBold:hover{
-text-decoration: underline;
-text-decoration: bold;
+.accBold:hover {
+  text-decoration: underline;
+  text-decoration: bold;
 }
-.needBold:hover{
-text-decoration: underline;
-text-decoration: bold;
+.checkBold:hover {
+  text-decoration: underline;
+  text-decoration: bold;
+}
+.needBold:hover {
+  text-decoration: underline;
+  text-decoration: bold;
 }

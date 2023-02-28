@@ -27,9 +27,9 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
 
     TASK_CALL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
-    TASK_MEET = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+    TASK_MEET = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#user";
     TASK_EMAIL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#email";
-    TASK_INTERNAL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+    TASK_INTERNAL = "/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#settings";
     TASK_NOTE = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#note";
 
     ACCOUNT_ICON = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account";
@@ -170,6 +170,10 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
 
     handleFieldPartChange(event) {
+        if (!this.taskTypePopUpOpen) {
+            this.template.querySelector(`[data-id="tasktype"]`).classList.remove('slds-is-open');
+            this.taskTypePopUpOpen = true;
+        }
         this.handleRemoveTaskTypeClick();
         console.log('Test::::');
         console.log('Value::::::' + event.currentTarget.dataset.value);
@@ -207,12 +211,41 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     }
 
     handleStartDate(event) {
-        this.SALESFORCE_TASK_RECORD.startDate = event.detail.value
+        console.log('Time::::'+ event.detail.value);
+        this.SALESFORCE_TASK_RECORD.startDate = event.detail.value;
+        console.log('Undefined:::::');
+        if( this.SALESFORCE_TASK_RECORD.startDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
+            console.log('Condition Passed::::');
+            this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Fill Strat Date');
+            this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
+            return;
+        }
+        
+        this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('');
+        this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
+        
+
     }
 
 
     handleEndDate(event) {
         this.SALESFORCE_TASK_RECORD.endDate = event.detail.value;
+        this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('');
+        this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+        if(this.SALESFORCE_TASK_RECORD.endDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
+            this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('Please Fill End Date');
+            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+            return;
+        }
+        if(this.SALESFORCE_TASK_RECORD.eventCreation == true && this.SALESFORCE_TASK_RECORD.startDate != null && this.SALESFORCE_TASK_RECORD.endDate != null){
+            let numericValue = new Date(this.SALESFORCE_TASK_RECORD.endDate).getDay() - new Date(this.SALESFORCE_TASK_RECORD.startDate).getDay();
+            console.log('Numeric Number::::'+ numericValue);
+            if(numericValue<0){
+            this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('End date can not be less than Start Date');
+            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+            }
+            return
+        }
     }
 
 
@@ -270,29 +303,37 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         this.SALESFORCE_TASK_RECORD.taskReminder = event.detail.checked;
     }
 
-
+    showRelatedObjectButton = false;
     handleSelectRelatedObjectValue(event) {
         console.log('Function Called::::');
         //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger');
         //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger_click');
+        if(!this.showRelatedObjectButton){
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-is-open');
+        this.showRelatedObjectButton = true;
+        }else{
+            this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
+            this.showRelatedObjectButton = false; 
+        }
     }
 
-    handleSelectRelatedObjectName(event) {
+     handleSelectRelatedObjectName(event) {
+         console.log('Function 56789876');
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
-        //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
+        this.showRelatedObjectButton = false; 
+        console.log('Function Call Successfull');
         let objectEvent = new CustomEvent("", {
             detail: {
                 value: event.currentTarget.dataset.id
             },
         });
-        this.handleObjectSelect(objectEvent);
+         this.handleObjectSelect(objectEvent);
         console.log('Value::::', event.currentTarget.dataset.id);
     }
 
     handleRemoveRelatedObject() {
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
-        this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
+        //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-dropdown-trigger_click');
     }
 
     taskTypePopUpOpen = true;
@@ -364,17 +405,40 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
 
     handleCreateEvent(event){
+        // const inputBox = event.currentTarget;
+        // inputBox.setCustomvalidity('Test Message');
+        // inputBox.reportValidity();
         console.log('Test::::');
         console.log('Boolean Value:::'+ event.target.checked);
         console.log('Boolean Data::::'+  this.SALESFORCE_TASK_RECORD.eventCreation);
         let eventUserInput = event.target.checked;
         if(eventUserInput){
             this.SALESFORCE_TASK_RECORD.eventCreation = true;
+            this.template.querySelector(`[data-error="startdateerror"]`).required = true;
+            this.template.querySelector(`[data-error="enddateerror"]`).required = true;
             console.log('Condition Passed:::'+ this.SALESFORCE_TASK_RECORD.eventCreation);
-            this.template.querySelector(`[data-id="startdateerror"]`).disabled = true;
+            //this.template.querySelector(`[data-error="startdateerror"]`).message-when-bad-input = 'Please Select Start Date Time';
+            //this.template.querySelector(`[data-error="startdateerror"]`).focus();
+            //this.template.querySelector(`[data-error="startdateerror"]`).showHelpMessageIfInvalid();
+            if(this.SALESFORCE_TASK_RECORD.startDate == null){
+            this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Select Start Date');
+            this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
+            }
+
+            if(this.SALESFORCE_TASK_RECORD.endDate == null){
+                this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('Please Select End Date');
+            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+            }
+
         }
         if(!eventUserInput){
             this.SALESFORCE_TASK_RECORD.eventCreation = false;
+            this.template.querySelector(`[data-error="startdateerror"]`).required = false;
+            this.template.querySelector(`[data-error="enddateerror"]`).required = false;
+            this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('');
+            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+            this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('');
+            this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
         }
     }
 
@@ -452,7 +516,8 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
             //slds-icon-standard-lead
         }
         this.template.querySelector(`[data-id="relatedCustomLookup"]`).handleRemovePill();
-
+       
+        console.log('Related Oject Function Called::::');
 
     }
 
@@ -599,6 +664,34 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
             this.showEventMessage('Record Field', 'Please Select Owner', 'warning', 'pester');
             this.load = false;
             return;
+        }
+
+        if(this.SALESFORCE_TASK_RECORD.startDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
+          this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Fill Start Date');
+           this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
+           this.showEventMessage('Record Field', 'Please Enter Start Date', 'warning', 'pester');
+            this.load = false;
+            return;
+        }
+
+        if(this.SALESFORCE_TASK_RECORD.endDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
+            this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('Please Fill End Date');
+            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+            this.showEventMessage('Record Field', 'Please Enter End Date', 'warning', 'pester');
+            this.load = false;
+            return;
+        }
+        if(this.SALESFORCE_TASK_RECORD.eventCreation == true && this.SALESFORCE_TASK_RECORD.startDate != null && this.SALESFORCE_TASK_RECORD.endDate != null){
+            let numericValue = new Date(this.SALESFORCE_TASK_RECORD.endDate).getDay() - new Date(this.SALESFORCE_TASK_RECORD.startDate).getDay();
+            console.log('Numeric Number::::'+ numericValue);
+            if(numericValue<0){
+            this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('End date can not be less than Start Date');
+            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+            this.showEventMessage('Record Field', 'End Date can not be less than Start Date', 'warning', 'pester');
+            this.load = false;
+            return
+            }
+            
         }
         console.log('Final List::::' + JSON.stringify(this.SALESFORCE_TASK_RECORD));
         insertTaskRecord({ jsonInput: JSON.stringify(this.SALESFORCE_TASK_RECORD) })

@@ -10,8 +10,6 @@ import updateAccount from "@salesforce/apex/OnBoardingController.updateAccount";
 import getPaymentGatewayProduct from "@salesforce/apex/OnBoardingController.getPaymentGatewayProduct";
 import getOnboardingCheckList from "@salesforce/apex/OnBoardingController.getOnboardingCheckList";
 
-
-
 import {
   getRecord,
   getFieldValue,
@@ -27,11 +25,16 @@ import checkDeviationAndCaseStatus from "@salesforce/apex/OnBoardingController.c
 import createCaseSubjectName from "@salesforce/apex/OnBoardingController.createCaseSubjectName";
 import fetchSubLobPicklistValues from "@salesforce/apex/OnBoardingController.fetchSubLobPicklistValues";
 
-import { subscribe, MessageContext,unsubscribe, APPLICATION_SCOPE } from "lightning/messageService";
-import DEVIATION_REFRESH from '@salesforce/messageChannel/deviationRefresh__c';
+import {
+  subscribe,
+  MessageContext,
+  unsubscribe,
+  APPLICATION_SCOPE
+} from "lightning/messageService";
+import DEVIATION_REFRESH from "@salesforce/messageChannel/deviationRefresh__c";
 
 export default class BeforeInitialOnboardingComponent extends LightningElement {
-  subscription=null;
+  subscription = null;
   @api recordId;
 
   @track LOBPICKLIST;
@@ -95,7 +98,7 @@ export default class BeforeInitialOnboardingComponent extends LightningElement {
   wiredProductName;
 
   @track statusCheckDeviation;
-  hideNeedApproval=false;
+  hideNeedApproval = false;
   //accountObject;
 
   @track accountObject = {
@@ -115,98 +118,106 @@ export default class BeforeInitialOnboardingComponent extends LightningElement {
     entityValue: null,
     website: null
   };
- 
- 
+
   @track questionList = [];
   @track pickValue = false;
   @track textValue = false;
-  picklistOptionValuesArray=[];
-  displayQuestionList=[];
-  
-  handleDisplayQuestion(){ 
-    console.log('inside handleDisplayQuestion');
-    if(this.displayQuestionList.length == 0){
-      getOnboardingCheckList()
-      .then(result=>{
-        this.questionList = result;
-        if(this.questionList.length == 0){
-          this.showOnboardingChecklist = false;
-          this.displayNext = true;
-        }else{
-          this.displayNext = false;
-          this.showOnboardingChecklist = true;
-          for(let i = 0; i< this.questionList.length; i++){
-            this.picklistOptionValuesArray = [];
-            if(this.questionList[i].Selection_Type__c == 'Picklist'){
-              this.pickValue = true;
-              this.textValue = false;        
-            }else{
-              this.textValue = true;
-              this.pickValue = false;
-            }
-            var arrayValues = this.questionList[i].Response_Option__c.split(',');
-            for(let i = 0; i < arrayValues.length; i++){
-              let picklistOptionValues = {
-                label: arrayValues[i],
-                value: arrayValues[i]
-              }
-              this.picklistOptionValuesArray.push(picklistOptionValues);
-              //console.log('picklistOptionValues: '+i,':'+picklistOptionValues);
-            }
-            console.log('picklistOptionValuesArray: '+JSON.stringify(this.picklistOptionValuesArray));
-            let tempQuestion = {
-              QuestionName: this.questionList[i].Question__c,
-              IsPicklist: this.pickValue,
-              IsTextValue: this.textValue,
-              QuestionResponse: '',
-              ResponseOptions: this.picklistOptionValuesArray,
-              QuestionId: this.questionList[i].Id
-            }
-            // console.log('Selection Type:::',this.QuestionList[i].Selection_Type__c);
-            // if(this.QuestionList[i].Selection_Type__c == 'Picklist'){
-              
-            //   this.pickValue = true;
-            //   this.textValue = false;        
-            // }else{
-            //   this.textValue = true;
-            // }
+  picklistOptionValuesArray = [];
+  displayQuestionList = [];
 
-            this.displayQuestionList = [...this.displayQuestionList,tempQuestion];
-          }      
-          console.log('this.QuestionList::',this.displayQuestionList);
-          //this.QuestionList = result;      
-        }
-      })
-      .catch((error) => {
-        console.log("error::",error);
-      });
+  handleDisplayQuestion() {
+    console.log("inside handleDisplayQuestion");
+    if (this.displayQuestionList.length == 0) {
+      getOnboardingCheckList()
+        .then((result) => {
+          this.questionList = result;
+          if (this.questionList.length == 0) {
+            this.showOnboardingChecklist = false;
+            this.displayNext = true;
+          } else {
+            this.displayNext = false;
+            this.showOnboardingChecklist = true;
+            for (let i = 0; i < this.questionList.length; i++) {
+              this.picklistOptionValuesArray = [];
+              if (this.questionList[i].Selection_Type__c == "Picklist") {
+                this.pickValue = true;
+                this.textValue = false;
+              } else {
+                this.textValue = true;
+                this.pickValue = false;
+              }
+              var arrayValues =
+                this.questionList[i].Response_Option__c.split(",");
+              for (let i = 0; i < arrayValues.length; i++) {
+                let picklistOptionValues = {
+                  label: arrayValues[i],
+                  value: arrayValues[i]
+                };
+                this.picklistOptionValuesArray.push(picklistOptionValues);
+                //console.log('picklistOptionValues: '+i,':'+picklistOptionValues);
+              }
+              console.log(
+                "picklistOptionValuesArray: " +
+                  JSON.stringify(this.picklistOptionValuesArray)
+              );
+              let tempQuestion = {
+                QuestionName: this.questionList[i].Question__c,
+                IsPicklist: this.pickValue,
+                IsTextValue: this.textValue,
+                QuestionResponse: "",
+                ResponseOptions: this.picklistOptionValuesArray,
+                QuestionId: this.questionList[i].Id
+              };
+              // console.log('Selection Type:::',this.QuestionList[i].Selection_Type__c);
+              // if(this.QuestionList[i].Selection_Type__c == 'Picklist'){
+
+              //   this.pickValue = true;
+              //   this.textValue = false;
+              // }else{
+              //   this.textValue = true;
+              // }
+
+              this.displayQuestionList = [
+                ...this.displayQuestionList,
+                tempQuestion
+              ];
+            }
+            console.log("this.QuestionList::", this.displayQuestionList);
+            //this.QuestionList = result;
+          }
+        })
+        .catch((error) => {
+          console.log("error::", error);
+        });
     }
     //this.showInitiateOnboardingPopover = true;
     //console.log('Show Questionaire:::',this.showInitiateOnboardingPopover);
   }
-  
-@track IdValue;
-@track AnswerList=[];
-@track tempList = [];
-@track displayNext = false;
-handleResponseChange(event){
-   console.log('inside handleResponseChange');
-   console.log('value: '+event.target.value);
-   let questionRecord = this.displayQuestionList.find(ele => ele.QuestionId === event.target.dataset.id);
-   questionRecord.QuestionResponse = event.target.value;
-   console.log('questionRecord: '+JSON.stringify(questionRecord));
+
+  @track IdValue;
+  @track AnswerList = [];
+  @track tempList = [];
+  @track displayNext = false;
+  handleResponseChange(event) {
+    console.log("inside handleResponseChange");
+    console.log("value: " + event.target.value);
+    let questionRecord = this.displayQuestionList.find(
+      (ele) => ele.QuestionId === event.target.dataset.id
+    );
+    questionRecord.QuestionResponse = event.target.value;
+    console.log("questionRecord: " + JSON.stringify(questionRecord));
     let flag = false;
-   for(let i=0; i<this.displayQuestionList.length; i++){
-    console.log('response:' +this.displayQuestionList[i].QuestionResponse);
-    if(this.displayQuestionList[i].QuestionResponse == ''){
-      flag = true;
-      break;
+    for (let i = 0; i < this.displayQuestionList.length; i++) {
+      console.log("response:" + this.displayQuestionList[i].QuestionResponse);
+      if (this.displayQuestionList[i].QuestionResponse == "") {
+        flag = true;
+        break;
+      }
     }
-   }
-   
-   if(flag == false){
-    this.displayNext = true;
-   }
+
+    if (flag == false) {
+      this.displayNext = true;
+    }
     // for(let i = 0; i < this.QuestionList.length; i++){
     //   if(event.target.dataset.id == this.QuestionList[i].Id){
     //     this.QuestionList[i].answer = event.target.value;
@@ -215,13 +226,13 @@ handleResponseChange(event){
     //       Id : event.target.dataset.id,
     //       Question__c  : event.target.name,
     //       Response_Option__c : event.target.value
-          
+
     //     }
     //     this.AnswerList.push(anserValue);
-    //   }     
+    //   }
     // }
     // this.tempList = this.AnswerList;
-    
+
     // console.log('answer:::', this.QuestionList);
     //   console.log('Answer Length:::',this.AnswerList.length);
     //   console.log('Question Length:::',this.QuestionList.length);
@@ -230,7 +241,7 @@ handleResponseChange(event){
     //   }else{
     //     this.displayNext = false;
     //   }
-    // console.log('AnswerList:::',this.AnswerList);   
+    // console.log('AnswerList:::',this.AnswerList);
   }
 
   dataCkecklist = [
@@ -246,34 +257,34 @@ handleResponseChange(event){
     ];
   }
 
-
   @wire(MessageContext)
   messageContext;
 
-  subscribeToMessageChannel(){
-    if(!this.subscription){
-      this.subscription = subscribe(this.messageContext,
-                                     DEVIATION_REFRESH,
-                                     (message) => this.handleOnboardingRefresh(message),
-                                      {scope: APPLICATION_SCOPE} 
-                                      );
+  subscribeToMessageChannel() {
+    if (!this.subscription) {
+      this.subscription = subscribe(
+        this.messageContext,
+        DEVIATION_REFRESH,
+        (message) => this.handleOnboardingRefresh(message),
+        { scope: APPLICATION_SCOPE }
+      );
     }
   }
 
-  handleOnboardingRefresh(message){
-  console.log('Message::::'+ message);
-  this.approvalTypePicklist();
+  handleOnboardingRefresh(message) {
+    console.log("Message::::" + message);
+    this.approvalTypePicklist();
   }
 
   unsubscribeToMessageChannel() {
     unsubscribe(this.subscription);
     this.subscription = null;
-   }
+  }
 
-   disconnectedCallback() {
+  disconnectedCallback() {
     this.unsubscribeToMessageChannel();
-    console.log('this.QuestionList::',this.QuestionList);
-   }
+    console.log("this.QuestionList::", this.QuestionList);
+  }
 
   //@wire(getRecord, { recordId: "$recordId", fields })
 
@@ -291,7 +302,7 @@ handleResponseChange(event){
   })
   fetchCurrentOpportunity({ data, error }) {
     this.opportunity = { data, error };
-    console.log('Opportunity Record::::::', this.opportunity);
+    console.log("Opportunity Record::::::", this.opportunity);
     if (data) {
       //this.checkApprovalStatus();
     } else if (error) {
@@ -328,8 +339,9 @@ handleResponseChange(event){
             this.opportunity.data.fields.Bank_Ops_Approval__c.value == true ||
             this.opportunity.data.fields.Sales_Approval__c.value == true ||
             this.opportunity.data.fields.Risk_Approval__c.value == true ||
-            this.opportunity.data.fields.Finance_Approval__c.value == true || 
-            this.opportunity.data.fields.Price_Deviation_Approval__c.value == true
+            this.opportunity.data.fields.Finance_Approval__c.value == true ||
+            this.opportunity.data.fields.Price_Deviation_Approval__c.value ==
+              true
           ) {
             this.renderStop = true;
             this.approvalTypePicklist();
@@ -389,7 +401,7 @@ handleResponseChange(event){
   }
 
   connectedCallback() {
-    console.log('Opportunity Records::::::',this.opportunity);
+    console.log("Opportunity Records::::::", this.opportunity);
     this.subscribeToMessageChannel();
     this.getAccountDetails();
     //this.fetchSubLobPickListValue();
@@ -496,7 +508,7 @@ handleResponseChange(event){
           this.salesApproval == true &&
           this.bankOpsApproval == true &&
           this.riskApproval == true &&
-          this.financeApproval == true && 
+          this.financeApproval == true &&
           this.priceDeviationApproval == true
         ) {
           this.needApprovalchecked = true;
@@ -506,7 +518,7 @@ handleResponseChange(event){
         this.checkDeviationStatus();
       })
       .catch((error) => {
-        console.log("error::",error);
+        console.log("error::", error);
         //this.showToastMessage('Error', error.body.message, 'error');
       });
   }
@@ -514,20 +526,23 @@ handleResponseChange(event){
   //Show Check Deviation Status
   checkDeviationStatus() {
     if (this.opportunity.data != null) {
-      console.log('this.opportunity.data.fields.Any_Deviation__c.value',this.opportunity.data.fields.Any_Deviation__c.value);
+      console.log(
+        "this.opportunity.data.fields.Any_Deviation__c.value",
+        this.opportunity.data.fields.Any_Deviation__c.value
+      );
       if (this.opportunity.data.fields.Any_Deviation__c.value == "Yes") {
         this.selectedDeviation = "yes";
         // this.noCheck = false;
-       this.hideNeedApproval=true;
-       this.statusCheckDeviation="Yes";
+        this.hideNeedApproval = true;
+        this.statusCheckDeviation = "Yes";
         //this.showrows = true;
         this.showOnboardingButton = false;
       } else if (this.opportunity.data.fields.Any_Deviation__c.value == "No") {
         //this.showrows = true;
-        this.statusCheckDeviation="No";
+        this.statusCheckDeviation = "No";
         this.selectedDeviation = "no";
-        this.hideNeedApproval=false;
-        this.checkDiviation=true;
+        this.hideNeedApproval = false;
+        this.checkDiviation = true;
         this.noCheck = false;
         // this.checkDiviation = true;
         this.showOnboardingButton = true;
@@ -564,7 +579,7 @@ handleResponseChange(event){
           this.opportunity.data.fields.Sales_Approval__c.value == true &&
           this.opportunity.data.fields.Bank_Ops_Approval__c.value == true &&
           this.opportunity.data.fields.Risk_Approval__c.value == true &&
-          this.opportunity.data.fields.Finance_Approval__c.value == true && 
+          this.opportunity.data.fields.Finance_Approval__c.value == true &&
           this.opportunity.data.fields.Price_Deviation_Approval__c.value == true
         ) {
           // this.handleDeviationChange = true;
@@ -576,11 +591,9 @@ handleResponseChange(event){
           this.priceDeviationApproval = true;
         }
         this.checkDiviation = true;
-      }
-       else if (this.opportunity.data.fields.Any_Deviation__c.value == "No"){
+      } else if (this.opportunity.data.fields.Any_Deviation__c.value == "No") {
         this.checkDiviation = true;
-      }
-      else{
+      } else {
         this.checkDiviation = false;
       }
     }
@@ -622,7 +635,7 @@ handleResponseChange(event){
               this.bankOpsApproval == true ||
               this.salesApproval == true ||
               this.riskApproval == true ||
-              this.financeApproval == true || 
+              this.financeApproval == true ||
               this.priceDeviationApproval == true
             ) {
               this.showOnboardingButton = true;
@@ -752,7 +765,7 @@ handleResponseChange(event){
     }
     if (
       (this.accountObject.ownerPan != undefined ||
-      this.accountObject.ownerPan != "" )&&
+        this.accountObject.ownerPan != "") &&
       !panValidattionPattern.test(JSON.stringify(this.accountObject.ownerPan))
     ) {
       this.showToastMessage(
@@ -842,41 +855,41 @@ handleResponseChange(event){
   }
 
   handleDeviationChange(event) {
-    console.log('event.value:'+event.target.value);
+    console.log("event.value:" + event.target.value);
     this.selectedDeviation = event.target.value;
   }
 
   handleSavecheckDeviation() {
-    console.log('inside handleSavecheckDeviation');
+    console.log("inside handleSavecheckDeviation");
     if (this.selectedDeviation == "" || this.selectedDeviation == "") {
       this.showToastMessage("Error", "Please select Deviation.", "error");
 
       return true;
     } else {
-      console.log('inside deviation else');
+      console.log("inside deviation else");
       this.showrows = true;
       this.handleClosePopoverModal();
     }
 
     if (this.selectedDeviation == "yes") {
-      console.log('inside deviation yes');
+      console.log("inside deviation yes");
       this.holdDeviationRecords = "Yes";
       //this.updateRecordView();
       this.checkDiviation = true;
       this.noCheck = false;
       this.updateDeviation();
-      this.showOnboardingButton=false;
-      console.log('inside deviation yes');
+      this.showOnboardingButton = false;
+      console.log("inside deviation yes");
       //this.checkInitiateButtonStatus();
     } else if (this.selectedDeviation == "no") {
-      console.log('inside deviation no');
-      this.showOnboardingButton=true;
+      console.log("inside deviation no");
+      this.showOnboardingButton = true;
       this.holdDeviationRecords = "No";
       this.checkDiviation = true;
       this.noCheck = false;
       this.updateDeviation();
-      console.log('inside deviation no');
-      
+      console.log("inside deviation no");
+
       //this.approvalTypePicklist();
     }
   }
@@ -887,14 +900,14 @@ handleResponseChange(event){
    * @return: NA
    */
   updateDeviation() {
-    console.log('inside updateDeviation');
+    console.log("inside updateDeviation");
     updateDeviation({
       opportunityId: this.recordId,
       deviationValue: this.holdDeviationRecords
     })
       .then((result) => {
         if (result == "success") {
-         // this.showOnboardingButton = "";
+          // this.showOnboardingButton = "";
           getRecordNotifyChange([{ recordId: this.recordId }]);
           this.approvalTypePicklist();
           this.showToastMessage(
@@ -992,25 +1005,22 @@ handleResponseChange(event){
       this.okayforOnboarding = false;
     }
   }
-  
-  showQuestionaireFunc(event){
 
-   
-      console.log('inside showQuestionaireFunc');
-      console.log('Event:::',JSON.stringify(event.target.answerresult));
-      console.log('Event:::1',event.target.answerresult);
-      console.log('Event:::2',event.target.answerresult);
-      console.log('Event:::3',event.target.answerresult);
-      this.QuestionList = event.target.answerresult;
-  
-      this.showInitiateOnboardingPopover = false;
-      this.showQuestionaire = true;
-      
-      this.handleDisplayQuestion();
-   
+  showQuestionaireFunc(event) {
+    console.log("inside showQuestionaireFunc");
+    console.log("Event:::", JSON.stringify(event.target.answerresult));
+    console.log("Event:::1", event.target.answerresult);
+    console.log("Event:::2", event.target.answerresult);
+    console.log("Event:::3", event.target.answerresult);
+    this.QuestionList = event.target.answerresult;
+
+    this.showInitiateOnboardingPopover = false;
+    this.showQuestionaire = true;
+
+    this.handleDisplayQuestion();
   }
 
-  hideModalBox(){
+  hideModalBox() {
     this.showQuestionaire = false;
   }
 
@@ -1026,7 +1036,6 @@ handleResponseChange(event){
       .catch((error) => {
         this.showToastMessage("Warning", "Something Went Wrong...", "warning");
       });
-      
   }
   handleCloseInitiateOnboardingPopover() {
     this.showInitiateOnboardingPopover = false;

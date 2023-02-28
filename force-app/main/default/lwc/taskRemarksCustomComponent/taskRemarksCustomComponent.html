@@ -9,85 +9,136 @@
   1.0   23-01-2023   Saurav Kashyap   Initial Version
 -->
 <template>
-    <!-- <article class="slds-card "> -->
+  <!-- <article class="slds-card "> -->
 
-    <div class="slds-is-relative">
-        <div if:true={load}>
-            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
-        </div>
-        <article class="slds-card" style="border:0">
-            <div class="slds-card__header" style="width: 100%;margin:0;padding:0;border-bottom:1px solid grey;padding-bottom: 8px;">
-                <header>
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size--2-of-12 slds-align--absolute-center " style="margin-left: -8px;">
-                            <span style="font-weight: bold;">Remarks</span>
-                        </div>
-                        <div class="slds-col slds-size--9-of-12">
-                            <lightning-input type="text" value={newValue} placeholder="Add remark Here"
-                                onchange={handlefieldchange}>
-                            </lightning-input>
-                        </div>
-                        <div class="slds-col slds-size--1-of-12 slds-m-top--x-small">
-                            <lightning-button-icon icon-name="utility:send" variant="border-filled" title="Send"
-                                class="slds-p-right--xxx-small" size="small" onclick={handleSave} style="    margin-left: 2px !important;
-                            margin-top: 15px !important;">
-                            </lightning-button-icon>
-                        </div>
-                    </div>
-                </header>
-            </div>
-
-            <div class="slds-card__body slds-card__body_inner" style="padding:0">
-                <div if:true={belowTemplate}
-                    style="font-weight: bold;font-size:12px;margin-bottom: 10px;">
-                    Past  Remarks</div>
-                <div if:true={belowTemplate} class="slds-scrollable--y" style="height:173px">
-                    <!-- When No Data Available ..... >>>>  -->
-                    <div if:false={doComments} class="slds-text-longform ">
-                        <c-illustration-component display-text="NO REMARKS"></c-illustration-component>
-                    </div>
-                    <!-- When Data is Available in the List ..... >>>>  -->
-                    <div if:true={doComments}>
-                        <template if:true={doComments} for:each={taskComments} for:item="comment">
-                            <div key={comment.remarkIdWrap}>
-                                <div class="slds-grid slds-gutters slds-wrap" style="margin-bottom: 2px;">
-                                    <!-- name -->
-                                    <div class="slds-col slds-size--5-of-12">
-                                        <div style=" color: grey;font-size: 12px;">
-                                            <p>{comment.createdByName}</p>
-                                        </div>
-                                    </div>
-                                    <!-- space -->
-                                    <div class="slds-col slds-size--2-of-12"></div>
-                                    <!-- date -->
-                                    <div class="slds-col slds-size--5-of-12">
-                                        <div style=" color: grey;font-size: 12px;">
-                                            <lightning-formatted-date-time value={comment.createddate}
-                                                year="numeric" month="numeric" day="numeric" hour="2-digit"
-                                                minute="2-digit"></lightning-formatted-date-time>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- remarks -->
-                                <div class="" style="margin-bottom: 10px;">
-                                    <div class="slds-media">
-                                        <div class="slds-media__body">
-                                            <div if:false={comment.taskEdit}
-                                                style="font-size: 12px; font-weight: 700; word-break: break-all">
-                                                {comment.Comment}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </div>
-        </article>
+  <div class="slds-is-relative">
+    <div if:true={load}>
+      <lightning-spinner
+        alternative-text="Loading"
+        size="medium"
+      ></lightning-spinner>
     </div>
+    <article class="slds-card" style="border: 0">
+      <div
+        class="slds-card__header"
+        style="
+          width: 100%;
+          margin: 0;
+          padding: 0;
+          border-bottom: 1px solid grey;
+          padding-bottom: 8px;
+        "
+      >
+        <header>
+          <div class="slds-grid slds-wrap">
+            <div
+              class="slds-col slds-size--2-of-12 slds-align--absolute-center"
+              style="margin-left: -8px"
+            >
+              <span style="font-weight: bold">Remarks</span>
+            </div>
+            <div class="slds-col slds-size--9-of-12">
+              <lightning-input
+                type="text"
+                value={newValue}
+                placeholder="Add remark Here"
+                onchange={handlefieldchange}
+              >
+              </lightning-input>
+            </div>
+            <div class="slds-col slds-size--1-of-12 slds-m-top--x-small">
+              <lightning-button-icon
+                icon-name="utility:send"
+                variant="border-filled"
+                title="Send"
+                class="slds-p-right--xxx-small"
+                size="small"
+                onclick={handleSave}
+                style="margin-left: 2px !important; margin-top: 15px !important"
+              >
+              </lightning-button-icon>
+            </div>
+          </div>
+        </header>
+      </div>
 
+      <div class="slds-card__body slds-card__body_inner" style="padding: 0">
+        <div
+          if:true={belowTemplate}
+          style="font-weight: bold; font-size: 12px; margin-bottom: 10px"
+        >
+          Past Remarks
+        </div>
+        <div
+          if:true={belowTemplate}
+          class="slds-scrollable--y"
+          style="height: 173px"
+        >
+          <!-- When No Data Available ..... >>>>  -->
+          <div if:false={doComments} class="slds-text-longform">
+            <c-illustration-component
+              display-text="NO REMARKS"
+            ></c-illustration-component>
+          </div>
+          <!-- When Data is Available in the List ..... >>>>  -->
+          <div if:true={doComments}>
+            <template
+              if:true={doComments}
+              for:each={taskComments}
+              for:item="comment"
+            >
+              <div key={comment.remarkIdWrap}>
+                <div
+                  class="slds-grid slds-gutters slds-wrap"
+                  style="margin-bottom: 2px"
+                >
+                  <!-- name -->
+                  <div class="slds-col slds-size--5-of-12">
+                    <div style="color: grey; font-size: 12px">
+                      <p>{comment.createdByName}</p>
+                    </div>
+                  </div>
+                  <!-- space -->
+                  <div class="slds-col slds-size--2-of-12"></div>
+                  <!-- date -->
+                  <div class="slds-col slds-size--5-of-12">
+                    <div style="color: grey; font-size: 12px">
+                      <lightning-formatted-date-time
+                        value={comment.createddate}
+                        year="numeric"
+                        month="numeric"
+                        day="numeric"
+                        hour="2-digit"
+                        minute="2-digit"
+                      ></lightning-formatted-date-time>
+                    </div>
+                  </div>
+                </div>
 
-    <!-- </article> -->
+                <!-- remarks -->
+                <div class="" style="margin-bottom: 10px">
+                  <div class="slds-media">
+                    <div class="slds-media__body">
+                      <div
+                        if:false={comment.taskEdit}
+                        style="
+                          font-size: 12px;
+                          font-weight: 700;
+                          word-break: break-all;
+                        "
+                      >
+                        {comment.Comment}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
 
+  <!-- </article> -->
 </template>

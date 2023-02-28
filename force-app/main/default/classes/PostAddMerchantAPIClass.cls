@@ -3,16 +3,16 @@
  * @author            : Saurav Kashyap
  * @group             : Appstrail
  * @last modified on  : 12-01-2022
-**/
+ **/
 public without sharing class PostAddMerchantAPIClass {
-    /**
-     * @description: method used to callout to Cashfree database and perform POST Operation.
-     * @parameter: serialize input in string format
-     *@return: 'Pass' will return if callout is successfull otherwise it'll return 'Fail'.
-     * whenever callout gets failed an "Error Log" will generate into
-     * 
-     * Later It'll Return ResponseWrapper From the callout
-     */
+  /**
+   * @description: method used to callout to Cashfree database and perform POST Operation.
+   * @parameter: serialize input in string format
+   *@return: 'Pass' will return if callout is successfull otherwise it'll return 'Fail'.
+   * whenever callout gets failed an "Error Log" will generate into
+   *
+   * Later It'll Return ResponseWrapper From the callout
+   */
   /*  public static ResponseWrapper CashfreeAPICallout(String jsonInput){
         // jsonInput Contains all the required Data Like Name.Email and Phone Number Of Merchant
         //String result = 'Fail'; //...............................for returnType

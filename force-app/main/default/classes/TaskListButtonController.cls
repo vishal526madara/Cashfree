@@ -50,6 +50,7 @@ public without sharing class TaskListButtonController  {
             newTask.OwnerId = taskRecord.assigneeRecordId;
             newTask.Start_Date_Time__c =  taskRecord.startDate != null ? DateTime.ValueofGmt(taskRecord.startDate.replace('T', ' ')): null;
             newTask.End_Date_Time__c = taskRecord.endDate != null ? DateTime.ValueofGmt(taskRecord.endDate.replace('T', ' ')) : null;
+            newTask.Add_To_Calendar__c = taskRecord.eventCreation == true ? true : false;
             // if(taskRecord.startDate != null){
             //     Date newDate = Date.valueOf(taskRecord.startDate);
                 
@@ -101,28 +102,28 @@ public without sharing class TaskListButtonController  {
                     Database.Error errorResult = taskResult.getErrors().get(0);
                     System.debug('Error Message:::::'+ errorResult.getMessage());
                     throw  new AuraHandledException(errorResult.getMessage());
-                 }else{
-                    System.debug('Event Boolean Data:::'+ taskRecord.eventCreation);
-                    if(taskRecord.eventCreation){
-                    Event newEvent = new Event();
-                    newEvent.Subject = taskRecord.taskSubject;
-                    newEvent.StartDateTime =  taskRecord.startDate != null ? DateTime.ValueofGmt(taskRecord.startDate.replace('T', ' ')): null;
-                    newEvent.EndDateTime = taskRecord.endDate != null ? DateTime.ValueofGmt(taskRecord.endDate.replace('T', ' ')): null;
-                    newEvent.OwnerId = taskRecord.assigneeRecordId;
-                   // newEvent.DurationInMinutes = 840;
+                  }//else{
+                //     System.debug('Event Boolean Data:::'+ taskRecord.eventCreation);
+                //     if(taskRecord.eventCreation){
+                //     Event newEvent = new Event();
+                //     newEvent.Subject = taskRecord.taskSubject;
+                //     newEvent.StartDateTime =  taskRecord.startDate != null ? DateTime.ValueofGmt(taskRecord.startDate.replace('T', ' ')): null;
+                //     newEvent.EndDateTime = taskRecord.endDate != null ? DateTime.ValueofGmt(taskRecord.endDate.replace('T', ' ')): null;
+                //     newEvent.OwnerId = taskRecord.assigneeRecordId;
+                //    // newEvent.DurationInMinutes = 840;
 
                     
-                    Database.SaveResult newEventInsertion = Database.insert(newEvent);
-                    System.debug('Call Log::::'+ newEventInsertion.getId());
+                //     Database.SaveResult newEventInsertion = Database.insert(newEvent);
+                //     System.debug('Call Log::::'+ newEventInsertion.getId());
                        
-                    if(!newEventInsertion.isSuccess()){
-                    Database.Error errorResult = newEventInsertion.getErrors().get(0);
-                    System.debug('Error Message:::::'+ errorResult.getMessage());
-                    Database.rollback(sp);
-                    throw  new AuraHandledException(errorResult.getMessage());
-                    }
-                    }
-                 }
+                //     if(!newEventInsertion.isSuccess()){
+                //     Database.Error errorResult = newEventInsertion.getErrors().get(0);
+                //     System.debug('Error Message:::::'+ errorResult.getMessage());
+                //     Database.rollback(sp);
+                //     throw  new AuraHandledException(errorResult.getMessage());
+                //     }
+                //     }
+                //  }
                 
 
             // }else{

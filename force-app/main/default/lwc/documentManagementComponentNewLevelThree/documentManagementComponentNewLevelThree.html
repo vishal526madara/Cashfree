@@ -1,69 +1,92 @@
 <template>
-    <div style="position: relative;">
-        <lightning-spinner if:true={spinnerOn} alternative-text="Loading" size="small"></lightning-spinner>
+  <div style="position: relative">
+    <lightning-spinner
+      if:true={spinnerOn}
+      alternative-text="Loading"
+      size="small"
+    ></lightning-spinner>
+    <!--<div class="slds-box slds-box_x-small">-->
+    <template for:each={documentTypeList} for:item="docType">
+      <div key={docType.documentTypeId} class="slds-col">
         <!--<div class="slds-box slds-box_x-small">-->
-            <template for:each={documentTypeList} for:item="docType">
-                <div key={docType.documentTypeId} class="slds-col">
-                    <!--<div class="slds-box slds-box_x-small">-->
-                        <div class="slds-grid slds-grid_vertical">
-                            <div class="slds-col">
-                                <div class="slds-grid slds-gutters">
-                                    <div class="slds-col slds-align_absolute-center" style="width: 8%; padding-left: 20px;">
-                                        <lightning-button-icon if:false={docType.drop}
-                                            icon-name="utility:right"  
-                                            variant="bare"
-                                            alternative-text="Open" 
-                                            title="Open"
-                                            data-docid={docType.documentTypeId}
-                                            data-docvalue={docType.documentTypeValue}
-                                            onclick={handleShowDocument}>
-                                        </lightning-button-icon>
-                                        <lightning-button-icon if:true={docType.drop}
-                                            icon-name="utility:down"  
-                                            variant="bare"
-                                            alternative-text="Close" 
-                                            title="Close"
-                                            data-docid={docType.documentTypeId}
-                                            data-docvalue={docType.documentTypeValue}
-                                            onclick={handleHideDocument}>
-                                        </lightning-button-icon>
-                                    </div>
-                                    <div class="slds-col" style="width: 72%;">
-                                        <img src={folderIcon} style="height: 30px;"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <a href="javascript:void(0);" 
-                                            data-docid={docType.documentTypeId}
-                                            name={docType.documentTypeValue}
-                                            onclick={handleKycClick}>
-                                            {docType.documentTypeValue}
-                                        </a>
-                                    </div>
-                                    <div class="slds-col " style="width: 20%;"><!--slds-align_absolute-center-->
-                                        <img if:true={docType.containsFile} src={locationRedGif} style="height: 30px;">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slds-col" if:true={docType.drop} ><!--style="overflow: initial;"-->
-                                <div style="padding: 10px 5px 3px 65px;">
-                                    <c-document-management-component-new-level-four
-                                        document-type-value={docType.documentTypeValue}
-                                        document-type-id={docType.documentTypeId}
-                                        kyc-category-value={kycCategoryValue}
-                                        category-value={categoryValue}
-                                        category-id={categoryId}
-                                        record-id={recordId}
-                                        ondeletefile={handleDispatchEvent}
-                                        onuploadfile={handleDispatchEvent}
-                                        file-size-upload={fileSizeUpload}
-                                        object-api-name={objectApiName}
-                                        onhandlerefresh={handleRefresh}>
-                                    </c-document-management-component-new-level-four>
-                                </div>
-                            </div>
-                        </div>
-                    <!--</div>-->
-                </div>
-                <div key={docType} class="slds-col" style="height: 6px;"></div>
-            </template>
+        <div class="slds-grid slds-grid_vertical">
+          <div class="slds-col">
+            <div class="slds-grid slds-gutters">
+              <div
+                class="slds-col slds-align_absolute-center"
+                style="width: 8%; padding-left: 20px"
+              >
+                <lightning-button-icon
+                  if:false={docType.drop}
+                  icon-name="utility:right"
+                  variant="bare"
+                  alternative-text="Open"
+                  title="Open"
+                  data-docid={docType.documentTypeId}
+                  data-docvalue={docType.documentTypeValue}
+                  onclick={handleShowDocument}
+                >
+                </lightning-button-icon>
+                <lightning-button-icon
+                  if:true={docType.drop}
+                  icon-name="utility:down"
+                  variant="bare"
+                  alternative-text="Close"
+                  title="Close"
+                  data-docid={docType.documentTypeId}
+                  data-docvalue={docType.documentTypeValue}
+                  onclick={handleHideDocument}
+                >
+                </lightning-button-icon>
+              </div>
+              <div class="slds-col" style="width: 72%">
+                <img
+                  src={folderIcon}
+                  style="height: 30px"
+                />&nbsp;&nbsp;&nbsp;&nbsp;
+                <a
+                  href="javascript:void(0);"
+                  data-docid={docType.documentTypeId}
+                  name={docType.documentTypeValue}
+                  onclick={handleKycClick}
+                >
+                  {docType.documentTypeValue}
+                </a>
+              </div>
+              <div class="slds-col" style="width: 20%">
+                <!--slds-align_absolute-center-->
+                <img
+                  if:true={docType.containsFile}
+                  src={locationRedGif}
+                  style="height: 30px"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="slds-col" if:true={docType.drop}>
+            <!--style="overflow: initial;"-->
+            <div style="padding: 10px 5px 3px 65px">
+              <c-document-management-component-new-level-four
+                document-type-value={docType.documentTypeValue}
+                document-type-id={docType.documentTypeId}
+                kyc-category-value={kycCategoryValue}
+                category-value={categoryValue}
+                category-id={categoryId}
+                record-id={recordId}
+                ondeletefile={handleDispatchEvent}
+                onuploadfile={handleDispatchEvent}
+                file-size-upload={fileSizeUpload}
+                object-api-name={objectApiName}
+                onhandlerefresh={handleRefresh}
+              >
+              </c-document-management-component-new-level-four>
+            </div>
+          </div>
+        </div>
         <!--</div>-->
-    </div>
+      </div>
+      <div key={docType} class="slds-col" style="height: 6px"></div>
+    </template>
+    <!--</div>-->
+  </div>
 </template>

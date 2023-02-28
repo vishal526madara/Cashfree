@@ -1,6 +1,5 @@
-trigger OpportunityTrigger on Opportunity (before insert) {
-
-    if(trigger.isBefore && trigger.isInsert){
+trigger OpportunityTrigger on Opportunity(before insert) {
+  if (Trigger.isBefore && Trigger.isInsert) {
     OpportunityTriggerHandler.beforeInsert(Trigger.new);
-    }
+  }
 }

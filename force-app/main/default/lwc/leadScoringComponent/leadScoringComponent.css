@@ -1,21 +1,21 @@
 .dot {
-    height: 7px;
-    width: 7px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-  .circle-wrap .inside-circle {
-    width: 122px;
-    height: 122px;
-    border-radius: 50%;
-    background: #d2eaf1;
-    line-height: 120px;
-    text-align: center;
-    margin-top: 14px;
-    margin-left: 14px;
-    color: #1e51dc;
-    position: absolute;
-    z-index: 100;
-    font-weight: 700;
-    font-size: 2em;
-  }
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.circle-wrap .inside-circle {
+  width: 122px;
+  height: 122px;
+  border-radius: 50%;
+  background: #d2eaf1;
+  line-height: 120px;
+  text-align: center;
+  margin-top: 14px;
+  margin-left: 14px;
+  color: #1e51dc;
+  position: absolute;
+  z-index: 100;
+  font-weight: 700;
+  font-size: 2em;
+}

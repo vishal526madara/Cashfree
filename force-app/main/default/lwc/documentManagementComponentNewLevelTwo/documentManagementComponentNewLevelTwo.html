@@ -9,67 +9,83 @@
   1.0   28-12-2022   Saurav Kashyap   Initial Version
 -->
 <template>
-    <div style="position: relative;">
-        <lightning-spinner if:true={spinnerOn} alternative-text="Loading" size="small"></lightning-spinner>
-        <template if:true={showTemplateBody}>
-        <!--<div class="slds-box slds-box_x-small">-->
-            <template for:each={categoryList} for:item="catType">
-                <div key={catType.categoryId} class="slds-col">
-                    <div class="slds-box slds-box_x-small" style="background: white;">
-                        <div class="slds-grid slds-grid_vertical">
-                            <div class="slds-col">
-                                <div class="slds-grid slds-gutters">
-                                    <div class="slds-col slds-align_absolute-center" style="width: 8%; padding-left: 20px;">
-                                        <lightning-button-icon if:false={catType.drop}
-                                            icon-name="utility:right"  
-                                            variant="bare"
-                                            alternative-text="Open" 
-                                            title="Open"
-                                            data-catid={catType.categoryId}
-                                            data-catvalue={catType.categoryValue}
-                                            onclick={handleShowCategory}>
-                                        </lightning-button-icon>
-                                        <lightning-button-icon if:true={catType.drop}
-                                            icon-name="utility:down"  
-                                            variant="bare"
-                                            alternative-text="Close" 
-                                            title="Close"
-                                            data-catid={catType.categoryId}
-                                            data-catvalue={catType.categoryValue}
-                                            onclick={handleHideCategory}>
-                                        </lightning-button-icon>
-                                    </div>
-                                    <div class="slds-col" style="width: 92%;">
-                                        <img src={folderIcon} style="height: 30px;"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <a href="javascript:void(0);" 
-                                            data-catid={catType.categoryId}
-                                            name={catType.categoryValue}
-                                            onclick={handleKycClick}>
-                                            {kycCategoryValue} KYC Specific - {catType.categoryValue}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slds-col" if:true={catType.drop}>
-                                <div style="padding: 10px 5px 3px 30px;">
-                                    <c-document-management-component-new-level-three
-                                        kyc-category-value={kycCategoryValue}
-                                        category-value={catType.categoryValue}
-                                        category-id={catType.categoryId}
-                                        record-id={recordId}
-                                        oneventthree={handleDispatchEvent}
-                                        file-size-upload={fileSizeUpload}
-                                        object-api-name={objectApiName}>
-                                    </c-document-management-component-new-level-three>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  <div style="position: relative">
+    <lightning-spinner
+      if:true={spinnerOn}
+      alternative-text="Loading"
+      size="small"
+    ></lightning-spinner>
+    <template if:true={showTemplateBody}>
+      <!--<div class="slds-box slds-box_x-small">-->
+      <template for:each={categoryList} for:item="catType">
+        <div key={catType.categoryId} class="slds-col">
+          <div class="slds-box slds-box_x-small" style="background: white">
+            <div class="slds-grid slds-grid_vertical">
+              <div class="slds-col">
+                <div class="slds-grid slds-gutters">
+                  <div
+                    class="slds-col slds-align_absolute-center"
+                    style="width: 8%; padding-left: 20px"
+                  >
+                    <lightning-button-icon
+                      if:false={catType.drop}
+                      icon-name="utility:right"
+                      variant="bare"
+                      alternative-text="Open"
+                      title="Open"
+                      data-catid={catType.categoryId}
+                      data-catvalue={catType.categoryValue}
+                      onclick={handleShowCategory}
+                    >
+                    </lightning-button-icon>
+                    <lightning-button-icon
+                      if:true={catType.drop}
+                      icon-name="utility:down"
+                      variant="bare"
+                      alternative-text="Close"
+                      title="Close"
+                      data-catid={catType.categoryId}
+                      data-catvalue={catType.categoryValue}
+                      onclick={handleHideCategory}
+                    >
+                    </lightning-button-icon>
+                  </div>
+                  <div class="slds-col" style="width: 92%">
+                    <img
+                      src={folderIcon}
+                      style="height: 30px"
+                    />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a
+                      href="javascript:void(0);"
+                      data-catid={catType.categoryId}
+                      name={catType.categoryValue}
+                      onclick={handleKycClick}
+                    >
+                      {kycCategoryValue} KYC Specific - {catType.categoryValue}
+                    </a>
+                  </div>
                 </div>
-                <div key={catType} class="slds-col" style="height: 6px;"></div>
-            </template>
-        <!--</div>-->
-        </template>
-
-    </div>
+              </div>
+              <div class="slds-col" if:true={catType.drop}>
+                <div style="padding: 10px 5px 3px 30px">
+                  <c-document-management-component-new-level-three
+                    kyc-category-value={kycCategoryValue}
+                    category-value={catType.categoryValue}
+                    category-id={catType.categoryId}
+                    record-id={recordId}
+                    oneventthree={handleDispatchEvent}
+                    file-size-upload={fileSizeUpload}
+                    object-api-name={objectApiName}
+                  >
+                  </c-document-management-component-new-level-three>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div key={catType} class="slds-col" style="height: 6px"></div>
+      </template>
+      <!--</div>-->
+    </template>
+  </div>
 </template>

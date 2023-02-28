@@ -1,15 +1,15 @@
 <template>
-    <div class="slds-modal__header">
-        <div class="slds-grid">
-            <div class="slds-col slds-size_1-of-3"></div>
-            <div class="slds-col slds-size_1-of-3">
-                <div class="slds-align_absolute-center">
-                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
-                        Import Work Order
-                    </h1>
-                </div>
-            </div>
-            <!-- <div class="slds-col slds-size_1-of-3" >
+  <div class="slds-modal__header">
+    <div class="slds-grid">
+      <div class="slds-col slds-size_1-of-3"></div>
+      <div class="slds-col slds-size_1-of-3">
+        <div class="slds-align_absolute-center">
+          <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+            Import Work Order
+          </h1>
+        </div>
+      </div>
+      <!-- <div class="slds-col slds-size_1-of-3" >
                 <lightning-button 
                     style="float: right;"
                     icon-name="utility:download" 
@@ -19,45 +19,65 @@
                     variant="neutral">
                 </lightning-button>
             </div> -->
-        </div>
     </div>
-    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-        <template if:true={spinnerOn}>
-            <lightning-spinner alternative-text="Loading" size="small" style="margin: 50% 0% 50% 0%;"></lightning-spinner>
-        </template>
-        <div class="slds-grid slds-grid_vertical">
-            <div class="slds-col">
-                <div class="slds-align_absolute-center">
-                    <lightning-input type="file"
-                        label="Choose File"
-                        variant="label-hidden"
-                        accept=".csv"
-                        onchange={importcsv}
-                        disabled={filename}
-                        multiple>
-                    </lightning-input>
-                </div>
-            </div>
-            <div class="slds-col">
-                <div class="slds-align_absolute-center">
-                    <div class="slds-form-element slds-text-body_small slds-text-color_error">{filename}</div>
-                </div>
-            </div>
-            <div class="slds-col">
-                <div class="slds-align_absolute-center">
-                    <div style="margin-left:4%" class="slds-form-element">
-                        <template if:true={showLoadingSpinner}>
-                            <lightning-spinner alternative-text="Uploading......" size="medium"></lightning-spinner>
-                        </template>
-                    </div>
-                </div> 
-            </div>
+  </div>
+  <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+    <template if:true={spinnerOn}>
+      <lightning-spinner
+        alternative-text="Loading"
+        size="small"
+        style="margin: 50% 0% 50% 0%"
+      ></lightning-spinner>
+    </template>
+    <div class="slds-grid slds-grid_vertical">
+      <div class="slds-col">
+        <div class="slds-align_absolute-center">
+          <lightning-input
+            type="file"
+            label="Choose File"
+            variant="label-hidden"
+            accept=".csv"
+            onchange={importcsv}
+            disabled={filename}
+            multiple
+          >
+          </lightning-input>
         </div>
+      </div>
+      <div class="slds-col">
+        <div class="slds-align_absolute-center">
+          <div
+            class="slds-form-element slds-text-body_small slds-text-color_error"
+          >
+            {filename}
+          </div>
+        </div>
+      </div>
+      <div class="slds-col">
+        <div class="slds-align_absolute-center">
+          <div style="margin-left: 4%" class="slds-form-element">
+            <template if:true={showLoadingSpinner}>
+              <lightning-spinner
+                alternative-text="Uploading......"
+                size="medium"
+              ></lightning-spinner>
+            </template>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="slds-modal__footer">
-        <!-- <lightning-button label="Cancel" title="Non-primary action" onclick={cancel} class="slds-m-left_x-small" variant="neutral"></lightning-button> -->
-        <lightning-button label="Import" title="Non-primary action" onclick={insertRecordsFunction} class="slds-m-left_x-small" variant="brand" disabled={importButtonDisable}></lightning-button>
-       
-    </div><!--readFiles-->
-    <!-- <lightning-button label="Test Button" onclick={handleTest}></lightning-button> -->
+  </div>
+  <div class="slds-modal__footer">
+    <!-- <lightning-button label="Cancel" title="Non-primary action" onclick={cancel} class="slds-m-left_x-small" variant="neutral"></lightning-button> -->
+    <lightning-button
+      label="Import"
+      title="Non-primary action"
+      onclick={insertRecordsFunction}
+      class="slds-m-left_x-small"
+      variant="brand"
+      disabled={importButtonDisable}
+    ></lightning-button>
+  </div>
+  <!--readFiles-->
+  <!-- <lightning-button label="Test Button" onclick={handleTest}></lightning-button> -->
 </template>

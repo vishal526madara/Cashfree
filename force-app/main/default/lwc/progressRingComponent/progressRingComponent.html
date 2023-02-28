@@ -6,17 +6,26 @@
   @last modified by  : Kartik Patkar Appstrail
 -->
 <template>
-    <div class={computedOuterClass}>
-        <div class="slds-progress-ring__progress ring-section-size" role="progressbar" aria-valuemin="0"
-            aria-valuemax="100" aria-valuenow={value}>
-            <svg viewBox="-1 -1 2 2">
-                <path if:true={initialized} class="slds-progress-ring__path" d={d}></path>
-            </svg>
-        </div>
-        <div class="slds-progress-ring__content ring-section-value">
-            <!-- <lightning-icon if:true={computedIconName} icon-name={computedIconName}
-                alternative-text={computedAltText}></lightning-icon> -->
-            {value}%
-        </div>
+  <div class={computedOuterClass}>
+    <div
+      class="slds-progress-ring__progress ring-section-size"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow={value}
+    >
+      <svg viewBox="-1 -1 2 2">
+        <path
+          if:true={initialized}
+          class="slds-progress-ring__path"
+          d={d}
+        ></path>
+      </svg>
     </div>
+    <div class="slds-progress-ring__content ring-section-value">
+      <!-- <lightning-icon if:true={computedIconName} icon-name={computedIconName}
+                alternative-text={computedAltText}></lightning-icon> -->
+      {value}%
+    </div>
+  </div>
 </template>

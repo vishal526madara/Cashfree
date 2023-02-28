@@ -1,25 +1,44 @@
 <template>
-    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
-        class="slds-modal slds-fade-in-open">
-        <div class="slds-modal__container">
-            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-                onclick={handleCloseModal}>
-                <lightning-icon icon-name="utility:close" size="small" variant="inverse" alternative-text="Close"
-                    title="Close"></lightning-icon>
-            </button>
-            <div class="slds-modal__header">
-                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create Work Jobs</h1>
-                <p class="slds-m-top_x-small">Choose the coverages for which you want to create a child case and work
-                    job</p>
-            </div>
-            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                <!-- Update Date: 18 July,2022 -->
-                <!-- <lightning-progress-indicator current-step={currentStep} type="base" variant="base">
+  <section
+    role="dialog"
+    tabindex="-1"
+    aria-labelledby="modal-heading-01"
+    aria-modal="true"
+    class="slds-modal slds-fade-in-open"
+  >
+    <div class="slds-modal__container">
+      <button
+        class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+        onclick={handleCloseModal}
+      >
+        <lightning-icon
+          icon-name="utility:close"
+          size="small"
+          variant="inverse"
+          alternative-text="Close"
+          title="Close"
+        ></lightning-icon>
+      </button>
+      <div class="slds-modal__header">
+        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+          Create Work Jobs
+        </h1>
+        <p class="slds-m-top_x-small">
+          Choose the coverages for which you want to create a child case and
+          work job
+        </p>
+      </div>
+      <div
+        class="slds-modal__content slds-p-around_medium"
+        id="modal-content-id-1"
+      >
+        <!-- Update Date: 18 July,2022 -->
+        <!-- <lightning-progress-indicator current-step={currentStep} type="base" variant="base">
                     <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
                     <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
                 </lightning-progress-indicator> -->
 
-                <!-- <div class="stepOne slds-p-top_none" if:true={first}>
+        <!-- <div class="stepOne slds-p-top_none" if:true={first}>
                     <div class="slds-col slds-p-top_none">
                         <lightning-record-edit-form object-api-name="Case">
                             <lightning-messages> </lightning-messages>
@@ -37,66 +56,95 @@
                         </div>
                     </div>
                 </div> -->
-                <!-- Update Date: 18 July,2022 -->
-                <div class="stepTwo" if:true={customForm2Modal}>
-                    <div class="slds-modal__content slds-p-top_none slds-p-around_medium" id="modal-content-id-2">
-                        <template if:false={showPaymentGatewayProduct}>
-                            <lightning-checkbox-group name="Checkbox Group" label="Coverages" options={checkboxOptions}
-                                value={checkboxValue} onchange={handleCheckboxChange} required>
-                            </lightning-checkbox-group>
-                        </template>
+        <!-- Update Date: 18 July,2022 -->
+        <div class="stepTwo" if:true={customForm2Modal}>
+          <div
+            class="slds-modal__content slds-p-top_none slds-p-around_medium"
+            id="modal-content-id-2"
+          >
+            <template if:false={showPaymentGatewayProduct}>
+              <lightning-checkbox-group
+                name="Checkbox Group"
+                label="Coverages"
+                options={checkboxOptions}
+                value={checkboxValue}
+                onchange={handleCheckboxChange}
+                required
+              >
+              </lightning-checkbox-group>
+            </template>
 
-                        <template if:true={showPaymentGatewayProduct}>
-                            <lightning-badge label="Coverages" class="slds-badge_inverse"></lightning-badge>
-                            <template for:each={paymentGatewayProduct} for:item="methodType">
-                                <lightning-accordion key={methodType.Id} allow-multiple-sections-open
-                                    active-section-name={methodType.methodName}>
-                                    <lightning-accordion-section name={methodType.methodName}
-                                        label={methodType.methodName}>
-                                        <div class="slds-grid slds-grid_vertical">
-
-                                            <template for:each={methodType.productWrapperList} for:item="commercial">
-                                                <div class="slds-col" key={commercial.commercialId}>
-                                                    <div class="slds-checkbox">
-                                                        <input type="checkbox" name="options"
-                                                            id={commercial.commercialId}
-                                                            value={commercial.commercialName}
-                                                            data-method-id={commercial.methodId}
-                                                            data-commercial-id={commercial.commercialId} checked
-                                                            onchange={handlePaymentGatewayProduct} />
-                                                        <label class="slds-checkbox__label"
-                                                            for={commercial.commercialId}>
-                                                            <span class="slds-checkbox_faux"></span>
-                                                            <span class="slds-form-element__label">
-                                                                {commercial.commercialName}</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                            </template>
-                                        </div>
-                                    </lightning-accordion-section>
-                                </lightning-accordion>
-                            </template>
-                        </template>
-
-
-
-
-                        <div class="slds-float_right">
-                            <!-- <button class="slds-button slds-button_neutral slds-m-top_small " onclick={goBackToStepOne}
-                                title="Previous"> Previous </button> -->
-                            <button class="slds-button slds-button_neutral slds-m-top_small" onclick={handleCloseModal}
-                                title="Cancel"> Cancel </button>
-                            <button class="slds-button slds-button_brand slds-m-top_small"
-                                onclick={handleSave}>Save</button>
+            <template if:true={showPaymentGatewayProduct}>
+              <lightning-badge
+                label="Coverages"
+                class="slds-badge_inverse"
+              ></lightning-badge>
+              <template for:each={paymentGatewayProduct} for:item="methodType">
+                <lightning-accordion
+                  key={methodType.Id}
+                  allow-multiple-sections-open
+                  active-section-name={methodType.methodName}
+                >
+                  <lightning-accordion-section
+                    name={methodType.methodName}
+                    label={methodType.methodName}
+                  >
+                    <div class="slds-grid slds-grid_vertical">
+                      <template
+                        for:each={methodType.productWrapperList}
+                        for:item="commercial"
+                      >
+                        <div class="slds-col" key={commercial.commercialId}>
+                          <div class="slds-checkbox">
+                            <input
+                              type="checkbox"
+                              name="options"
+                              id={commercial.commercialId}
+                              value={commercial.commercialName}
+                              data-method-id={commercial.methodId}
+                              data-commercial-id={commercial.commercialId}
+                              checked
+                              onchange={handlePaymentGatewayProduct}
+                            />
+                            <label
+                              class="slds-checkbox__label"
+                              for={commercial.commercialId}
+                            >
+                              <span class="slds-checkbox_faux"></span>
+                              <span class="slds-form-element__label">
+                                {commercial.commercialName}</span
+                              >
+                            </label>
+                          </div>
                         </div>
+                      </template>
                     </div>
-                </div>
+                  </lightning-accordion-section>
+                </lightning-accordion>
+              </template>
+            </template>
 
+            <div class="slds-float_right">
+              <!-- <button class="slds-button slds-button_neutral slds-m-top_small " onclick={goBackToStepOne}
+                                title="Previous"> Previous </button> -->
+              <button
+                class="slds-button slds-button_neutral slds-m-top_small"
+                onclick={handleCloseModal}
+                title="Cancel"
+              >
+                Cancel
+              </button>
+              <button
+                class="slds-button slds-button_brand slds-m-top_small"
+                onclick={handleSave}
+              >
+                Save
+              </button>
             </div>
-
+          </div>
         </div>
-    </section>
-    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+      </div>
+    </div>
+  </section>
+  <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
 </template>

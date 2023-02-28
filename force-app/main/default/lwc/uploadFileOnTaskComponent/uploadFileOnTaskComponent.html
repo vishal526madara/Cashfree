@@ -1,44 +1,70 @@
 <template>
-    <div if:true={load}>
-        <lightning-spinner alternative-text="Loading" size="large">
+  <div if:true={load}>
+    <lightning-spinner alternative-text="Loading" size="large">
+    </lightning-spinner>
+  </div>
 
-        </lightning-spinner>
-    </div>
-
-    <div if:true={showuploadModel}>
-        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
-            <div class="slds-modal__container" style="width: 400px;">
-                <header class="slds-modal__header slds-modal__header_empty">
-                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-                        title="Close" onclick={handleCloseUpload}>
-                        <lightning-icon icon-name="utility:close" variant="inverse" size="small">
-                        </lightning-icon>
-                        <span class="slds-assistive-text">Close</span>
-                    </button>
-                </header>
-                <div class="slds-modal__content slds-p-around_none" style="height:auto; position: relative;">
-                    <lightning-spinner if:true={spinnerOn} alternative-text="Loading" size="small"></lightning-spinner>
-                    <h2 id="modal-heading-03" class="slds-modal__title slds-hyphenate slds-align_absolute-center"
-                        style=" border-bottom: 2px solid #dddbda; height: 60px;">
-                        Upload Document
-                    </h2>
-                    <div class="slds-scrollable slds-col">
-                        <div class="slds-align_absolute-center" style="padding-bottom: 10px;">
-                            <!-- Using lightning upload for Testing the functionality ...>>> -->
-                            <lightning-file-upload label="Document Upload file" name="fileUploader" accept={acceptedFormats}
-                                onuploadfinished={handleuploadfile}>
-                            </lightning-file-upload>
-                        </div>
-                    </div>
-                    <footer class="slds-modal__footer">
-                        <button class="slds-button slds-button_neutral" onclick={handleCloseUpload}>
-                            Close
-                        </button>
-                    </footer>
-                </div>
+  <div if:true={showuploadModel}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container" style="width: 400px">
+        <header class="slds-modal__header slds-modal__header_empty">
+          <button
+            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+            title="Close"
+            onclick={handleCloseUpload}
+          >
+            <lightning-icon
+              icon-name="utility:close"
+              variant="inverse"
+              size="small"
+            >
+            </lightning-icon>
+            <span class="slds-assistive-text">Close</span>
+          </button>
+        </header>
+        <div
+          class="slds-modal__content slds-p-around_none"
+          style="height: auto; position: relative"
+        >
+          <lightning-spinner
+            if:true={spinnerOn}
+            alternative-text="Loading"
+            size="small"
+          ></lightning-spinner>
+          <h2
+            id="modal-heading-03"
+            class="slds-modal__title slds-hyphenate slds-align_absolute-center"
+            style="border-bottom: 2px solid #dddbda; height: 60px"
+          >
+            Upload Document
+          </h2>
+          <div class="slds-scrollable slds-col">
+            <div
+              class="slds-align_absolute-center"
+              style="padding-bottom: 10px"
+            >
+              <!-- Using lightning upload for Testing the functionality ...>>> -->
+              <lightning-file-upload
+                label="Document Upload file"
+                name="fileUploader"
+                accept={acceptedFormats}
+                onuploadfinished={handleuploadfile}
+              >
+              </lightning-file-upload>
             </div>
-        </section>
-        <div class="slds-backdrop slds-backdrop_open"></div>
-    </div>
-    <!-- </lightning-spinner> -->
+          </div>
+          <footer class="slds-modal__footer">
+            <button
+              class="slds-button slds-button_neutral"
+              onclick={handleCloseUpload}
+            >
+              Close
+            </button>
+          </footer>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+  </div>
+  <!-- </lightning-spinner> -->
 </template>

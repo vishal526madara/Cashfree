@@ -13,7 +13,7 @@
     <!-- Modal/Popup Box LWC starts here -->
     <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
       aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
-      <div class="slds-modal__container">
+      <div class="slds-modal__container" style="height: 732px;">
         <!-- Modal/Popup Box LWC header starts here -->
         <header class="slds-modal__header">
           <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
@@ -30,10 +30,17 @@
 
         <!-- Modal/Popup Box LWC body starts here -->
         <div class="slds-modal__content slds-p-around_medium slds-scrollable" id="modal-content-id-1"
-          style="position: relative; height: 455px !important">
+          >
           <!-- Lightning Spinner ... Starts Here >>> -->
           <div if:true={load}>
-            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            <div class="demo-only" style="height:31rem;position:relative" dir="rtl">
+              <div role="status" class="slds-spinner slds-spinner_medium">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+              </div>
+            </div>
+            <!-- style="height: 602px;margin-top:52px" -->
           </div>
           <!-- Lightning Spinner ... Ends Here >>> -->
 
@@ -72,7 +79,7 @@
                                     class="slds-input_faux slds-combobox__input" onclick={handleTaskTypeClick}>
                                     <div class="slds-media">
                                       <span class="slds-media__figure">
-                                        <span class="slds-media__figure">
+                                        <span class="slds-media__figure" style="--lwc-spacingSmall: -5px;">
                                           <template if:true={SALESFORCE_TASK_RECORD.taskType}>
                                             <span class="slds-icon_container slds-icon-standard-sossession">
                                               <svg class="slds-icon slds-icon_small">
@@ -152,7 +159,7 @@
                       </div>
 
                       <!-- Row-2 and Col-1 -->
-                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-small">
                         <lightning-input type="text" name="taskSubject" label="Task subject"
                           value={SALESFORCE_TASK_RECORD.taskSubject} onchange={handleTaskSubject}
                           style="margin: 0; padding: 0">
@@ -160,13 +167,13 @@
                       </div>
                       <!-- <div class="slds-col slds-size--1-of-12 " style="padding: 0px 0px 10px 0px"></div> -->
                       <!-- Row-2 and Col-2 -->
-                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-small">
                         <lightning-input type="date" name="dueDate" label="Due Date"
                           value={SALESFORCE_TASK_RECORD.dueDate} onchange={handledDueDate}>
                         </lightning-input>
                       </div>
                       <!-- Row-3 and Col-1 -->
-                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-small">
                         <lightning-combobox name="priority" label="Priority" value={priorityPicklistValue}
                           data-id="priorityinput" options={priorityList} onchange={handlePriorityChange}
                           required="true">
@@ -176,26 +183,27 @@
                       <!-- <div class="slds-col slds-size--1-of-12" style="padding: 0px 0px 10px 0px"></div> -->
 
                       <!-- Row-3 and Col-2 -->
-                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-small">
                         <lightning-combobox name="status" label="Status" value={statusPicklistValue}
                           options={statusPicklist} onchange={handleStatusChange}>
                         </lightning-combobox>
                       </div>
                       <!-- Row-4 and Col-1 -->
-                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
-                        <lightning-input type="datetime" name="startDate" label="Start Date" data-error="startdateerror"
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-small">
+                        <lightning-input class="custom-input-font" type="datetime" name="startDate" label="Start Date" data-error="startdateerror"
                           value={SALESFORCE_TASK_RECORD.startDate} onchange={handleStartDate}>
                         </lightning-input>
                       </div>
                       <!-- <div class="slds-col slds-size--1-of-12" style="padding: 0px 0px 10px 0px"></div> -->
                       <!-- Row-4 and Col-2 -->
-                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
-                        <lightning-input type="datetime" name="endDate" label="End Date" onchange={handleEndDate}>
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-small">
+                        <lightning-input class="custom-input-font" type="datetime" name="endDate" label="End Date" onchange={handleEndDate}
+                          data-error="enddateerror">
                         </lightning-input>
                       </div>
 
                       <!-- Related Object Segment-->
-                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
+                      <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium slds-p-top--x-small">
                         <div class="slds-grid">
                           <div style="
                               display: flex;
@@ -213,7 +221,7 @@
                                     <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
                                       data-id="iconrelatedobject">
                                       <button class="slds-button slds-button_icon slds-button_icon-border-filled"
-                                        onclick={handleSelectRelatedObjectValue} onblur={handleRemoveRelatedObject}
+                                        onclick={handleSelectRelatedObjectValue} 
                                         aria-haspopup="true" aria-expanded="true" title="Show More"
                                         style="width: 53px; padding-top: 8px">
                                         <!-- <lightning-icon icon-name="utility:down" size="small"></lightning-icon>
@@ -242,10 +250,10 @@
                                       <div class="slds-dropdown slds-dropdown_actions slds-dropdown_left">
                                         <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
                                           <template for:each={relatedObjectList} for:item="objectName">
-                                            <li key={objectName.value} class="slds-dropdown__item slds-is-selected"
+                                            <li key={objectName.value} onclick={handleSelectRelatedObjectName}  data-id={objectName.value} class="slds-dropdown__item slds-is-selected"
                                               role="presentation">
                                               <!-- <a aria-checked="true" href="#" role="menuitemcheckbox" tabindex="0"> -->
-                                              <a onclick={handleSelectRelatedObjectName} data-id={objectName.value}>
+                                              <a>
                                                 <span class="slds-truncate" title={objectName.value}>
                                                   <lightning-icon class="slds-m-right_x-small"
                                                     icon-name={objectName.iconName}></lightning-icon>{objectName.value}</span>
@@ -334,7 +342,7 @@
                             <input type="checkbox" onchange={handleCreateEvent} name="label" value="option" />
                             <span class="slds-checkbox_faux"></span>
                           </span>
-                          <label class="slds-form-element__label">Create Event</label>
+                          <label class="slds-form-element__label">Add to Calender</label>
                         </div>
                       </div>
                       <!-- End Of Craete Event Section-->
@@ -350,133 +358,138 @@
                         </p>
                       </div>
                       <!-- Row-1 and Col-1 -->
-                      <div class="slds-col slds-size--6-of-12" style="padding: 0px 0px 10px 0px; padding-right: 18px">
+                      <div class="slds-col slds-size--6-of-12 slds-p-right--x-large">
                         <!--  -->
-                        <template if:true={IsRemarksVisible}>
-                          <article class="slds-card" style="border: 0">
-                            <div class="slds-card__header" style="
+                        <!-- <template if:true={IsRemarksVisible}> -->
+                        <article class="slds-card slds-p-top_small">
+                          <div class="slds-card__header slds-border_bottom" style="
                                 width: 100%;
                                 margin: 0;
                                 padding: 0;
-                                border-bottom: 1px solid grey;
-                                padding-bottom: 8px;
+                                padding-bottom: 9px;
                               ">
-                              <header>
-                                <div class="slds-grid slds-wrap">
-                                  <div class="slds-col slds-size--2-of-12 slds-align--absolute-center"
-                                    style="margin-left: -8px">
-                                    <span style="font-weight: bold">Remarks</span>
-                                  </div>
-                                  <div class="slds-col slds-size--9-of-12">
-                                    <lightning-input type="text" value={remarkObject.Comment}
-                                      placeholder="Add remark Here" onchange={handleRemarksCommentChange}>
-                                    </lightning-input>
-                                  </div>
-                                  <div class="slds-col slds-size--1-of-12 slds-m-top--x-small slds-p-top--small">
-                                    <lightning-button-icon icon-name="utility:send" variant="border-filled" title="Send"
-                                      class="slds-p-right--xxx-small" size="small" onclick={handleRemarksComment} style="
+                            <header>
+                              <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--2-of-12 slds-align--absolute-center"
+                                  style="margin-left: -8px">
+                                  <span style="font-weight: bold">Remarks</span>
+                                </div>
+                                <div class="slds-col slds-size--9-of-12">
+                                  <lightning-input type="text" value={remarkObject.Comment}
+                                    placeholder="Add remark Here" onchange={handleRemarksCommentChange}>
+                                  </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size--1-of-12 slds-m-top--x-small slds-p-top--small">
+                                  <lightning-button-icon icon-name="utility:send" variant="border-filled" title="Send"
+                                    class="slds-p-right--xxx-small" size="small" onclick={handleRemarksComment} style="
                                         margin-left: 2px !important;
                                         margin-top: 15px !important;
                                       ">
-                                    </lightning-button-icon>
-                                  </div>
+                                  </lightning-button-icon>
                                 </div>
-                              </header>
-                            </div>
+                              </div>
+                            </header>
+                          </div>
 
-                            <div class="slds-box slds-card__body slds-card__body_inner" style="padding: 0">
-                              <div class="slds-p-left--x-small" if:true={belowTemplate} style="
+                          <div class="slds-box slds-card__body slds-card__body_inner slds-theme--shade" style="padding: 0">
+                            <div class="slds-p-left--x-small" if:true={belowTemplate} style="
                                   font-weight: bold;
                                   font-size: 12px;
                                   margin-bottom: 10px;
                                 ">
-                                Current Remarks
+                              Current Remarks
+                            </div>
+                            <div if:true={belowTemplate} class="slds-p-left--x-small slds-scrollable--y"
+                              style="height: 173px">
+                              <!-- When No Data Available ..... >>>>  -->
+                              <div if:false={showRemarks} class="slds-text-longform">
+                                <c-illustration-component display-text="NO REMARKS"></c-illustration-component>
                               </div>
-                              <div if:true={belowTemplate} class="slds-p-left--x-small slds-scrollable--y"
-                                style="height: 173px">
-                                <!-- When No Data Available ..... >>>>  -->
-                                <div if:false={showRemarks} class="slds-text-longform">
-                                  <c-illustration-component display-text="NO REMARKS"></c-illustration-component>
-                                </div>
-                                <!-- When Data is Available in the List ..... >>>>  -->
-                                <div if:true={showRemarks}>
-                                  <template for:each={remarksList} for:item="comment">
-                                    <div key={comment.remarkIdWrap}>
-                                      <div class="slds-grid slds-gutters slds-wrap slds-p-bottom--small"
-                                        style="margin-bottom: 2px">
-                                        <!-- name -->
+                              <!-- When Data is Available in the List ..... >>>>  -->
+                              <div if:true={showRemarks}>
+                                <template for:each={remarksList} for:item="comment">
+                                  <div key={comment.remarkIdWrap}>
+                                    <div class="slds-grid slds-gutters slds-wrap slds-p-bottom--small"
+                                    >
+                                      <!-- name -->
 
-                                        <!-- remarks -->
-                                        <!--space-->
+                                      <!-- remarks -->
+                                      <!--space-->
 
-                                        <div class="slds-col slds-size--8-of-12">
-                                          <div class="slds-media">
-                                            <div class="slds-media__body">
-                                              <div if:false={comment.taskEdit} style="
-                                                  font-size: 12px;
-                                                  font-weight: 700;
-                                                  word-break: break-all;
-                                                ">
-                                                {comment.Comment}
-                                              </div>
+                                      <div class="slds-col slds-size--8-of-12">
+                                        <div class="slds-media">
+                                          <div class="slds-media__body">
+                                            <div if:false={comment.taskEdit} style="font-family:'Salesforce Sans', Arial, sans-serif SANS_SERIF;word-wrap: break-word;">
+                                              {comment.Comment}
                                             </div>
                                           </div>
                                         </div>
-                                        <div class="slds-col slds-size--4-of-12">
-                                          <!-- style="padding-left: 43px" -->
-                                          <div style="color: grey; font-size: 12px">
-                                            <p>{comment.createdByName}</p>
-                                          </div>
+                                      </div>
+                                      <div class="slds-col slds-size--4-of-12">
+                                        <!-- style="padding-left: 43px" -->
+                                        <div style="color: grey; font-size: 12px">
+                                          <p>{comment.createdByName}</p>
                                         </div>
                                       </div>
                                     </div>
-                                  </template>
-                                </div>
+                                  </div>
+                                </template>
                               </div>
                             </div>
-                          </article>
-                        </template>
+                          </div>
+                        </article>
+                        <!-- </template> -->
                         <!--  -->
                       </div>
                       <!-- <div class="slds-col slds-size--1-of-12" style="padding: 0px 0px 10px 0px;">
 											</div> -->
 
                       <!--Attachment Section-->
-                      <div class="slds-col slds-size--6-of-12" style="padding: 0px 0px 10px 0px; padding-left: 18px">
+                      <div class="slds-col slds-size--6-of-12 slds-p-left_xx-large">
                         <!--Attachment Part-->
-                        <article class="slds-card" style="width: 100%; border: 0ch">
-                          <div class="slds-is-relative">
-                            <lightning-card varient="Narrow" title="Attachment" style="height: 100px; font-size: small">
-                              <div slot="actions" style="width: 100%">
-                                <lightning-file-upload name="fileUploader" accept={acceptedFormats} record-id=""
-                                  onuploadfinished={handleUploadFinished} multiple>
-                                </lightning-file-upload>
+                        <article class="slds-card">
+                          <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                              <div class="slds-media__figure">
+                                <span class="slds-assistive-text">Attachment</span>
                               </div>
-                              <div class="slds-scrollable">
-                                <div style="
-                                    font-weight: bold;
-                                    font-size: 15px;
-                                    margin-left: 15px;
-                                    border-top: 1px solid #c4bcbc !important;
-                                  ">
-                                  Uploaded
-                                </div>
-                                <div style="height: 170px" class="slds-var-m-around_medium">
+                              <div class="slds-media__body">
+                                <h2 class="slds-card__header-title">
+                                  <span>Attachment</span>
+                                </h2>
+                              </div>
+                              <div class="slds-no-flex">
+                                <div>
+                                <lightning-file-upload name="fileUploader" accept={acceptedFormats} record-id=""
+                                onuploadfinished={handleUploadFinished} multiple>
+                              </lightning-file-upload>
+                            </div>
+                              </div>
+                            </header>
+                          </div>
+                          <div class="slds-is-relative slds-border_top">
+                            <!-- <lightning-card varient="Narrow" title="Attachment"> -->
+                             
+                              <!-- <div class="slds-scrollable"> -->
+                                <div style="height: 200px" class="slds-box slds-theme_shade slds-var-m-around_medium slds-p-left--x-small slds-scrollable--y">
                                   <div if:true={showAttachments}>
                                     <template for:each={attachmentFileArray} for:item="file">
-                                      <div key={file.contentVersionId}>
+                                      <div class="slds-p-top--xx-small" key={file.contentVersionId}>
                                         {file.name}
                                       </div>
-
                                       <template for:each={fileSize} for:item="size">
                                         <div key={size}>{size}</div>
                                       </template>
                                     </template>
                                   </div>
+                                  <div if:false={showAttachments}>
+                                    <c-illustration-component display-text="No Attachment Found"></c-illustration-component>
+                                  </div>
                                 </div>
-                              </div>
-                            </lightning-card>
+                              <!-- </div> -->
+                            <!-- </lightning-card> -->
                           </div>
+                          <footer class="slds-card__footer"></footer>
                         </article>
                         <!--Attachment Part-->
                       </div>
@@ -501,6 +514,7 @@
                 </div>
               </div>
             </div>
+           
           </template>
           <!-- Main Body Template Ends Here ... >>> -->
 

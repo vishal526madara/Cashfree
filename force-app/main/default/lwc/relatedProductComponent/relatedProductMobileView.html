@@ -1,218 +1,308 @@
 <template>
-    <article class="slds-card slds-card_boundary" if:true={homepage}>
-
-        <!--HEADER START-->
-        <div class="slds-card__header slds-grid slds-theme_shade" style="padding-bottom: 10px;">
-            <header class="slds-media slds-media_center slds-has-flexi-truncate">
-
-                <!--HEADER ICON-->
-                <div class="slds-media__figure">
-                    <span class="slds-icon_container slds-icon-standard-account" title="account">
-                        <svg class="slds-icon slds-icon_small" aria-hidden="true">
-                            <use xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account"></use>
-                        </svg>
-                        <span class="slds-assistive-text">Opportunity Product</span>
-                    </span>
-                </div>
-
-                <!--HEADER TITLE-->
-                <div class="slds-media__body">
-                    <h2 class="slds-card__header-title">
-                        <a href="#" class="slds-card__header-link slds-truncate" title="Opportunity Product">
-                            <span>Opportunity Product</span>
-                        </a>
-                    </h2>
-                </div>
-
-                <!--ACTION BUTTONS-->
-                <div class="slds-no-flex">
-                    <div class="slds-button-group" role="group">
-                        <lightning-button-group>
-                            <lightning-button-icon if:true={noProduct} icon-name="utility:add" variant="border-filled" 
-                                alternative-text="Add Product" onclick={handleAddProduct}>
-                            </lightning-button-icon>
-                            <lightning-button-icon if:false={noProduct} icon-name="utility:edit" variant="border-filled" 
-                                alternative-text="Edit Product" onclick={handleEditProduct}>
-                            </lightning-button-icon>
-                            <lightning-button-icon if:false={noProduct} icon-name="utility:delete" variant="border-filled" 
-                                alternative-text="Delete Product" onclick={handleConfirmReset}>
-                            </lightning-button-icon>
-                        </lightning-button-group>
-                    </div>
-                </div>
-            </header>
+  <article class="slds-card slds-card_boundary" if:true={homepage}>
+    <!--HEADER START-->
+    <div
+      class="slds-card__header slds-grid slds-theme_shade"
+      style="padding-bottom: 10px"
+    >
+      <header class="slds-media slds-media_center slds-has-flexi-truncate">
+        <!--HEADER ICON-->
+        <div class="slds-media__figure">
+          <span
+            class="slds-icon_container slds-icon-standard-account"
+            title="account"
+          >
+            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+              <use
+                xlink:href="/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#account"
+              ></use>
+            </svg>
+            <span class="slds-assistive-text">Opportunity Product</span>
+          </span>
         </div>
-        <!--HEADER END-->
-        
-        <!--BODY START-->
-        <div class="slds-card__body slds-card__body_inner">
 
-            <!--SPINNER-->
-            <div if:true={load}>
-                <lightning-spinner variant="brand" size="large"> </lightning-spinner>
-            </div>
+        <!--HEADER TITLE-->
+        <div class="slds-media__body">
+          <h2 class="slds-card__header-title">
+            <a
+              href="#"
+              class="slds-card__header-link slds-truncate"
+              title="Opportunity Product"
+            >
+              <span>Opportunity Product</span>
+            </a>
+          </h2>
+        </div>
 
-             <!--ILLUSTRATION-->
-             <div if:true={noProduct}>
-                <c-illustration-component display-text="No Product Found"></c-illustration-component>
-            </div>
+        <!--ACTION BUTTONS-->
+        <div class="slds-no-flex">
+          <div class="slds-button-group" role="group">
+            <lightning-button-group>
+              <lightning-button-icon
+                if:true={noProduct}
+                icon-name="utility:add"
+                variant="border-filled"
+                alternative-text="Add Product"
+                onclick={handleAddProduct}
+              >
+              </lightning-button-icon>
+              <lightning-button-icon
+                if:false={noProduct}
+                icon-name="utility:edit"
+                variant="border-filled"
+                alternative-text="Edit Product"
+                onclick={handleEditProduct}
+              >
+              </lightning-button-icon>
+              <lightning-button-icon
+                if:false={noProduct}
+                icon-name="utility:delete"
+                variant="border-filled"
+                alternative-text="Delete Product"
+                onclick={handleConfirmReset}
+              >
+              </lightning-button-icon>
+            </lightning-button-group>
+          </div>
+        </div>
+      </header>
+    </div>
+    <!--HEADER END-->
 
-            <div class="slds-grid slds-wrap" if:false={noProduct}>
+    <!--BODY START-->
+    <div class="slds-card__body slds-card__body_inner">
+      <!--SPINNER-->
+      <div if:true={load}>
+        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+      </div>
 
-                <!--SELECTED PRODUCT START-->
+      <!--ILLUSTRATION-->
+      <div if:true={noProduct}>
+        <c-illustration-component
+          display-text="No Product Found"
+        ></c-illustration-component>
+      </div>
+
+      <div class="slds-grid slds-wrap" if:false={noProduct}>
+        <!--SELECTED PRODUCT START-->
+        <div class="slds-col slds-size_1-of-1">
+          <div
+            class="slds-visual-picker slds-visual-picker_vertical product-option"
+          >
+            <input type="radio" id={oppProduct.OppPro.Id} checked />
+            <label for={oppProduct.OppPro.Name}>
+              <span
+                class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center product-option"
+                style="padding: 5px"
+              >
+                <!--PRODUCT IMAGE-->
+                <div
+                  class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small"
+                >
+                  <span style="width: 40px; height: 40px">
+                    <lightning-formatted-rich-text
+                      value={oppProduct.OppPro.ProductImage}
+                    ></lightning-formatted-rich-text>
+                  </span>
+                </div>
+
+                <!--PRODUCT NAME-->
+                <div
+                  class="slds-media__body slds-border_left slds-p-left--small"
+                >
+                  <h2 class="slds-truncate slds-text-heading_small">
+                    {oppProduct.OppPro.Name}
+                  </h2>
+                </div>
+              </span>
+              <span class="slds-icon_container slds-visual-picker__text-check">
+                <svg
+                  class="slds-icon slds-icon-text-check slds-icon_x-small"
+                  aria-hidden="true"
+                >
+                  <use
+                    xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"
+                  ></use>
+                </svg>
+              </span>
+            </label>
+          </div>
+        </div>
+        <!--SELECTED PRODUCT END-->
+
+        <template for:each={recordList} for:item="commercial">
+          <div
+            class="slds-col slds-size_1-of-1 slds-p-top_xx-small slds-p-bottom_xx-small"
+            key={commercial.Id}
+          >
+            <div class="slds-box">
+              <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 box-border-bottom">
+                  <div class="slds-grid slds-wrap">
+                    <div
+                      class="slds-col slds-size--3-of-5 slds-truncate"
+                      title={commercial.Name}
+                    >
+                      <!-- <a href={commercial.nameUrl}> -->
+                      {commercial.Name}
+                      <!-- </a> -->
+                    </div>
+                    <div
+                      class="slds-col slds-size--2-of-5 slds-float__right badge-style"
+                    >
+                      <span class="slds-badge modes-badge"
+                        >{commercial.ModeName}</span
+                      >
+                    </div>
+                  </div>
+                </div>
                 <div class="slds-col slds-size_1-of-1">
-                    <div class="slds-visual-picker slds-visual-picker_vertical product-option">
-                        <input type="radio" id={oppProduct.OppPro.Id} checked/>
-                        <label for={oppProduct.OppPro.Name}>
-                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center product-option"
-                                style="padding:5px;">
-
-                                <!--PRODUCT IMAGE-->
-                                <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center slds-m-left_xx-small">
-                                    <span style="width: 40px;height:40px;">
-                                        <lightning-formatted-rich-text value={oppProduct.OppPro.ProductImage}></lightning-formatted-rich-text>
-                                    </span>
-                                </div>
-
-                                <!--PRODUCT NAME-->
-                                <div class="slds-media__body slds-border_left slds-p-left--small">
-                                    <h2 class="slds-truncate slds-text-heading_small">{oppProduct.OppPro.Name}</h2>
-                                </div>
-                            </span>
-                            <span class="slds-icon_container slds-visual-picker__text-check">
-                                <svg class="slds-icon slds-icon-text-check slds-icon_x-small" aria-hidden="true">
-                                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
-                                </svg>
-                            </span>
-                        </label>
-                    </div>
+                  <table>
+                    <tr>
+                      <td>
+                        <div class="field-style">
+                          <h1 class="field-label">List Price</h1>
+                        </div>
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={commercial.CommPercent}
+                        >
+                        </lightning-formatted-number
+                        >%
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={commercial.CommPrice}
+                          format-style="currency"
+                          currency-code="INR"
+                        >
+                        </lightning-formatted-number>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="field-style">
+                          <h1 class="field-label">Add-On</h1>
+                        </div>
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={commercial.Add_On__c}
+                        >
+                        </lightning-formatted-number
+                        >%
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={commercial.Add_On_Price__c}
+                          format-style="currency"
+                          currency-code="INR"
+                        >
+                        </lightning-formatted-number>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="field-style">
+                          <h1 class="field-label">Sales Price</h1>
+                        </div>
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={commercial.Actual_Price_Percent__c}
+                        >
+                        </lightning-formatted-number
+                        >%
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={commercial.Actual_Price__c}
+                          format-style="currency"
+                          currency-code="INR"
+                        >
+                        </lightning-formatted-number>
+                      </td>
+                    </tr>
+                  </table>
                 </div>
-                <!--SELECTED PRODUCT END-->
-
-                <template for:each={recordList} for:item="commercial">
-                    <div class="slds-col slds-size_1-of-1 slds-p-top_xx-small slds-p-bottom_xx-small" key={commercial.Id}>
-
-                        <div class="slds-box">
-                            <div class="slds-grid slds-wrap">
-                                <div class="slds-col slds-size_1-of-1 box-border-bottom">
-                                    <div class="slds-grid slds-wrap">
-                                        <div class="slds-col slds-size--3-of-5 slds-truncate" title={commercial.Name}>
-                                            <!-- <a href={commercial.nameUrl}> -->
-                                                {commercial.Name}
-                                            <!-- </a> -->
-                                        </div>
-                                        <div class="slds-col slds-size--2-of-5 slds-float__right badge-style"> 
-                                            <span class="slds-badge modes-badge">{commercial.ModeName}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="slds-col slds-size_1-of-1">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div class="field-style"><h1 class="field-label">List Price</h1></div>
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={commercial.CommPercent}>
-                                                </lightning-formatted-number>%
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={commercial.CommPrice} 
-                                                    format-style="currency" currency-code="INR">
-                                                </lightning-formatted-number>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="field-style"><h1 class="field-label">Add-On</h1></div>
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={commercial.Add_On__c}>
-                                                </lightning-formatted-number>%
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={commercial.Add_On_Price__c} 
-                                                    format-style="currency" currency-code="INR">
-                                                </lightning-formatted-number>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="field-style"><h1 class="field-label">Sales Price</h1></div>
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={commercial.Actual_Price_Percent__c}>
-                                                </lightning-formatted-number>%
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={commercial.Actual_Price__c} 
-                                                    format-style="currency" currency-code="INR">
-                                                </lightning-formatted-number>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-
-                <template for:each={selectedSettlementList} for:item="settle">
-                    <div class="slds-col slds-size_1-of-1 slds-p-top_xx-small slds-p-bottom_xx-small" key={settle.Id}>
-
-                        <div class="slds-box">
-                            <div class="slds-grid slds-wrap">
-                                <div class="slds-col slds-size_1-of-1 box-border-bottom">
-                                    <div class="slds-grid slds-wrap">
-                                        <div class="slds-col slds-size--3-of-5 slds-truncate" title={settle.Name}>
-                                            <!-- <a href={commercial.nameUrl}> -->
-                                                {settle.Name}
-                                            <!-- </a> -->
-                                        </div>
-                                        <div class="slds-col slds-size--2-of-5 slds-float__right badge-style"> 
-                                            <span class="slds-badge modes-badge">Settlement</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="slds-col slds-size_1-of-1">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div class="field-style"><h1 class="field-label">List Price</h1></div>
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={settle.Commercial__c}>
-                                                </lightning-formatted-number>%
-                                            </td>
-                                            <td class="table-data-center">
-                                                <lightning-formatted-number value={settle.Commercial_Price__c} 
-                                                    format-style="currency" currency-code="INR">
-                                                </lightning-formatted-number>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                
+              </div>
             </div>
-        </div>
-        <!--BODY END-->
+          </div>
+        </template>
+
+        <template for:each={selectedSettlementList} for:item="settle">
+          <div
+            class="slds-col slds-size_1-of-1 slds-p-top_xx-small slds-p-bottom_xx-small"
+            key={settle.Id}
+          >
+            <div class="slds-box">
+              <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 box-border-bottom">
+                  <div class="slds-grid slds-wrap">
+                    <div
+                      class="slds-col slds-size--3-of-5 slds-truncate"
+                      title={settle.Name}
+                    >
+                      <!-- <a href={commercial.nameUrl}> -->
+                      {settle.Name}
+                      <!-- </a> -->
+                    </div>
+                    <div
+                      class="slds-col slds-size--2-of-5 slds-float__right badge-style"
+                    >
+                      <span class="slds-badge modes-badge">Settlement</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1">
+                  <table>
+                    <tr>
+                      <td>
+                        <div class="field-style">
+                          <h1 class="field-label">List Price</h1>
+                        </div>
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={settle.Commercial__c}
+                        >
+                        </lightning-formatted-number
+                        >%
+                      </td>
+                      <td class="table-data-center">
+                        <lightning-formatted-number
+                          value={settle.Commercial_Price__c}
+                          format-style="currency"
+                          currency-code="INR"
+                        >
+                        </lightning-formatted-number>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <!--BODY END-->
+  </article>
+
+  <!--ADD PRODUCT MODAL START-->
+  <template if:true={addProductModel}>
+    <article class="slds-card slds-card_boundary">
+      <div class="slds-card__body slds-card__body_inner slds-p-around--none">
+        <!--ADD PRODUCT COMPONENT-->
+        <c-product-component
+          record-id={recordId}
+          oncallpasstoparent={handleCancel}
+        >
+        </c-product-component>
+      </div>
     </article>
-
-    <!--ADD PRODUCT MODAL START-->
-    <template if:true={addProductModel}>
-        <article class="slds-card slds-card_boundary">
-            <div class="slds-card__body slds-card__body_inner slds-p-around--none">
-                <!--ADD PRODUCT COMPONENT-->
-                <c-product-component record-id={recordId} oncallpasstoparent={handleCancel}>
-                </c-product-component>
-            </div>
-        </article>
-        <!-- <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+    <!-- <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
             <div class="slds-modal__container">
                 <header class="slds-modal__header slds-modal__header_empty">
                     <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
@@ -231,59 +321,65 @@
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>-->
-    </template>
-    <!--ADD PRODUCT MODAL END-->
+  </template>
+  <!--ADD PRODUCT MODAL END-->
 
-    <!--EDIT PRODUCT MODAL START-->
-    <template if:true={editProductModel}>
-        <article class="slds-card slds-card_boundary">
-            <div class="slds-card__body slds-card__body_inner slds-p-around--none">
-                <!--EDIT PRODUCT COMPONENT-->
-                <c-edit-product-component record-id={recordId} oncallpasstoparent={handleCancel}>
-                </c-edit-product-component>
-            </div>
-        </article>
-    </template>
-    <!--EDIT PRODUCT MODAL END-->
+  <!--EDIT PRODUCT MODAL START-->
+  <template if:true={editProductModel}>
+    <article class="slds-card slds-card_boundary">
+      <div class="slds-card__body slds-card__body_inner slds-p-around--none">
+        <!--EDIT PRODUCT COMPONENT-->
+        <c-edit-product-component
+          record-id={recordId}
+          oncallpasstoparent={handleCancel}
+        >
+        </c-edit-product-component>
+      </div>
+    </article>
+  </template>
+  <!--EDIT PRODUCT MODAL END-->
 
-    <!--CONFIRM PRODUCT MODAL START-->
-    <template if:true={showConfirmPopOver}>
-        <article class="slds-card slds-card_boundary">
-            <div class="slds-card__body slds-card__body_inner slds-p-around--none">
-                <header class="slds-modal__header">
-                    <!-- <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+  <!--CONFIRM PRODUCT MODAL START-->
+  <template if:true={showConfirmPopOver}>
+    <article class="slds-card slds-card_boundary">
+      <div class="slds-card__body slds-card__body_inner slds-p-around--none">
+        <header class="slds-modal__header">
+          <!-- <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
                         title="Close" onclick={handleCancelReset}>
                         <lightning-icon icon-name="utility:close" 
                             variant="inverse" 
                             size="small" title="Close">
                         </lightning-icon>
                     </button> -->
-                    <h2 class="slds-modal__title slds-hyphenate">Delete Product</h2>
-                </header>
+          <h2 class="slds-modal__title slds-hyphenate">Delete Product</h2>
+        </header>
 
-                <div class="slds-modal__content slds-p-around_medium">
-                    <!--LOAD SECTION-->
-                    <div if:true={load}>
-                        <lightning-spinner variant="brand" size="large"> </lightning-spinner>
-                    </div>
+        <div class="slds-modal__content slds-p-around_medium">
+          <!--LOAD SECTION-->
+          <div if:true={load}>
+            <lightning-spinner variant="brand" size="large">
+            </lightning-spinner>
+          </div>
 
-                    <div class="slds-grid slds-wrap">
-                        <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
-                            Are you sure you want to delete this Product?
-                        </div>
-                    </div>
-                    
-                </div>
-                <footer class="slds-modal__footer">
-                    <button class="slds-button slds-button_neutral" onclick={handleCancelReset}>
-                        Cancel
-                    </button>
-                    <button class="slds-button slds-button_brand" onclick={handleReset}>
-                        Delete
-                    </button>
-                </footer>
+          <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+              Are you sure you want to delete this Product?
             </div>
-        </article>
-    </template>
-    <!--CONFIRM PRODUCT MODAL END-->
+          </div>
+        </div>
+        <footer class="slds-modal__footer">
+          <button
+            class="slds-button slds-button_neutral"
+            onclick={handleCancelReset}
+          >
+            Cancel
+          </button>
+          <button class="slds-button slds-button_brand" onclick={handleReset}>
+            Delete
+          </button>
+        </footer>
+      </div>
+    </article>
+  </template>
+  <!--CONFIRM PRODUCT MODAL END-->
 </template>

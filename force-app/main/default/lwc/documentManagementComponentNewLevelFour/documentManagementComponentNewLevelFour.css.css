@@ -1,10 +1,10 @@
-.dummy{
-	color : blue;
+.dummy {
+  color: blue;
 }
-.slds-modal__container{
-	max-width: 63rem;
-    min-width: 30rem;
-    width: 100%;
-    max-height: 70rem;
-    min-height: 44rem;
+.slds-modal__container {
+  max-width: 63rem;
+  min-width: 30rem;
+  width: 100%;
+  max-height: 70rem;
+  min-height: 44rem;
 }

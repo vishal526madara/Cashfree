@@ -1,7 +1,5 @@
 public without sharing class OnBoardingController {
   //Global Variable for Queue
- 
-
 
   @AuraEnabled
   public static OpportunityDataWrapper currentOpportunityRec(String recordId) {
@@ -78,25 +76,27 @@ public without sharing class OnBoardingController {
   }
 
   @AuraEnabled
-  public static List<Onboarding_Checklist__c> getOnboardingCheckList(){
+  public static List<Onboarding_Checklist__c> getOnboardingCheckList() {
     List<Onboarding_Checklist__c> onBoardList = new List<Onboarding_Checklist__c>();
-    onBoardList = [select Id, Question__c,Response_Option__c,Selection_Type__c, Index__c 
-                  FROM Onboarding_Checklist__c 
-                  WHERE Is_Active__c = true 
-                  ORDER BY Index__c ASC];
-    system.debug('onBoardList:::'+onBoardList.size());
+    onBoardList = [
+      SELECT Id, Question__c, Response_Option__c, Selection_Type__c, Index__c
+      FROM Onboarding_Checklist__c
+      WHERE Is_Active__c = TRUE
+      ORDER BY Index__c ASC
+    ];
+    system.debug('onBoardList:::' + onBoardList.size());
     return onBoardList;
   }
 
   @AuraEnabled
   public static string updateAccount(String jsonAccountInput) {
     try {
-      System.debug('line 78: '+jsonAccountInput);
+      System.debug('line 78: ' + jsonAccountInput);
       AccountWrapper accWrapper = (AccountWrapper) JSON.deserialize(
         jsonAccountInput,
         AccountWrapper.class
       );
-      System.debug('line 83: '+accWrapper);
+      System.debug('line 83: ' + accWrapper);
       Account updateAccount = new Account();
       updateAccount.Ownership = accWrapper.entityValue;
       updateAccount.Id = accWrapper.accountId;
@@ -112,7 +112,7 @@ public without sharing class OnBoardingController {
       updateAccount.Registered_Name__c = accWrapper.registeredName;
       updateAccount.Account_Holder_Name__c = accWrapper.accHolderName;
       updateAccount.Owner_Director_PAN_Number__c = accWrapper.ownerPan;
-      System.debug('line 99: '+updateAccount);
+      System.debug('line 99: ' + updateAccount);
       update updateAccount;
       return 'success';
     } catch (Exception e) {
@@ -199,33 +199,37 @@ public without sharing class OnBoardingController {
   }
 
   @AuraEnabled
-  public static string createCaseChecklist(Case caseRec, List<ChecklistWrapper> checkList, List<DocChecklistWrapper> docChecklist,String accountId) {
-
-    system.debug('caseRec::'+caseRec);
+  public static string createCaseChecklist(
+    Case caseRec,
+    List<ChecklistWrapper> checkList,
+    List<DocChecklistWrapper> docChecklist,
+    String accountId
+  ) {
+    system.debug('caseRec::' + caseRec);
     try {
       if (caseRec != null) {
-       
-      Database.SaveResult caseResult = Database.insert(caseRec, true);
+        Database.SaveResult caseResult = Database.insert(caseRec, true);
 
-      if(caseResult.isSuccess() && !Test.isRunningTest()){
-        CashfreeDataSynQueue caseQueue = new CashfreeDataSynQueue(caseResult.getId());
-        Id jobId = System.enqueueJob(caseQueue);
-      }
-       
+        if (caseResult.isSuccess() && !Test.isRunningTest()) {
+          CashfreeDataSynQueue caseQueue = new CashfreeDataSynQueue(
+            caseResult.getId()
+          );
+          Id jobId = System.enqueueJob(caseQueue);
+        }
 
-        if(docChecklist.size() != 0){
-        List<Collected_Document__c> collDocList = new List<Collected_Document__c>();
-        for (DocChecklistWrapper docCheck : docChecklist) {
-          Collected_Document__c collDocRecrd = new Collected_Document__c();
-          collDocRecrd.Name = docCheck.label;
-          collDocRecrd.isCollected__c = docCheck.selected;
-          collDocRecrd.Case__c = caseRec.Id;
-          collDocList.add(collDocRecrd);
+        if (docChecklist.size() != 0) {
+          List<Collected_Document__c> collDocList = new List<Collected_Document__c>();
+          for (DocChecklistWrapper docCheck : docChecklist) {
+            Collected_Document__c collDocRecrd = new Collected_Document__c();
+            collDocRecrd.Name = docCheck.label;
+            collDocRecrd.isCollected__c = docCheck.selected;
+            collDocRecrd.Case__c = caseRec.Id;
+            collDocList.add(collDocRecrd);
+          }
+          if (collDocList.size() > 0) {
+            insert collDocList;
+          }
         }
-        if (collDocList.size() > 0) {
-          Insert collDocList;
-        }
-      }
 
         Set<Id> checkListIdSet = new Set<Id>();
         List<TaskWrapper> taskWList = new List<TaskWrapper>();
@@ -265,11 +269,11 @@ public without sharing class OnBoardingController {
         if (newTaskList.size() > 0) {
           insert newTaskList;
         }
-    
+
         return 'suuccess';
       }
 
-     return 'error';
+      return 'error';
     } catch (Exception e) {
       System.debug('Error:::' + e.getMessage());
       System.debug('Error::::' + e.getLineNumber());
@@ -309,79 +313,104 @@ public without sharing class OnBoardingController {
     }
   }
 
-  
   @AuraEnabled
-  public static List<ContentDocumentLink> getAllAttachmenterlatedtoTask(String recordId) {
+  public static List<ContentDocumentLink> getAllAttachmenterlatedtoTask(
+    String recordId
+  ) {
     try {
-     
-      List<Case_Checklist__c> taskrec=[ SELECT Id,Name, Completed__c,Checklist__c,
-                                        (SELECT Id, Subject,  OwnerId, Owner.Name, Status, Link__c, ActivityDate 
-                                        FROM Tasks )
-                                        FROM Case_Checklist__c
-                                        WHERE Case__c = :recordId
-                                          AND Name != 'Sales Approval'
-                                          AND Name != 'Bank Ops Approval'
-                                          AND Name != 'Risk Team Approval'
+      List<Case_Checklist__c> taskrec = [
+        SELECT
+          Id,
+          Name,
+          Completed__c,
+          Checklist__c,
+          (
+            SELECT
+              Id,
+              Subject,
+              OwnerId,
+              Owner.Name,
+              Status,
+              Link__c,
+              ActivityDate
+            FROM Tasks
+          )
+        FROM Case_Checklist__c
+        WHERE
+          Case__c = :recordId
+          AND Name != 'Sales Approval'
+          AND Name != 'Bank Ops Approval'
+          AND Name != 'Risk Team Approval'
       ];
-      set<id> taskid = new set<id>();
-      for(Case_Checklist__c casecheckitm : taskrec){
-        for(Task itm :casecheckitm.Tasks){
+      set<id> taskid = new Set<id>();
+      for (Case_Checklist__c casecheckitm : taskrec) {
+        for (Task itm : casecheckitm.Tasks) {
           taskid.add(itm.id);
         }
       }
-      system.debug('taskids'+taskid);
-      if(taskid.size()>0){
-          return [SELECT Id, LinkedEntityId, ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId=:taskid];
-      }
-      else{
+      system.debug('taskids' + taskid);
+      if (taskid.size() > 0) {
+        return [
+          SELECT Id, LinkedEntityId, ContentDocumentId
+          FROM ContentDocumentLink
+          WHERE LinkedEntityId = :taskid
+        ];
+      } else {
         return null;
       }
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
-   // return null;
+    // return null;
   }
-  
+
   @AuraEnabled
-  public static string uploadfileonTask(String taskid, String contentverid, String deletedocverid)  {
+  public static string uploadfileonTask(
+    String taskid,
+    String contentverid,
+    String deletedocverid
+  ) {
     try {
-      
-      system.debug('taskid result :::'+taskid);
-      system.debug('conVersionId result :::'+contentverid);
+      system.debug('taskid result :::' + taskid);
+      system.debug('conVersionId result :::' + contentverid);
 
-      if(contentverid!=Null){
-
-        ContentDocumentLink contentdoclink =new ContentDocumentLink();
-        contentdoclink.ContentDocumentId=contentverid;
-        contentdoclink.LinkedEntityId=taskid;
+      if (contentverid != null) {
+        ContentDocumentLink contentdoclink = new ContentDocumentLink();
+        contentdoclink.ContentDocumentId = contentverid;
+        contentdoclink.LinkedEntityId = taskid;
         insert contentdoclink;
 
-        if(deletedocverid!= null){
+        if (deletedocverid != null) {
+          ContentDocumentLink deletecontentdoclink = new ContentDocumentLink();
 
-          ContentDocumentLink deletecontentdoclink =new ContentDocumentLink();
-
-          deletecontentdoclink = [SELECT id,ContentDocumentId,LinkedEntityId 
-                                  FROM ContentDocumentLink 
-                                  WHERE ContentDocumentId=:deletedocverid AND LinkedEntityId=:taskid LIMIT 1];
-           if(deletecontentdoclink!=null){
+          deletecontentdoclink = [
+            SELECT id, ContentDocumentId, LinkedEntityId
+            FROM ContentDocumentLink
+            WHERE
+              ContentDocumentId = :deletedocverid
+              AND LinkedEntityId = :taskid
+            LIMIT 1
+          ];
+          if (deletecontentdoclink != null) {
             delete deletecontentdoclink;
-           }                       
+          }
         }
       }
       return 'success';
-
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
   }
 
-
   @AuraEnabled
-  public static string createOnBoardResponseRecord(List<OnboardingChecklistResponseWrapper> onboardList, String recordId){
-    try{
-      System.debug('line 407 onboardList:::'+onboardList);
+  public static string createOnBoardResponseRecord(
+    List<OnboardingChecklistResponseWrapper> onboardList,
+    String recordId
+  ) {
+    try {
+      System.debug('line 407 onboardList:::' + onboardList);
       List<Onboarding_Checklist_Response__c> onboardResponseList = new List<Onboarding_Checklist_Response__c>();
-      for(Integer i=0; i<onboardList.size(); i++){
+      for (Integer i = 0; i < onboardList.size(); i++) {
         Onboarding_Checklist_Response__c onboardResponse = new Onboarding_Checklist_Response__c();
         onboardResponse.Onboarding_Checklist__c = onboardList[i].QuestionId;
         onboardResponse.Opportunity__c = recordId;
@@ -389,22 +418,19 @@ public without sharing class OnBoardingController {
         onboardResponse.Response__c = onboardList[i].QuestionResponse;
         onboardResponseList.add(onboardResponse);
       }
-      if(onboardResponseList.size() > 0){
+      if (onboardResponseList.size() > 0) {
         insert onboardResponseList;
-        System.debug('onboardResponseList:::'+onboardResponseList);      
+        System.debug('onboardResponseList:::' + onboardResponseList);
       }
-    }catch(Exception e){
-      System.debug('Error: '+e.getCause());
-      System.debug('Error: '+e.getLineNumber());
-      System.debug('Error: '+e.getMessage());
+    } catch (Exception e) {
+      System.debug('Error: ' + e.getCause());
+      System.debug('Error: ' + e.getLineNumber());
+      System.debug('Error: ' + e.getMessage());
       return 'error';
     }
-    
-    return 'success';  
 
+    return 'success';
   }
-
-
 
   @AuraEnabled
   public static string updateTask(String taskId, String statusValue) {
@@ -433,14 +459,16 @@ public without sharing class OnBoardingController {
       } else {
         //do nothing....
       }
-      return [SELECT Id, Name, isCollected__c FROM Collected_Document__c WHERE Case__c = :recordId];
+      return [
+        SELECT Id, Name, isCollected__c
+        FROM Collected_Document__c
+        WHERE Case__c = :recordId
+      ];
     } catch (Exception e) {
       throw new AuraHandledException(e.getMessage());
     }
   }
- 
- 
- 
+
   @AuraEnabled
   public static string createTask(
     Date taskduedate,
@@ -595,12 +623,11 @@ public without sharing class OnBoardingController {
     try {
       String saveDeviation;
       if (selectedDeviation == 'Yes') {
-        saveDeviation ='Yes';
-      } else if (selectedDeviation == 'No'){
+        saveDeviation = 'Yes';
+      } else if (selectedDeviation == 'No') {
         saveDeviation = 'No';
-      }
-      else{
-        saveDeviation ='';
+      } else {
+        saveDeviation = '';
       }
 
       // String sales;
@@ -625,23 +652,20 @@ public without sharing class OnBoardingController {
         Opportunity updateOpportunity = new Opportunity();
         updateOpportunity.Id = recordId;
         updateOpportunity.Approval__c = selectedApproval;
-       // updateOpportunity.Comments__c = selectedComment;
-       if(selectedApproval=='Sales Approval'){
-       // sales=selectedComment;
-        updateOpportunity.Sales_Approval_Comments__c=selectedComment;
-      }
-      else if(selectedApproval=='Bank Ops Approval'){
-       // bank=selectedComment;
-        updateOpportunity.Bank_Ops_Approval_Comments__c=selectedComment;
-      }
-      else if(selectedApproval=='Risk Approval'){
-       // risk=selectedComment;
-        updateOpportunity.Risk_Approval_Comments__c=selectedComment;
-      }
-      else if(selectedApproval=='Finance Approval'){
-        //finance=selectedComment;
-        updateOpportunity.Finance_Approval_Comments__c=selectedComment;
-      }
+        // updateOpportunity.Comments__c = selectedComment;
+        if (selectedApproval == 'Sales Approval') {
+          // sales=selectedComment;
+          updateOpportunity.Sales_Approval_Comments__c = selectedComment;
+        } else if (selectedApproval == 'Bank Ops Approval') {
+          // bank=selectedComment;
+          updateOpportunity.Bank_Ops_Approval_Comments__c = selectedComment;
+        } else if (selectedApproval == 'Risk Approval') {
+          // risk=selectedComment;
+          updateOpportunity.Risk_Approval_Comments__c = selectedComment;
+        } else if (selectedApproval == 'Finance Approval') {
+          //finance=selectedComment;
+          updateOpportunity.Finance_Approval_Comments__c = selectedComment;
+        }
 
         updateOpportunity.Any_Deviation__c = saveDeviation;
         update updateOpportunity;
@@ -790,7 +814,7 @@ public without sharing class OnBoardingController {
     result.opportunityDeviation = parentCase;
     result.parentCaseCreation = parentCase;
     List<Opportunity> oppRecord = [
-      SELECT Id , Any_Deviation__c
+      SELECT Id, Any_Deviation__c
       FROM Opportunity
       WHERE Id = :recordId
       LIMIT 1
@@ -941,14 +965,17 @@ public without sharing class OnBoardingController {
   @AuraEnabled(cacheable=true)
   public static String getPaymentGatewayProduct(String recordId) {
     String result = '';
-    List<Opportunity_Product__c> oppProductList = [ SELECT Id, Name FROM Opportunity_Product__c WHERE Opportunity__c = :recordId];
+    List<Opportunity_Product__c> oppProductList = [
+      SELECT Id, Name
+      FROM Opportunity_Product__c
+      WHERE Opportunity__c = :recordId
+    ];
     if (oppProductList.size() != 0) {
       result = oppProductList[0].Name;
     }
     return result;
   }
 
- 
   public class CaseSubjectName {
     @AuraEnabled
     public String subjectName;
@@ -1049,21 +1076,36 @@ public without sharing class OnBoardingController {
   }
 
   public class AccountWrapper {
-    @AuraEnabled public String accountId;
-    @AuraEnabled public String lob;
-    @AuraEnabled public String subLob;
-    @AuraEnabled public String cin;
-    @AuraEnabled public String gst;
-    @AuraEnabled public String pan;
-    @AuraEnabled public String entityValue;
-    @AuraEnabled public String phone;
-    @AuraEnabled public String merchantSiteURL;
-    @AuraEnabled public String supportEmail;
-    @AuraEnabled public String registeredName;
-    @AuraEnabled public String accHolderName;
-    @AuraEnabled public String ownerPan;
-    @AuraEnabled public String accountEmail;
-    @AuraEnabled public String website;
+    @AuraEnabled
+    public String accountId;
+    @AuraEnabled
+    public String lob;
+    @AuraEnabled
+    public String subLob;
+    @AuraEnabled
+    public String cin;
+    @AuraEnabled
+    public String gst;
+    @AuraEnabled
+    public String pan;
+    @AuraEnabled
+    public String entityValue;
+    @AuraEnabled
+    public String phone;
+    @AuraEnabled
+    public String merchantSiteURL;
+    @AuraEnabled
+    public String supportEmail;
+    @AuraEnabled
+    public String registeredName;
+    @AuraEnabled
+    public String accHolderName;
+    @AuraEnabled
+    public String ownerPan;
+    @AuraEnabled
+    public String accountEmail;
+    @AuraEnabled
+    public String website;
   }
 
   public class TaskUpdateWrapper {
@@ -1077,9 +1119,12 @@ public without sharing class OnBoardingController {
     public String link;
   }
 
-  public class OnboardingChecklistResponseWrapper{
-    @AuraEnabled public Id QuestionId{get;set;}
-    @AuraEnabled public String QuestionName{get;set;}
-    @AuraEnabled public String QuestionResponse{get;set;}
+  public class OnboardingChecklistResponseWrapper {
+    @AuraEnabled
+    public Id QuestionId { get; set; }
+    @AuraEnabled
+    public String QuestionName { get; set; }
+    @AuraEnabled
+    public String QuestionResponse { get; set; }
   }
 }

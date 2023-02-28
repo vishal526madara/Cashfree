@@ -1,238 +1,312 @@
 <template>
   <article class="slds-card">
-      <div class="slds-theme_shade" style="padding-left:9px">
-      
-      <div  style="padding-top:9px; padding-bottom:9px; ">
+    <div class="slds-theme_shade" style="padding-left: 9px">
+      <div style="padding-top: 9px; padding-bottom: 9px">
         <div class="demo-only demo-only--sizing slds-grid slds-wrap">
-        <div class="slds-col slds-size--1-of-12">  
-      <lightning-icon icon-name="utility:task" style="--sds-c-icon-color-background:rgb(58, 180, 87)" variant="inverse"></lightning-icon><span style="padding-left:10px" >Tasks</span>
-      </div>
-      
-    <div class="slds-col slds-size--1-of-12"> 
-      <div style="width:120px; padding:0.5rem;">
-        <c-multi-select-picklist
-        options={taskpickListValue} 
-        onvaluechange={taskTypeChange} 
-        label="Task Type">
-      </c-multi-select-picklist>
-      </div>
-    </div>
-    <div class="slds-col slds-size--1-of-12"> 
-      <div style="width:120px; padding:0.5rem;">
-        <c-multi-select-picklist
-        options={picklistValues} 
-        onvaluechange={handleMultiValueChange} 
-        label="Due Date">
-      </c-multi-select-picklist>
-      </div>
-    </div>
-    <div class="slds-col slds-size--1-of-12"> 
-      <div style="width:120px; padding:0.5rem;">
-        <c-multi-select-picklist
-        options={picklistValues} 
-        onvaluechange={priorityChange} 
-        label="Priority">
-      </c-multi-select-picklist>
-      </div>
-    </div>
+          <div class="slds-col slds-size--1-of-12">
+            <lightning-icon
+              icon-name="utility:task"
+              style="--sds-c-icon-color-background: rgb(58, 180, 87)"
+              variant="inverse"
+            ></lightning-icon
+            ><span style="padding-left: 10px">Tasks</span>
+          </div>
 
-    <div class="slds-col slds-size--1-of-12"> 
-      <div style="width:120px; padding:0.5rem;">
-        <c-multi-select-picklist
-          options={picklistValues} 
-          onvaluechange={handleMultiValueChange} 
-          label="Assigned to">
-        </c-multi-select-picklist>
+          <div class="slds-col slds-size--1-of-12">
+            <div style="width: 120px; padding: 0.5rem">
+              <c-multi-select-picklist
+                options={taskpickListValue}
+                onvaluechange={taskTypeChange}
+                label="Task Type"
+              >
+              </c-multi-select-picklist>
+            </div>
+          </div>
+          <div class="slds-col slds-size--1-of-12">
+            <div style="width: 120px; padding: 0.5rem">
+              <c-multi-select-picklist
+                options={picklistValues}
+                onvaluechange={handleMultiValueChange}
+                label="Due Date"
+              >
+              </c-multi-select-picklist>
+            </div>
+          </div>
+          <div class="slds-col slds-size--1-of-12">
+            <div style="width: 120px; padding: 0.5rem">
+              <c-multi-select-picklist
+                options={picklistValues}
+                onvaluechange={priorityChange}
+                label="Priority"
+              >
+              </c-multi-select-picklist>
+            </div>
+          </div>
+
+          <div class="slds-col slds-size--1-of-12">
+            <div style="width: 120px; padding: 0.5rem">
+              <c-multi-select-picklist
+                options={picklistValues}
+                onvaluechange={handleMultiValueChange}
+                label="Assigned to"
+              >
+              </c-multi-select-picklist>
+            </div>
+          </div>
+
+          <div class="slds-col slds-size--1-of-12">
+            <div style="width: 120px; padding: 0.5rem">
+              <c-multi-select-picklist
+                options={picklistValues}
+                onvaluechange={handleMultiValueChange}
+                label="Related to"
+              >
+              </c-multi-select-picklist>
+            </div>
+          </div>
+          <div class="slds-col slds-size--1-of-12">
+            <div style="width: 120px; padding: 0.5rem">
+              <c-multi-select-picklist
+                options={statusPicklistValue}
+                onvaluechange={statusChange}
+                label="Status"
+              >
+              </c-multi-select-picklist>
+            </div>
+          </div>
+        </div>
       </div>
-
+      <!--<img src="	https://cashfreepayments--appdev2.sandbox.my.salesforce.com/img/icon/t4v35/standard/task_120.png">-->
+      {taskDataLenghnt} items
     </div>
-    
-    
-    <div class="slds-col slds-size--1-of-12"> 
-      <div style="width:120px; padding:0.5rem;">
+    <div class="tablehead" style="height: 35rem; overflow: auto">
+      <table
+        class="slds-table slds-table_bordered slds-border_left slds-border_right"
+      >
+        <thead class="slds-border_right test">
+          <tr class="slds-line-height_reset test">
+            <td
+              class="slds-text-align_right slds-cell_action-mode test"
+              role="gridcell"
+            >
+              <div class="slds-checkbox">
+                <input
+                  type="checkbox"
+                  name="options"
+                  id="checkbox-01"
+                  value="checkbox-01"
+                  tabindex="0"
+                  aria-labelledby="check-button-label-01 column-group-header"
+                />
+                <label
+                  class="slds-checkbox__label"
+                  for="checkbox-01"
+                  id="check-button-label-01"
+                >
+                  <span class="slds-checkbox_faux"></span>
+                  <span
+                    class="slds-form-element__label slds-assistive-text"
+                  ></span>
+                </label>
+              </div>
+            </td>
 
+            <!-- <th class="slds-text-align_right slds-cell_action-mode" role="gridcell"> <div class="slds-checkbox"> <input type="checkbox" name="options" id="checkbox-01" value="checkbox-01" tabindex="0" aria-labelledby="check-button-label-01 column-group-header" /> <label class="slds-checkbox__label" for="checkbox-01" id="check-button-label-01"> <span class="slds-checkbox_faux"></span> <span class="slds-form-element__label slds-assistive-text">Select item 1</span> </label> </div> </th> -->
+            <th scope="col" class="test">
+              <span class="slds-truncate" title="Name"
+                ><strong>Task title</strong></span
+              >
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Due date</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Time</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Priority</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong> Assigned to</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Related to</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Contact</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong> Phone Number</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Email Id</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Remarks</strong>
+              </div>
+            </th>
+            <th class="test">
+              <div class="slds-truncate" title="Some Custom Column">
+                <strong>Status</strong>
+              </div>
+            </th>
+            <th class="test" scope="col">
+              <lightning-button-menu
+                alternative-text="Show menu"
+                icon-size="x-small"
+              >
+                <lightning-menu-item
+                  value="MenuItemOne"
+                  label="Menu Item One"
+                ></lightning-menu-item>
+                <lightning-menu-item
+                  value="MenuItemTwo"
+                  label="Menu Item Two"
+                ></lightning-menu-item>
+                <lightning-menu-item
+                  value="MenuItemThree"
+                  label="Menu Item Three"
+                ></lightning-menu-item>
+              </lightning-button-menu>
+            </th>
+          </tr>
+        </thead>
 
-        <c-multi-select-picklist
-          options={picklistValues} 
-          onvaluechange={handleMultiValueChange} 
-          label="Related to">
-        </c-multi-select-picklist>
-      
-      </div>
-    </div>
-    <div class="slds-col slds-size--1-of-12"> 
-      <div style="width:120px; padding:0.5rem;">
-        <c-multi-select-picklist
-          options={statusPicklistValue} 
-          onvaluechange={statusChange} 
-          label="Status">
-        </c-multi-select-picklist>
-      </div>
+        <tbody>
+          <template for:each={taskData} for:item="acc">
+            <tr key={acc.id}>
+              <td
+                class="slds-text-align_right slds-cell_action-mode"
+                role="gridcell"
+              >
+                <div class="slds-checkbox">
+                  <input
+                    type="checkbox"
+                    name="options"
+                    value="checkbox-01"
+                    tabindex="0"
+                    aria-labelledby="check-button-label-01 column-group-header"
+                  />
+                  <label class="slds-checkbox__label" for="checkbox-01">
+                    <span class="slds-checkbox_faux"></span>
+                    <span class="slds-form-element__label slds-assistive-text"
+                      >Select item 1</span
+                    >
+                  </label>
+                </div>
+              </td>
 
-    </div>
-    </div>
-    </div>   
-      <!--<img src="	https://cashfreepayments--appdev2.sandbox.my.salesforce.com/img/icon/t4v35/standard/task_120.png">-->          
-      {taskDataLenghnt} items   
-  
-      </div>
-      <div class="tablehead" style="height: 35rem; overflow:auto;">
-      <table class="slds-table slds-table_bordered slds-border_left slds-border_right">
-        
-          <thead class="slds-border_right test">
-           
-            <tr class="slds-line-height_reset test">
+              <td class="" scope="col">
+                <div class="slds-truncate" title="Name"></div>
+              </td>
 
-              <td class="slds-text-align_right slds-cell_action-mode test" role="gridcell"> <div class="slds-checkbox"> <input type="checkbox" name="options" id="checkbox-01" value="checkbox-01" tabindex="0" aria-labelledby="check-button-label-01 column-group-header" /> <label class="slds-checkbox__label" for="checkbox-01" id="check-button-label-01"> <span class="slds-checkbox_faux"></span> <span class="slds-form-element__label slds-assistive-text"></span> </label> </div> </td>
-              
-              <!-- <th class="slds-text-align_right slds-cell_action-mode" role="gridcell"> <div class="slds-checkbox"> <input type="checkbox" name="options" id="checkbox-01" value="checkbox-01" tabindex="0" aria-labelledby="check-button-label-01 column-group-header" /> <label class="slds-checkbox__label" for="checkbox-01" id="check-button-label-01"> <span class="slds-checkbox_faux"></span> <span class="slds-form-element__label slds-assistive-text">Select item 1</span> </label> </div> </th> -->
-              <th scope="col" class="test ">
-                <span class="slds-truncate" title="Name"><strong>Task title</strong></span>
-              </th>
-              <th class="test ">
-                <div class="slds-truncate" title="Some Custom Column"><strong>Due date</strong></div>
-              </th>
-              <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong>Time</strong></div>
-                </th>
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong>Priority</strong></div>
-                </th>
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong> Assigned to</strong></div>
-                </th>
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong>Related to</strong></div>
-                </th>
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong>Contact</strong></div>
-                </th>
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong> Phone Number</strong></div>
-                </th >
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong>Email Id</strong></div>
-                </th>
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong>Remarks</strong></div>
-                </th>
-                <th class="test ">
-                  <div class="slds-truncate" title="Some Custom Column"><strong>Status</strong></div>
-                </th>
-                <th class="test " scope="col">
-                                  
-                  <lightning-button-menu alternative-text="Show menu" icon-size="x-small">
-                      <lightning-menu-item value="MenuItemOne" label="Menu Item One"></lightning-menu-item>
-                      <lightning-menu-item value="MenuItemTwo" label="Menu Item Two"></lightning-menu-item>
-                      <lightning-menu-item value="MenuItemThree" label="Menu Item Three"></lightning-menu-item>
-                  </lightning-button-menu>
-              
-          
-              </th>
-            
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column">
+                  {acc.activityDate}
+                </div>
+              </td>
+
+              <td class="" scope="col">
+                <div class="slds-truncate" title="Name">{acc.taskTime}</div>
+              </td>
+
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column">
+                  {acc.Priority}
+                </div>
+              </td>
+
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column">
+                  {acc.ownerName}
+                </div>
+              </td>
+
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column">
+                  <lightning-icon
+                    icon-name={acc.icon}
+                    class="slds-float_left"
+                    size="xx-small"
+                  ></lightning-icon>
+                  <span style="padding-left: 6px"
+                    ><a data-id={acc.WhatId} onclick={handleClick}
+                      >{acc.whatName}</a
+                    ></span
+                  >
+                </div>
+              </td>
+
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column">
+                  {acc.contactName}
+                </div>
+              </td>
+
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column">
+                  {acc.phoneNumber}
+                </div>
+              </td>
+
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column"></div>
+              </td>
+
+              <td>
+                <div class="slds-truncate" title="Some Custom Column"></div>
+              </td>
+
+              <td class="slds-cell-edit" scope="row" tabindex="0">
+                <div class="slds-truncate" title="Some Custom Column">
+                  {acc.status}
+                </div>
+              </td>
+
+              <td class="" scope="col">
+                <lightning-button-menu
+                  alternative-text="Show menu"
+                  icon-size="x-small"
+                >
+                  <lightning-menu-item
+                    value="MenuItemOne"
+                    label="Menu Item One"
+                  ></lightning-menu-item>
+                  <lightning-menu-item
+                    value="MenuItemTwo"
+                    label="Menu Item Two"
+                  ></lightning-menu-item>
+                  <lightning-menu-item
+                    value="MenuItemThree"
+                    label="Menu Item Three"
+                  ></lightning-menu-item>
+                  <lightning-menu-item
+                    value="MenuItemFour"
+                    label="Menu Item Four"
+                  ></lightning-menu-item>
+                </lightning-button-menu>
+              </td>
             </tr>
-         
-          </thead>
-          
-          <tbody>
-              
-                  <template for:each={taskData} for:item="acc">
-                                            
-                          <tr key={acc.id}>
-
-                            <td class="slds-text-align_right slds-cell_action-mode" role="gridcell">
-                              <div class="slds-checkbox">
-                                <input type="checkbox" name="options"  value="checkbox-01" tabindex="0" aria-labelledby="check-button-label-01 column-group-header" />
-                                <label class="slds-checkbox__label" for="checkbox-01">
-                                  <span class="slds-checkbox_faux"></span>
-                                  <span class="slds-form-element__label slds-assistive-text">Select item 1</span>
-                                </label>
-                              </div>
-                            </td>                            
-                            
-                                <td class="" scope="col">
-                                <div class="slds-truncate" title="Name"></div>
-                                </td>
-
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-
-                                  <div class="slds-truncate" title="Some Custom Column">{acc.activityDate}</div>
-                                  
-                                    </td>
-                                    
-                                <td class="" scope="col">
-                                  <div class="slds-truncate" title="Name">{acc.taskTime}</div>
-                                </td>
-
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-
-                                  <div class="slds-truncate" title="Some Custom Column">{acc.Priority}</div>
-                                  
-                                    </td>
-                                    
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-                                  <div class="slds-truncate" title="Some Custom Column">{acc.ownerName}</div>
-          
-                                    </td>
-                                
-                                
-
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-                                  <div class="slds-truncate" title="Some Custom Column">
-                                    <lightning-icon icon-name ={acc.icon} class="slds-float_left " size ="xx-small" ></lightning-icon>
-                                    <span style="padding-left:6px"><a data-id={acc.WhatId} onclick={handleClick}>{acc.whatName}</a></span>
-
-                                  </div>
-
-                                  
-                                    </td>
-                                
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-                                  <div class="slds-truncate" title="Some Custom Column">{acc.contactName}</div>
-                                  
-                                    </td>
-                                
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-                                  <div class="slds-truncate" title="Some Custom Column">{acc.phoneNumber}</div>
-                                  
-                                    </td>
-
-                                
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-                                  <div class="slds-truncate" title="Some Custom Column"></div>
-                                  
-                                    </td>                             
-
-                            
-                                    <td>
-                                      <div class="slds-truncate" title="Some Custom Column"></div>
-                                    </td>
-                                
-                                <td class="slds-cell-edit" scope="row" tabindex="0">
-                                  <div class="slds-truncate" title="Some Custom Column">{acc.status}</div>
-                                  
-                                    </td>
-                                
-                                    
-                                <td class="" scope="col">
-                                  
-                                    <lightning-button-menu alternative-text="Show menu" icon-size="x-small">
-                                        <lightning-menu-item value="MenuItemOne" label="Menu Item One"></lightning-menu-item>
-                                        <lightning-menu-item value="MenuItemTwo" label="Menu Item Two"></lightning-menu-item>
-                                        <lightning-menu-item value="MenuItemThree" label="Menu Item Three"></lightning-menu-item>
-                                        <lightning-menu-item value="MenuItemFour" label="Menu Item Four"></lightning-menu-item>
-                                    </lightning-button-menu>
-                                
-                            
-                                </td>
-                          </tr>
-                      
-                  </template>
-              
-          </tbody>
-        </table>
-      </div>
-      
-        </article>
-  
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </article>
 </template>

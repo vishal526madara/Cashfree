@@ -3,16 +3,16 @@
  * @parameter: Na
  * @return: Na
  * **/
-trigger LeadTrigger on Lead (after Insert, before insert, before update){
-    if(Trigger.isAfter && Trigger.isInsert && LeadTriggerHandler.checkStatus){
-        LeadTriggerHandler.afterInsert(Trigger.new);
+trigger LeadTrigger on Lead(after insert, before insert, before update) {
+  if (Trigger.isAfter && Trigger.isInsert && LeadTriggerHandler.checkStatus) {
+    LeadTriggerHandler.afterInsert(Trigger.new);
+  }
+  if (Trigger.isBefore) {
+    if (Trigger.isInsert) {
+      LeadTriggerHandler.beforeInsert(Trigger.new);
     }
-    if(Trigger.isBefore){
-        if(Trigger.isInsert){
-             LeadTriggerHandler.beforeInsert(Trigger.new);
-        }
-        if(Trigger.isUpdate){
-            LeadTriggerHandler.beforeUpdate(Trigger.newMap,Trigger.oldMap);
-        }
+    if (Trigger.isUpdate) {
+      LeadTriggerHandler.beforeUpdate(Trigger.newMap, Trigger.oldMap);
     }
+  }
 }

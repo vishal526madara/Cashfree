@@ -76,15 +76,15 @@ export default class EditProductComponent extends LightningElement {
         this.recordList = this.oppProduct.oppModeList.filter((item) => {
           console.log("Real Data:::", item);
           if (item.hasOwnProperty("Method_Type__c")) {
-            console.log('Condition Passed::');
+            console.log("Condition Passed::");
             if (
               item.Commercial__r.Method_Type__r.Name != null &&
               item.Commercial__r.Method_Type__r.Mode__r.Name != null
             ) {
-              item.ModeName =  item.Commercial__r.Method_Type__r.Mode__r.Name;
-                // item.Commercial__r.Method_Type__r.Mode__r.Name +
-                // " - " +
-                // item.Commercial__r.Method_Type__r.Name;
+              item.ModeName = item.Commercial__r.Method_Type__r.Mode__r.Name;
+              // item.Commercial__r.Method_Type__r.Mode__r.Name +
+              // " - " +
+              // item.Commercial__r.Method_Type__r.Name;
             }
           } else {
             item.ModeName = item.Mode__r.Name;
@@ -199,7 +199,7 @@ export default class EditProductComponent extends LightningElement {
         if (checked) {
           result.filter((item) => {
             console.log("Record:::", item);
-            item.ModeName=item.Mode__r.Name;
+            item.ModeName = item.Mode__r.Name;
             item.Commercial__c = item.Id;
             item.CommPrice =
               item.Commercial_Price__c == null ? 0 : item.Commercial_Price__c;
@@ -257,19 +257,19 @@ export default class EditProductComponent extends LightningElement {
       .then((result) => {
         if (checked) {
           result.filter((item) => {
-            let existingData=false;
-            for(let i=0; i<this.recordList.length; i++){
-                if(item.Method_Type__c == this.recordList[i].Method_Type__c){
-                    existingData =true;
-                    break;
-                }
+            let existingData = false;
+            for (let i = 0; i < this.recordList.length; i++) {
+              if (item.Method_Type__c == this.recordList[i].Method_Type__c) {
+                existingData = true;
+                break;
+              }
             }
             console.log("Record:::", item);
             if (item.Method_Type__r.Mode__r.Name != null) {
-              item.ModeName =  item.Method_Type__r.Mode__r.Name;
-                // item.Method_Type__r.Mode__r.Name +
-                // " - " +
-                // item.Method_Type__r.Name;
+              item.ModeName = item.Method_Type__r.Mode__r.Name;
+              // item.Method_Type__r.Mode__r.Name +
+              // " - " +
+              // item.Method_Type__r.Name;
             } else {
               item.ModeName = item.Mode__r.Name;
             }
@@ -287,11 +287,10 @@ export default class EditProductComponent extends LightningElement {
             item.Opportunity_Product__c = this.oppProduct.OppPro.Id;
             item.Add_On__c = this.settlementTotal.Commercial__c;
             item.Add_On_Price__c = this.settlementTotal.Commercial_Price__c;
-            if(existingData == true){
-                //do nothing.....
-            }
-            else{
-            this.newList.push(item);
+            if (existingData == true) {
+              //do nothing.....
+            } else {
+              this.newList.push(item);
             }
             return item;
           });
@@ -317,9 +316,9 @@ export default class EditProductComponent extends LightningElement {
           }
           return item;
         });
-        console.log('Record List::::',this.recordList);
-        console.log('New List::::',this.newList);
-        console.log('Delete List::::',this.deleteList);
+        console.log("Record List::::", this.recordList);
+        console.log("New List::::", this.newList);
+        console.log("Delete List::::", this.deleteList);
         this.load = false;
       })
       .catch((error) => {
@@ -502,10 +501,13 @@ export default class EditProductComponent extends LightningElement {
       })
       .catch((error) => {
         console.log("error:::" + JSON.stringify(error));
-        if(error.body.message.includes('ENTITY_IS_LOCKED')){
-        this.showToastMessage("Error", "Record Is In Lock State, Please Contact your Manager or Admin", "error");
-        }
-        else{
+        if (error.body.message.includes("ENTITY_IS_LOCKED")) {
+          this.showToastMessage(
+            "Error",
+            "Record Is In Lock State, Please Contact your Manager or Admin",
+            "error"
+          );
+        } else {
           this.showToastMessage("Error", error.message, "error");
         }
         this.disableSave = false;
