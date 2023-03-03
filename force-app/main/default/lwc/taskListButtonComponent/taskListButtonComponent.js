@@ -249,14 +249,17 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     }
 
 
+    visibleAssignee;
     handleAssigneeLookup(event) {
         console.log('Look Up Selected:::');
+        this.visibleAssignee = false;
         this.template.querySelector(`[data-id="taskowner"]`).classList.remove('slds-has-error');
         this.defaultAssignRecord = event.detail.Name;
         this.SALESFORCE_TASK_RECORD.assigneeRecordId = event.detail.Id;
     }
 
     handleNoAssigneeLookup(event) {
+        this.visibleAssignee = true;
         console.log('handle No Asssignee Called:::');
         this.template.querySelector(`[data-id="taskowner"]`).classList.add('slds-has-error');
         this.defaultAssignRecord = '';
@@ -656,7 +659,7 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
          */
         console.log('Value:::' + this.SALESFORCE_TASK_RECORD.assigneeRecordId);
         if (this.SALESFORCE_TASK_RECORD.assigneeRecordId == '' || this.SALESFORCE_TASK_RECORD.assigneeRecordId == undefined || this.SALESFORCE_TASK_RECORD.assigneeRecordId == null) {
-
+            this.visibleAssignee = true;
             this.template.querySelector(`[data-id="taskowner"]`).classList.add('slds-has-error');
 
 

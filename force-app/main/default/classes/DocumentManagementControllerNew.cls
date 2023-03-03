@@ -2,29 +2,13 @@
  * @description       : 
  * @author            :Appstrail Developer
  * @group             : SK Group
- * @last modified on  : 06-01-2023
+ * @last modified on  : 15-02-2023
  * @last modified by  : Saurav Kashyap
  * Modifications Log
  * Ver   Date         Author           Modification
  * 1.0   22-12-2022   Saurav Kashyap   Initial Version
 **/
 public without sharing class DocumentManagementControllerNew {
-
-
-
-
-    private String CLASS_NAME='';
-    private String METHOD_NAME='';
-    private String NAME_AND_STATE_CODE='';
-    private String ERROR_MESSAGE='';
-    private Integer LINE_NUMBER;
-    private String ACCOUNT_ID;
-
-   
-
-    List<API_Logger__c> API_LOGGER_LIST = new List<API_Logger__c>();
-    List<Error_Log__c> ERROR_LOG_LIST = new List<Error_Log__c>();
-
     /**
     * @description 
     * @author 
@@ -438,107 +422,97 @@ public without sharing class DocumentManagementControllerNew {
                                                  String documentTypeValue,
                                                  String documentTextVarTemp){
 
-        try{
-            System.debug('merchantId '+merchantId );
-            System.debug('filetype '+filetype);
-            System.debug('docType '+docType);
-            System.debug('contentVId '+contentVId);
-            System.debug('filetypename '+filetypename);
-            System.debug('recId '+recId);
-            System.debug('kycCategoryValue '+kycCategoryValue);
-            System.debug('categoryValue '+categoryValue);
-            System.debug('documentTypeValue '+documentTypeValue);
-            System.debug('documentTextVarTemp '+documentTextVarTemp); 
+        system.debug('merchantId '+merchantId );
+        system.debug('filetype '+filetype);
+        system.debug('docType '+docType);
+        system.debug('contentVId '+contentVId);
+        system.debug('filetypename '+filetypename);
+        system.debug('recId '+recId);
+        system.debug('kycCategoryValue '+kycCategoryValue);
+        system.debug('categoryValue '+categoryValue);
+        system.debug('documentTypeValue '+documentTypeValue);
+        system.debug('documentTextVarTemp '+documentTextVarTemp);   
+        
+        String className ='DocumentManagementControllerNew';
+        String methodName ='uploadmerchant_document';
 
-            // String className ='DocumentManagementControllerNew';
-            // String methodName ='uploadmerchant_document';
-            // List<API_Logger__c> apiLoggerList = new List<API_Logger__c>();
-            // List<Error_Log__c>  errorLoggerList = new List<Error_Log__c>();
-            List<Account> accList = [Select Id FROM Account WHERE MID__c  = :merchantId];
+        List<API_Logger__c> apiLoggerList = new List<API_Logger__c>();
+  
+        List<Error_Log__c>  errorLoggerList = new List<Error_Log__c>();
 
+        List<Account> accList = [Select Id FROM Account WHERE MID__c  = :merchantId];
+
+        
+        ContentVersionWrapper ContentVersionWrapperObject = new ContentVersionWrapper();
+        
+        ContentVersionWrapperObject = getContentDocument(contentVId);
+        system.debug('ContentVersionWrapperObject >> '+ContentVersionWrapperObject);
+        
+        CashfreeAPIUtil.CombinedWrapper wrap= new CashfreeAPIUtil.CombinedWrapper();
+        String jsonWebToken='';
             if(accList.size() == 0){
-                throw new AuraHandledException('MID Does Exist....');
-            }else{
-                ContentVersionWrapper ContentVersionWrapperObject = new ContentVersionWrapper();
-                ContentVersionWrapperObject = getContentDocument(contentVId);
-                System.debug('ContentVersionWrapperObject >> '+ContentVersionWrapperObject);
-                CashfreeAPIUtil.CombinedWrapper wrap= new CashfreeAPIUtil.CombinedWrapper();
-
-                String jsonWebToken='';
-
-                wrap =CashfreeAPIUtil.generateJWTToken();
-               jsonWebToken= 'Bearer '+wrap.jwtToken;
-               String endpoint =cashFreeMetaData[0].End_Point__c;
-               
-               String docUploadUrl =endpoint+'/integration/salesforce/v1/docs/'+merchantId+'/upload';
-               String boundary = '----WebKitFormBoundary7MA4YWxkTrZu0gW';
-               String header = '------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name="docType"\r\n\r\n'+doctype+
-                   '\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name="file"; filename="'+filetypename+
-                   '"\r\nContent-Type: '+filetype;
-               String footer = '\r\n--'+boundary+'--';              
-               String headerEncoded = EncodingUtil.base64Encode(Blob.valueOf(header+'\r\n\r\n'));
-
-               while(headerEncoded.endsWith('=')){
-                header+=' ';
-                headerEncoded = EncodingUtil.base64Encode(Blob.valueOf(header+'\r\n\r\n'));
-                String bodyEncoded = EncodingUtil.base64Encode(ContentVersionWrapperObject.versionData);
-                String footerEncoded = EncodingUtil.base64Encode(Blob.valueOf(footer));
-            
-                Blob bodyBlob = null;
-                String last4Bytes = bodyEncoded.substring(bodyEncoded.length()-4,bodyEncoded.length());
-                if(last4Bytes.endsWith('=')){
-                    Blob decoded4Bytes = EncodingUtil.base64Decode(last4Bytes);
-                    HttpRequest tmp = new HttpRequest();
-                    tmp.setBodyAsBlob(decoded4Bytes);
-                    String last4BytesFooter = tmp.getBody()+footer;   
-                    bodyBlob = EncodingUtil.base64Decode(headerEncoded+bodyEncoded.substring(0,bodyEncoded.length()-4)+EncodingUtil.base64Encode(Blob.valueOf(last4BytesFooter)));
-                }
-                else{
-                    bodyBlob = EncodingUtil.base64Decode(headerEncoded+bodyEncoded+footerEncoded);
-                }
-
-                HttpRequest req = new HttpRequest();
-                req.setHeader('Content-Type','multipart/form-data; boundary='+boundary);
-                req.setMethod('POST');
-                req.setEndpoint(docUploadUrl);
-                req.setBodyAsBlob(bodyBlob);
-                req.setTimeout(60000);
-                req.setHeader('Content-Length',String.valueof(req.getBodyAsBlob().size()));
-                req.setHeader('Authorization', jsonWebToken);
-                
-                Http http = new Http();
-                HTTPResponse res = http.send(req);
-                Map<String,Object> bodyReq=(Map<String,Object>) JSON.deserializeUntyped(res.getBody());
-
+                System.debug('MID Not Found Codition Pass:::');
+                 throw new AuraHandledException('MID Not Found....');
             }
-    
+            wrap =CashfreeAPIUtil.generateJWTToken();
+            jsonWebToken= 'Bearer '+wrap.jwtToken;
 
-            }
-
-           
-            
-           
-            
-            
-            
         
-            //system.debug('endpoint  result:::'+endpoint);
-            
-          
-            // String encoded = EncodingUtil.urlEncode(file, 'UTF-8');
-                    
-           
-           
-            
-          
-             
+        List<Cashfree_API_Token__mdt> cashFreeMetaData = CashfreeAPIUtil.fetchAPIValue();
         
+        String endpoint =cashFreeMetaData[0].End_Point__c;
+        
+        //system.debug('endpoint  result:::'+endpoint);
+        
+        String docUploadUrl =endpoint+'/integration/salesforce/v1/docs/'+merchantId+'/upload';
+        // String encoded = EncodingUtil.urlEncode(file, 'UTF-8');
+        		
+        String boundary = '----WebKitFormBoundary7MA4YWxkTrZu0gW';
+        String header = '------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name="docType"\r\n\r\n'+doctype+
+            '\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name="file"; filename="'+filetypename+
+            '"\r\nContent-Type: '+filetype;
+        String footer = '\r\n--'+boundary+'--';              
+        String headerEncoded = EncodingUtil.base64Encode(Blob.valueOf(header+'\r\n\r\n'));
+        while(headerEncoded.endsWith('=')){
+            header+=' ';
+            headerEncoded = EncodingUtil.base64Encode(Blob.valueOf(header+'\r\n\r\n'));
+        }
+        String bodyEncoded = EncodingUtil.base64Encode(ContentVersionWrapperObject.versionData);
+        String footerEncoded = EncodingUtil.base64Encode(Blob.valueOf(footer));
+        
+        Blob bodyBlob = null;
+        String last4Bytes = bodyEncoded.substring(bodyEncoded.length()-4,bodyEncoded.length());
+        if(last4Bytes.endsWith('=')){
+            Blob decoded4Bytes = EncodingUtil.base64Decode(last4Bytes);
+            HttpRequest tmp = new HttpRequest();
+            tmp.setBodyAsBlob(decoded4Bytes);
+            String last4BytesFooter = tmp.getBody()+footer;   
+            bodyBlob = EncodingUtil.base64Decode(headerEncoded+bodyEncoded.substring(0,bodyEncoded.length()-4)+EncodingUtil.base64Encode(Blob.valueOf(last4BytesFooter)));
+        }
+        else{
+            bodyBlob = EncodingUtil.base64Decode(headerEncoded+bodyEncoded+footerEncoded);
+        }
+        
+        HttpRequest req = new HttpRequest();
+        req.setHeader('Content-Type','multipart/form-data; boundary='+boundary);
+        req.setMethod('POST');
+        req.setEndpoint(docUploadUrl);
+        req.setBodyAsBlob(bodyBlob);
+        req.setTimeout(60000);
+        req.setHeader('Content-Length',String.valueof(req.getBodyAsBlob().size()));
+        req.setHeader('Authorization', jsonWebToken);
+        
+        Http http = new Http();
+        HTTPResponse res = http.send(req);
         
         System.debug('res::'+ res);
         System.debug('resgetbody::'+ res.getbody());
 		
+        Map<String,Object> bodyReq=(Map<String,Object>) JSON.deserializeUntyped(res.getBody());
             string errorbody = string.valueOf(bodyReq);
-              if(res.getStatusCode()==200){
+        try {
+            
+            if(res.getStatusCode()==200){
                 system.debug('accList--'+accList);
                 if(recId=='' && accList.size()>0){
                     Folder__c newDocFolder = new Folder__c();
@@ -548,38 +522,25 @@ public without sharing class DocumentManagementControllerNew {
                     newDocFolder.Document_Type__c = documentTypeValue;
                     newDocFolder.External_Doc_Type__c = docType;
                     newDocFolder.Node__c = kycCategoryValue;
-                    Insert newDocFolder;
+                    insert newDocFolder;
                     system.debug('newDocFolder-'+newDocFolder);
                 }
 
                     apiLoggerList.add(API_Logger.createAPI_Logger(className,String.valueOf(req),String.valueOf(res),docUploadUrl,String.valueOf(res.getStatusCode()),accList[0].Id));
-                    Insert apiLoggerList;
+                    insert apiLoggerList;
 
                 return 'success';
                 
             } 
-            
-
-        }catch(Exception e){
-
-        }
-
-    
-        
-      
-        try {
-            
-          
             else if(res.getStatusCode()==400){
 
                 errorLoggerList.add(ErrorLogger.createErrorLogger(className, methodName, 'CustomException, Status_Code:-'+ res.getStatusCode() , errorbody,null, accList[0].Id));
-                Insert errorLoggerList;
+                insert errorLoggerList;
                 
                 String jsonStr = res.getbody();
                 Map<String, String> m = (Map<String, String>) JSON.deserialize(jsonStr, Map<String, String>.class);
 
                 System.debug('res::'+ m);
-
                 List<String> mapOutput = new List<String>();
                 mapOutput = m.values();
                 if(mapOutput.size()>0){
@@ -595,10 +556,10 @@ public without sharing class DocumentManagementControllerNew {
         } catch (Exception e) {
             string typenameandstatcode = e.getTypeName() +', Status_Code:-'+ res.getStatusCode();
 
-            String errormessage = errorbody;
+            string errormessage = errorbody;
             errorLoggerList.add(ErrorLogger.createErrorLogger(className, methodName, typenameandstatcode, errormessage, e.getLineNumber(), accList[0].Id));
             Insert errorLoggerList;
-           // return 'error';
+            return errormessage;
         }
         return 'error';
    	}
