@@ -39,6 +39,7 @@ export default class ContactCustomLookup extends LightningElement {
   }
 
   renderedCallback() {
+    console.log('Filter Data::::'+ this.filter);
     if (!this.stopRecursion) this.populateDefault();
   }
 

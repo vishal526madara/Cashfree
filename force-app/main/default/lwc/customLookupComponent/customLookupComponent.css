@@ -1,32 +1,32 @@
 .pillSize {
-  width: 100%;
+    width: 100%
 }
 
 lightning-radio-group .slds-radio_faux {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .slds-modal__content {
-  overflow: initial;
+    overflow: initial;
 }
 
 .slds-pill {
-  padding: 4px;
-  width: 100%;
-  line-height: 26px;
+    padding: 4px;
+    width: 100%;
+    line-height: 26px;
 }
 
 .slds-pill__label {
-  max-width: none;
-  width: calc(100% - 55px);
+    max-width: none;
+    width: calc(100% - 55px);
 }
 
 .slds-pill__remove {
-  margin-right: 5px;
-  margin-left: 0px;
+    margin-right: 5px;
+    margin-left: 0px;
 }
 
 .inputClass {
-  line-height: var(--lwc-lineHeightButton, 1.875rem);
-  min-height: calc(2.125rem + 2px);
+    line-height: var(--lwc-lineHeightButton, 1.875rem);
+    min-height: calc(2.125rem + 2px);
 }

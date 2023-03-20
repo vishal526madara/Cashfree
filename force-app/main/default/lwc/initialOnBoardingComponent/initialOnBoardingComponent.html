@@ -9,14 +9,12 @@
     1.0                Kartik Patkar   Initial Version
 -->
 <template>
-  <header class="slds-modal__header">
-    <h2 class="slds-modal__title slds-hyphenate">
-      Kick Off Merchant Onboarding Project
-    </h2>
-  </header>
+    <header class="slds-modal__header">
+        <h2 class="slds-modal__title slds-hyphenate">Kick Off Merchant Onboarding Project</h2>
+    </header>
 
-  <!--Questionaire for Opportunity Start-->
-  <!--<template if:false={accountRecordHolder}>
+    <!--Questionaire for Opportunity Start-->
+    <!--<template if:false={accountRecordHolder}>
         <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container" style="width: 60rem;">
                 <header class="slds-modal__header slds-modal__header_empty">
@@ -70,37 +68,28 @@
         </section>
     
         <div class="slds-backdrop slds-backdrop_open"></div>
-    </template>  -->
+    </template>  -->  
+    
+    <!--Questionaire for Opportunity Stop-->
 
-  <!--Questionaire for Opportunity Stop-->
+    
+    <div class="slds-modal__content loading-section slds-p-around_small" if:true={screen.firstPage}>
 
-  <div
-    class="slds-modal__content loading-section slds-p-around_small"
-    if:true={screen.firstPage}
-  >
-    <!--LOAD SECTION-->
-    <div if:true={load}>
-      <lightning-spinner variant="brand" size="large"> </lightning-spinner>
-    </div>
+        <!--LOAD SECTION-->
+        <div if:true={load}>
+            <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+        </div>
 
-    <template if:true={accountRecordHolder}>
-      <div class="slds-grid slds-wrap">
-        <div
-          class="slds-col slds-size_1-of-1 slds-p-around_small slds-p-top_none"
-        >
-          <!-- <template if:true={caseRec.ContactId}> -->
-          <c-custom-lookup-component
-            obj-name="Contact"
-            search-placeholder="Select Contact..."
-            input-label="Primary Onboarding Contact"
-            icon-name="custom:custom80"
-            default-name={caseRec.ContactName}
-            onlookupselected={handleContactChange}
-            onnolookupselected={handleContactChange}
-            filter={contactFilter}
-          >
-          </c-custom-lookup-component>
-          <!-- </template>
+        <template if:true={accountRecordHolder}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small slds-p-top_none">
+                    <!-- <template if:true={caseRec.ContactId}> -->
+                        <c-custom-lookup-component obj-name="Contact" search-placeholder="Select Contact..."
+                            input-label="Primary Onboarding Contact" icon-name="custom:custom80"
+                            default-name={caseRec.ContactName}  onlookupselected={handleContactChange}
+                            onnolookupselected={handleContactChange} filter={contactFilter}>
+                        </c-custom-lookup-component>
+                    <!-- </template>
                     <template if:false={caseRec.ContactId}>
                         <c-custom-lookup-component obj-name="Contact" search-placeholder="Select Contact..."
                             input-label="Onboarding Contact" icon-name="custom:custom80" default-name=''
@@ -108,117 +97,70 @@
                             filter={contactFilter} onchange={handlecontactremove}>
                         </c-custom-lookup-component>
                     </template> -->
-        </div>
-        <div class="slds-col">
-          <div class="slds-grid slds-wrap">
-            <!-- <div class="slds-col slds-size_1-of-2 slds-p-left--medium">
+                </div>
+                <div class="slds-col">
+                    <div class="slds-grid  slds-wrap">
+                        <!-- <div class="slds-col slds-size_1-of-2 slds-p-left--medium">
                         <lightning-input type="text" value={accountName} label="POC Name"></lightning-input>
                     </div> -->
 
-            <!-- <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                        <!-- <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
                         <lightning-input type="text" value={accountRecordHolder.businessEmail} label="Business Email"></lightning-input>
                     </div> -->
 
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-            >
-              <lightning-input
-                type="text"
-                value={accountRecordHolder.supportEmail}
-                label="Support Email Id"
-                disabled
-              ></lightning-input>
-            </div>
-            <!-- value={accountRecordHolder.supportEmail} -->
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-              if:true={caseRec}
-            >
-              <lightning-input
-                type="text"
-                label="Phone Number"
-                value={caseRec.ContactPhone}
-                disabled
-              >
-              </lightning-input>
-            </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                            <lightning-input type="text" value={accountRecordHolder.supportEmail}
+                                label="Support Email Id" disabled></lightning-input>
+                        </div>
+                        <!-- value={accountRecordHolder.supportEmail} -->
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
+                            if:true={caseRec}>
+                            <lightning-input type="text" label="Phone Number" value={caseRec.ContactPhone} disabled>
+                            </lightning-input>
+                        </div>
 
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-            >
-              <lightning-input
-                type="text"
-                label="Registered Name"
-                value={accountRecordHolder.registerBusinessName}
-                disabled
-              ></lightning-input>
-            </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                            <lightning-input type="text" label="Registered Name"
+                                value={accountRecordHolder.registerBusinessName} disabled></lightning-input>
+                        </div>
 
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-            >
-              <lightning-input
-                type="text"
-                label="Merchant Site URL"
-                data-id="MerchantSiteUrl"
-                onchange={handleAccountRecord}
-                value={accountRecordHolder.merchantSiteUrl}
-                disabled
-              >
-              </lightning-input>
-            </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                            <lightning-input type="text" label="Merchant Site URL" data-id='MerchantSiteUrl'
+                                onchange={handleAccountRecord} value={accountRecordHolder.merchantSiteUrl} disabled>
+                            </lightning-input>
+                        </div>
 
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-            >
-              <lightning-input
-                type="text"
-                value={accountRecordHolder.accountName}
-                label="Business Name"
-                disabled
-              ></lightning-input>
-            </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                            <lightning-input type="text" value={accountRecordHolder.accountName} label="Business Name"
+                                disabled></lightning-input>
+                        </div>
 
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-            >
-              <lightning-input
-                type="text"
-                value={accountRecordHolder.lob}
-                label="LOB"
-                disabled
-              >
-              </lightning-input>
-            </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                            <lightning-input type="text" value={accountRecordHolder.lob} label="LOB" disabled>
+                            </lightning-input>
+                        </div>
 
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-            >
-              <lightning-input
-                type="text"
-                value={accountRecordHolder.entityType}
-                label="Entity Type"
-                disabled
-              ></lightning-input>
-            </div>
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                            <lightning-input type="text" value={accountRecordHolder.entityType} label="Entity Type"
+                                disabled></lightning-input>
+                        </div>
 
-            <div
-              class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium"
-            >
-              <!-- <lightning-combobox name="Case Type" label="Case Type" placeholder="Select Case Type..."
+                        <div class="slds-col slds-size_1-of-2 slds-p-left--medium slds-p-right--medium">
+                            <!-- <lightning-combobox name="Case Type" label="Case Type" placeholder="Select Case Type..."
                                 options={caseTypeList} value={casecategory} onchange={handleCaseType}>
                             </lightning-combobox> -->
-              <lightning-input
-                type="text"
-                label="Registered Address"
-                disabled
-                value={accountRecordHolder.addressData}
-              ></lightning-input>
-            </div>
-          </div>
-        </div>
+                            <lightning-input type="text" label="Registered Address" disabled
+                                value={accountRecordHolder.addressData}></lightning-input>
+                        </div>
 
-        <!-- <div class="slds-col slds-size_1-of-1 slds-p-around_small slds-p-top_none">
+
+                    </div>
+                </div>
+
+
+
+
+                <!-- <div class="slds-col slds-size_1-of-1 slds-p-around_small slds-p-top_none">
                 <lightning-textarea label="Deals Handoff Notes" max-length="400" class="textarea-height"
                     name="Deal_Handoff_Notes__c" value={caseRec.Deal_Handoff_Notes__c} onchange={handleFieldChange}>
                 </lightning-textarea>
@@ -228,310 +170,192 @@
                     name="Desired_Outcomes__c" value={caseRec.Desired_Outcomes__c} onchange={handleFieldChange}>
                 </lightning-textarea>
             </div> -->
-        <div
-          class="slds-col slds-size_1-of-1 slds-p-around_small slds-p-top_none"
-        >
-          <div class="slds-grid slds-wrap">
-            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
-              <span>
-                <lightning-input
-                  label="Project Name"
-                  name="Subject"
-                  value={caseRec.Subject}
-                  onchange={handleFieldChange}
-                  required
-                ></lightning-input>
-              </span>
-            </div>
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-p-left_small"
-            >
-              <span>
-                <lightning-input
-                  type="text"
-                  label="Sales Manager"
-                  value={ownerName}
-                  disabled
-                >
-                </lightning-input>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </div>
+                <div class="slds-col slds-size_1-of-1 slds-p-around_small slds-p-top_none">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12">
+                            <span>
+                                <lightning-input label="Project Name" name="Subject" value={caseRec.Subject}
+                                    onchange={handleFieldChange} required></lightning-input>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-p-left_small">
+                            <span>
+                                <lightning-input type="text" label="Sales Manager" value={ownerName} disabled>
+                                </lightning-input>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-  <div
-    class="slds-modal__content loading-section slds-p-around_small"
-    if:true={screen.secondPage}
-  >
-    <!--LOAD SECTION-->
-    <div if:true={load}>
-      <lightning-spinner variant="brand" size="large"></lightning-spinner>
+            </div>
+        </template>
     </div>
-    <!--<c-onboarding-document record-id={recordId} object-api-name={objectApiName} account-field-api={accountFieldApi}
+
+
+    <div class="slds-modal__content loading-section slds-p-around_small" if:true={screen.secondPage}>
+
+        <!--LOAD SECTION-->
+        <div if:true={load}>
+            <lightning-spinner variant="brand" size="large"></lightning-spinner>
+        </div>
+        <!--<c-onboarding-document record-id={recordId} object-api-name={objectApiName} account-field-api={accountFieldApi}
             library-name={libraryName} ondoccheckclick={selectedNavHandler}>
         </c-onboarding-document>-->
-    <c-document-management-component-new
-      record-id={recordId}
-      show-both="true"
-      file-size-upload="10"
-    ></c-document-management-component-new>
-  </div>
-
-  <footer class="slds-modal__footer" if:true={screen.firstPage}>
-    <!--<button class="slds-button slds-button_neutral" onclick={handleContactBack}>Back</button>-->
-    <button
-      class="slds-button slds-button_neutral slds-col_bump-left"
-      onclick={onHandleBack}
-      style="float: left"
-    >
-      Back
-    </button>
-    <button class="slds-button slds-button_neutral" onclick={handleCancel}>
-      Cancel
-    </button>
-    <button
-      class="slds-button slds-button_brand"
-      onclick={handleContactNext}
-      disabled={disableNext}
-    >
-      Next
-    </button>
-  </footer>
-  <footer class="slds-modal__footer" if:true={screen.secondPage}>
-    <button
-      class="slds-button slds-button_neutral slds-col_bump-left"
-      onclick={onHandleBackSecondPage}
-      style="float: left"
-    >
-      Back
-    </button>
-    <button class="slds-button slds-button_brand" onclick={handleChecklistBack}>
-      Cancel
-    </button>
-    <button class="slds-button slds-button_brand" onclick={handleSave}>
-      Save
-    </button>
-  </footer>
-
-  <template if:true={showPopover}>
-    <section
-      class="slds-popover slds-popover_prompt slds-popover_prompt_top popover-position"
-      role="dialog"
-    >
-      <!--CLOSE BUTTON-->
-      <button
-        class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
-        title="Close dialog"
-        onclick={handleCancelNewChecklist}
-      >
-        <svg class="slds-button__icon">
-          <use
-            xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close"
-          ></use>
-        </svg>
-        <span class="slds-assistive-text">Close dialog</span>
-      </button>
-
-      <!--POPOVER BODY SECTION START-->
-      <div class="slds-popover__body loading-section">
-        <!--LOAD SECTION-->
-        <div if:true={load}>
-          <lightning-spinner variant="brand" size="large"> </lightning-spinner>
-        </div>
-        <div class="slds-media">
-          <div class="slds-media__body">
-            <div class="slds-media">
-              <div class="slds-media__figure">
-                <span class="slds-icon_container">
-                  <svg
-                    class="slds-icon slds-icon_small slds-icon-text-default"
-                    aria-hidden="true"
-                  >
-                    <use
-                      xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#prompt"
-                    ></use>
-                  </svg>
-                  <span class="slds-assistive-text"></span>
-                </span>
-              </div>
-              <div class="slds-media__body" if:true={showNewChecklist}>
-                <h2 class="slds-popover_prompt__heading">New Checklist</h2>
-                <lightning-input
-                  label="Name"
-                  value={newChecklist.Name}
-                  onchange={handleChecklistName}
-                >
-                </lightning-input>
-              </div>
-              <div class="slds-media__body" if:true={newChecklistTask}>
-                <h2 class="slds-popover_prompt__heading">New Task</h2>
-                <lightning-input
-                  label="Name"
-                  name="Name"
-                  onchange={handleTaskFieldChange}
-                >
-                </lightning-input>
-                <lightning-input
-                  type="number"
-                  label="Due Day"
-                  name="DueDay"
-                  onchange={handleTaskFieldChange}
-                ></lightning-input>
-                <c-custom-lookup-component
-                  obj-name="User"
-                  search-placeholder="Select User..."
-                  input-label="Assign To"
-                  icon-name="standard:user"
-                  default-name={newTask.userName}
-                  filter="IsActive=true"
-                >
-                </c-custom-lookup-component>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--POPOVER BODY SECTION END-->
-
-      <!--POPOVER FOOTER SECTION START-->
-      <footer class="slds-popover__footer">
-        <div class="slds-grid slds-grid_vertical-align-center">
-          <button
-            class="slds-button slds-button_neutral slds-col_bump-right"
-            onclick={handleCancelNewChecklist}
-          >
-            Cancel
-          </button>
-          <button
-            class="slds-button slds-button_brand"
-            if:true={showNewChecklist}
-            onclick={handleNewChecklistSave}
-          >
-            Save
-          </button>
-          <button
-            class="slds-button slds-button_brand"
-            if:true={newChecklistTask}
-            onclick={handleSaveTask}
-          >
-            Save
-          </button>
-        </div>
-      </footer>
-      <!--POPOVER FOOTER SECTION END-->
-    </section>
-  </template>
-  <!--CREATE NEW CHECKLIST POPOVER END-->
-
-  <!--TASK POPOVER SECTION START-->
-  <section
-    role="dialog"
-    tabindex="-1"
-    class="slds-modal slds-fade-in-open slds-modal_small"
-    if:true={ChecklistTask}
-  >
-    <div class="slds-modal__container">
-      <button
-        class="slds-button slds-button_icon slds-modal__close"
-        onclick={handleCancelNewChecklist}
-      >
-        <svg
-          class="slds-button__icon slds-button__icon_large"
-          aria-hidden="true"
-        >
-          <use
-            xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close"
-          ></use>
-        </svg>
-        <span class="slds-assistive-text">Cancel and close</span>
-      </button>
-      <div
-        class="slds-modal__header slds-border_left slds-border_right slds-border_top"
-      >
-        <h1 class="slds-modal__title slds-hyphenate">Tasks</h1>
-      </div>
-      <div
-        class="slds-modal__content slds-p-around_x-small slds-border_left slds-border_right loading-section"
-      >
-        <!--LOAD SECTION-->
-        <div if:true={load}>
-          <lightning-spinner variant="brand" size="large"> </lightning-spinner>
-        </div>
-
-        <div class="slds-box slds-box_x-small">
-          <div class="slds-grid slds-wrap" if:true={openedChecklist}>
-            <template for:each={openedChecklist.taskList} for:item="task">
-              <div class="slds-col slds-size_1-of-1" key={task.taskId}>
-                <div
-                  class="slds-box slds-box_x-small slds-m-vertical_xx-small task-section-bar"
-                >
-                  <div class="slds-grid slds-wrap">
-                    <div class="slds-col slds-size_3-of-5">
-                      <div class="slds-media slds-media_center">
-                        <div class="slds-media__figure">
-                          <lightning-icon
-                            icon-name="utility:mark_all_as_read"
-                            size="x-small"
-                          >
-                          </lightning-icon>
-                        </div>
-                        <div class="slds-media__body">
-                          <h1>{task.Name}</h1>
-                          <h1 class="task-due-field">Due: {task.DueDay}</h1>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="slds-col slds-size_1-of-5"></div>
-                    <div class="slds-col slds-size_1-of-5">
-                      <div class="slds-float_right">
-                        <lightning-icon
-                          icon-name="utility:edit"
-                          size="x-small"
-                          class="slds-p-around_x-small"
-                        >
-                        </lightning-icon>
-                        <lightning-icon
-                          icon-name="utility:delete"
-                          size="x-small"
-                          class="slds-p-around_x-small"
-                        >
-                        </lightning-icon>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-
-            <div class="slds-col slds-size_1-of-1">
-              <button
-                class="slds-button slds-button_brand"
-                onclick={handleOpenNewTask}
-              >
-                Add Task
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="slds-modal__footer slds-border_left slds-border_right">
-        <button
-          class="slds-button slds-button_neutral"
-          onclick={handleCancelNewChecklist}
-        >
-          Cancel
-        </button>
-        <button
-          class="slds-button slds-button_brand"
-          onclick={handleSaveChecklistTask}
-        >
-          Save
-        </button>
-      </div>
+        <c-document-management-component-new record-id={recordId} show-both="true" file-size-upload="10"></c-document-management-component-new>
     </div>
-  </section>
-  <!--TASK POPOVER SECTION END-->
+
+
+    <footer class="slds-modal__footer" if:true={screen.firstPage}>
+        <!--<button class="slds-button slds-button_neutral" onclick={handleContactBack}>Back</button>-->
+        <button class="slds-button slds-button_neutral slds-col_bump-left" onclick={onHandleBack} style="float: left;" >Back</button>
+        <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+        <button class="slds-button slds-button_brand" onclick={handleContactNext} disabled={disableNext}>
+            Next
+        </button>
+    </footer>
+    <footer class="slds-modal__footer" if:true={screen.secondPage}>
+        <button class="slds-button slds-button_neutral slds-col_bump-left" onclick={onHandleBackSecondPage} style="float: left;" >Back</button>
+        <button class="slds-button slds-button_brand" onclick={handleChecklistBack}>Cancel</button>
+        <button class="slds-button slds-button_brand" onclick={handleSave}>Save</button>
+    </footer>
+
+
+    <template if:true={showPopover}>
+        <section class="slds-popover slds-popover_prompt slds-popover_prompt_top popover-position" role="dialog">
+            <!--CLOSE BUTTON-->
+            <button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close"
+                title="Close dialog" onclick={handleCancelNewChecklist}>
+                <svg class="slds-button__icon">
+                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Close dialog</span>
+            </button>
+
+            <!--POPOVER BODY SECTION START-->
+            <div class="slds-popover__body loading-section">
+                <!--LOAD SECTION-->
+                <div if:true={load}>
+                    <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+                </div>
+                <div class="slds-media">
+                    <div class="slds-media__body">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container">
+                                    <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                        <use
+                                            xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#prompt">
+                                        </use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+                            </div>
+                            <div class="slds-media__body" if:true={showNewChecklist}>
+                                <h2 class="slds-popover_prompt__heading">New Checklist</h2>
+                                <lightning-input label="Name" value={newChecklist.Name} onchange={handleChecklistName}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-media__body" if:true={newChecklistTask}>
+                                <h2 class="slds-popover_prompt__heading">New Task</h2>
+                                <lightning-input label="Name" name="Name" onchange={handleTaskFieldChange}>
+                                </lightning-input>
+                                <lightning-input type="number" label="Due Day" name="DueDay"
+                                    onchange={handleTaskFieldChange}></lightning-input>
+                                <c-custom-lookup-component obj-name="User" search-placeholder="Select User..."
+                                    input-label="Assign To" icon-name="standard:user" default-name={newTask.userName}
+                                    filter="IsActive=true">
+                                </c-custom-lookup-component>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--POPOVER BODY SECTION END-->
+
+            <!--POPOVER FOOTER SECTION START-->
+            <footer class="slds-popover__footer">
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    
+                    <button class="slds-button slds-button_neutral slds-col_bump-right"
+                        onclick={handleCancelNewChecklist}>
+                        Cancel
+                    </button>
+                    <button class="slds-button slds-button_brand" if:true={showNewChecklist}
+                        onclick={handleNewChecklistSave}>Save</button>
+                    <button class="slds-button slds-button_brand" if:true={newChecklistTask}
+                        onclick={handleSaveTask}>Save</button>
+                </div>
+            </footer>
+            <!--POPOVER FOOTER SECTION END-->
+        </section>
+    </template>
+    <!--CREATE NEW CHECKLIST POPOVER END-->
+
+    <!--TASK POPOVER SECTION START-->
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" if:true={ChecklistTask}>
+        <div class="slds-modal__container">
+            <button class="slds-button slds-button_icon slds-modal__close" onclick={handleCancelNewChecklist}>
+                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Cancel and close</span>
+            </button>
+            <div class="slds-modal__header slds-border_left slds-border_right slds-border_top">
+                <h1 class="slds-modal__title slds-hyphenate">Tasks</h1>
+            </div>
+            <div class="slds-modal__content slds-p-around_x-small slds-border_left slds-border_right loading-section">
+                <!--LOAD SECTION-->
+                <div if:true={load}>
+                    <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+                </div>
+
+                <div class="slds-box slds-box_x-small">
+                    <div class="slds-grid slds-wrap" if:true={openedChecklist}>
+                        <template for:each={openedChecklist.taskList} for:item="task">
+                            <div class="slds-col slds-size_1-of-1" key={task.taskId}>
+                                <div class="slds-box slds-box_x-small slds-m-vertical_xx-small task-section-bar">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_3-of-5">
+                                            <div class="slds-media slds-media_center">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon icon-name="utility:mark_all_as_read" size="x-small">
+                                                    </lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <h1>{task.Name}</h1>
+                                                    <h1 class="task-due-field">Due: {task.DueDay}</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5">
+
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5">
+                                            <div class="slds-float_right">
+                                                <lightning-icon icon-name="utility:edit" size="x-small"
+                                                    class="slds-p-around_x-small">
+                                                </lightning-icon>
+                                                <lightning-icon icon-name="utility:delete" size="x-small"
+                                                    class="slds-p-around_x-small">
+                                                </lightning-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <div class="slds-col slds-size_1-of-1">
+                            <button class="slds-button slds-button_brand" onclick={handleOpenNewTask}>Add Task</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-modal__footer slds-border_left slds-border_right">
+                <button class="slds-button slds-button_neutral" onclick={handleCancelNewChecklist}>Cancel</button>
+                <button class="slds-button slds-button_brand" onclick={handleSaveChecklistTask}>Save</button>
+            </div>
+        </div>
+    </section>
+    <!--TASK POPOVER SECTION END-->
 </template>

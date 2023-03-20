@@ -8,275 +8,168 @@
     1.0                Kartik Patkar   Initial Version
 -->
 <template>
-  <!--HEADER SECTION START-->
-  <header class="slds-modal__header">
-    <h2 class="slds-modal__title slds-hyphenate">Initiate Onboarding</h2>
-  </header>
-  <!--HEADER SECTION END-->
+    <!--HEADER SECTION START-->
+    <header class="slds-modal__header">
+        <h2 class="slds-modal__title slds-hyphenate">Initiate Onboarding</h2>
+    </header>
+    <!--HEADER SECTION END-->
 
-  <!--BODY SECTION START-->
-  <!--FIRST PAGE START-->
-  <div
-    class="slds-modal__content slds-p-around_medium modal-body-height slds-scrollable slds-p-around--none"
-  >
-    <div if:true={load}>
-      <lightning-spinner variant="brand" size="large"> </lightning-spinner>
-    </div>
-    <div class="slds-grid slds-wrap">
-      <div
-        class="slds-col slds-size_1-of-1 slds-align--absolute-center slds-col slds-p-around--small"
-      >
-        <h1 class="slds-text-heading_large slds-align--absolute-center">
-          Select Onboarding Type
-        </h1>
-      </div>
-      <div class="slds-col slds-size_1-of-1">
-        <fieldset class="slds-form-element product-page">
-          <div class="slds-form-element__control">
-            <div class="slds-grid slds-wrap">
-              <template
-                for:each={onBoardingType}
-                for:item="data"
-                for:index="index"
-              >
-                <div
-                  class="slds-col slds-size_1-of-1 slds-align_absolute-center extra-product-padding"
-                  key={data.Type}
-                >
-                  <!--TYPE TILE START-->
-                  <div
-                    class="slds-visual-picker slds-visual-picker_vertical product-option"
-                  >
-                    <input
-                      type="radio"
-                      name={data.Type}
-                      id={data.Type}
-                      checked={data.check}
-                      onchange={handleTypeSelect}
-                      disabled={data.disabled}
-                    />
-                    <label for={data.Type}>
-                      <span
-                        class="slds-visual-picker__figure slds-visual-picker__text product-option"
-                      >
-                        <span>
-                          <span
-                            class="slds-text-heading_medium slds-m-bottom_x-small text-decoration-none"
-                          >
-                            {data.Type}
-                          </span>
-                          <span class="slds-text-title">
-                            {data.description}
-                          </span>
-                        </span>
-                      </span>
-                      <span
-                        class="slds-icon_container slds-visual-picker__text-check"
-                      >
-                        <svg
-                          class="slds-icon slds-icon-text-check slds-icon_x-small"
-                          aria-hidden="true"
-                        >
-                          <use
-                            xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"
-                          ></use>
-                        </svg>
-                      </span>
-                    </label>
-                  </div>
-                  <!--TYPE TILE END-->
-                </div>
-                <div
-                  class="slds-col slds-size_1-of-1 slds-align_absolute-center"
-                  if:true={data.check}
-                  key={data.Type}
-                >
-                  <!--MILESTONE CHECKLIST START-->
-                  <div
-                    class="coverage-box coverage-box-width slds-box slds-m-top--xx-small extra-product-padding"
-                  >
-                    <template
-                      for:each={data.milestoneList}
-                      for:item="milestone"
-                    >
-                      <div class="slds-form-element" key={milestone.Id}>
-                        <div class="slds-form-element__control">
-                          <div class="slds-checkbox">
-                            <input
-                              type="checkbox"
-                              name={milestone.Id}
-                              id={milestone.Id}
-                              checked={milestone.check}
-                              onclick={handleChecklistSelect}
-                            />
-                            <label
-                              class="slds-checkbox__label"
-                              for={milestone.Id}
-                            >
-                              <span class="slds-checkbox_faux"></span>
-                              <span class="slds-form-element__label"
-                                >{milestone.Name}</span
-                              >
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-
-                    <!--OTHER OPTIONS-->
-                    <div class="slds-form-element">
-                      <div class="slds-form-element__control">
-                        <div class="slds-checkbox">
-                          <input
-                            type="checkbox"
-                            name={data.Type}
-                            id={data.otherId}
-                            checked={data.other}
-                            onclick={handleOtherCheckBox}
-                          />
-                          <label
-                            class="slds-checkbox__label"
-                            for={data.otherId}
-                          >
-                            <span class="slds-checkbox_faux"></span>
-                            <span class="slds-form-element__label">Other</span>
-                          </label>
-                        </div>
-                        <div
-                          if:true={data.other}
-                          class="other-input slds-p-left--large slds-p-right--x-small inline-section"
-                        >
-                          <template for:each={data.otherList} for:item="other">
-                            <lightning-input
-                              variant="label-hidden"
-                              key={other.Id}
-                              value={other.Name}
-                              placeholder="Other"
-                              class="slds-p-bottom_xx-small"
-                              onchange={handleOtherText}
-                              name={other.Id}
-                            >
-                            </lightning-input>
-                          </template>
-                        </div>
-                        <div if:true={data.other} class="inline-section">
-                          <lightning-button-icon
-                            icon-name="utility:add"
-                            title="Add"
-                            size="small"
-                            name={data.Type}
-                            onclick={handleAddMoreOther}
-                          >
-                          </lightning-button-icon>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--MILESTONE CHECKLIST END-->
-                </div>
-              </template>
-
-              <!--AD HOC REQUEST OPTION START-->
-              <div
-                class="slds-col slds-size_1-of-1 slds-align_absolute-center extra-product-padding"
-              >
-                <!--TILE START-->
-                <div
-                  class="slds-visual-picker slds-visual-picker_vertical product-option"
-                >
-                  <input
-                    type="radio"
-                    name="Ad Hoc Request"
-                    id="AdHocRequest"
-                    onclick={handleAdHocOption}
-                    checked={adHocFlag}
-                  />
-                  <label for="AdHocRequest">
-                    <span
-                      class="slds-visual-picker__figure slds-visual-picker__text product-option"
-                    >
-                      <span>
-                        <span
-                          class="slds-text-heading_medium slds-m-bottom_x-small text-decoration-none"
-                        >
-                          Ad Hoc Request
-                        </span>
-                        <span class="slds-text-title">
-                          The first stage of the customer journey once they
-                          begin using a product or service.
-                        </span>
-                      </span>
-                    </span>
-                    <span
-                      class="slds-icon_container slds-visual-picker__text-check"
-                    >
-                      <svg
-                        class="slds-icon slds-icon-text-check slds-icon_x-small"
-                        aria-hidden="true"
-                      >
-                        <use
-                          xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"
-                        ></use>
-                      </svg>
-                    </span>
-                  </label>
-                </div>
-                <!--TILE END-->
-              </div>
-              <div
-                class="slds-col slds-size_1-of-1 slds-align_absolute-center"
-                if:true={adHocFlag}
-              >
-                <!--CASE FORM START-->
-                <div
-                  class="coverage-box coverage-box-width slds-box slds-m-top--xx-small extra-product-padding"
-                >
-                  <div class="slds-grid slds-wrap">
-                    <div class="slds-col slds-size_1-of-1">
-                      <lightning-input
-                        label="Subject"
-                        onchange={handleCaseFieldChange}
-                        required
-                        name="subject"
-                      >
-                      </lightning-input>
-                    </div>
-                    <div class="slds-col slds-size_1-of-1">
-                      <lightning-textarea
-                        label="Description"
-                        max-length="300"
-                        name="description"
-                        onchange={handleCaseFieldChange}
-                      >
-                      </lightning-textarea>
-                    </div>
-                  </div>
-                </div>
-                <!--CASE FORM END-->
-              </div>
-              <!--AD HOC REQUEST OPTION END-->
+    <!--BODY SECTION START-->
+    <!--FIRST PAGE START-->
+    <div class="slds-modal__content slds-p-around_medium modal-body-height slds-scrollable slds-p-around--none">
+        <div if:true={load}>
+            <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-align--absolute-center slds-col slds-p-around--small">
+                <h1 class="slds-text-heading_large slds-align--absolute-center">Select Onboarding Type</h1>
             </div>
-          </div>
-        </fieldset>
-      </div>
-    </div>
-  </div>
-  <!--FIRST PAGE END-->
-  <!--BODY SECTION END-->
+            <div class="slds-col slds-size_1-of-1">
+                <fieldset class="slds-form-element product-page">
+                    <div class="slds-form-element__control">
+                        <div class="slds-grid slds-wrap"> 
+                            <template for:each={onBoardingType} for:item="data" for:index="index">
+                                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center extra-product-padding" key={data.Type}>
+                                    
+                                    <!--TYPE TILE START-->
+                                    <div class="slds-visual-picker slds-visual-picker_vertical product-option">
+                                        <input type="radio" name={data.Type} id={data.Type} checked={data.check}
+                                            onchange={handleTypeSelect} disabled={data.disabled}/>
+                                        <label for={data.Type}>
+                                            <span class="slds-visual-picker__figure slds-visual-picker__text product-option">
+                                                <span>
+                                                    <span class="slds-text-heading_medium slds-m-bottom_x-small text-decoration-none">
+                                                        {data.Type}
+                                                    </span>
+                                                    <span class="slds-text-title">
+                                                        {data.description}
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <span class="slds-icon_container slds-visual-picker__text-check">
+                                                <svg class="slds-icon slds-icon-text-check slds-icon_x-small" aria-hidden="true">
+                                                    <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                                </svg>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    <!--TYPE TILE END-->
 
-  <!--FOOTER SECTION START-->
-  <footer class="slds-modal__footer">
-    <button class="slds-button slds-button_neutral" onclick={handleCancel}>
-      Cancel
-    </button>
-    <!-- <button class="slds-button slds-button_brand" disabled={disabledNext} onclick={handleNext}>Next</button> -->
-    <button
-      class="slds-button slds-button_brand"
-      disabled={disabledSave}
-      onclick={handleSave}
-    >
-      Save
-    </button>
-  </footer>
-  <!--FOOTER SECTION END-->
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-align_absolute-center" if:true={data.check} key={data.Type}>
+
+                                    <!--MILESTONE CHECKLIST START-->
+                                    <div class="coverage-box coverage-box-width slds-box slds-m-top--xx-small extra-product-padding">
+                                        <template for:each={data.milestoneList} for:item="milestone">
+                                            <div class="slds-form-element" key={milestone.Id}>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-checkbox">
+                                                        <input type="checkbox" name={milestone.Id} id={milestone.Id} checked={milestone.check} 
+                                                            onclick={handleChecklistSelect}/>
+                                                        <label class="slds-checkbox__label" for={milestone.Id}>
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-form-element__label">{milestone.Name}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                        <!--OTHER OPTIONS-->
+                                        <div class="slds-form-element">
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-checkbox">
+                                                    <input type="checkbox" name={data.Type} id={data.otherId} checked={data.other} onclick={handleOtherCheckBox}/>
+                                                    <label class="slds-checkbox__label" for={data.otherId}>
+                                                        <span class="slds-checkbox_faux"></span>
+                                                        <span class="slds-form-element__label">Other</span>
+                                                    </label>
+                                                </div>
+                                                <div if:true={data.other} class="other-input slds-p-left--large slds-p-right--x-small inline-section">
+                                                    <template for:each={data.otherList} for:item="other">
+                                                        <lightning-input variant="label-hidden" key={other.Id} value={other.Name} placeholder="Other"
+                                                            class="slds-p-bottom_xx-small" onchange={handleOtherText} name={other.Id}>
+                                                        </lightning-input>
+                                                    </template>
+                                                </div>
+                                                <div if:true={data.other} class="inline-section">
+                                                    <lightning-button-icon icon-name="utility:add" title="Add" size="small"
+                                                        name={data.Type} onclick={handleAddMoreOther}>
+                                                    </lightning-button-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <!--MILESTONE CHECKLIST END-->
+
+                                </div>
+                            </template>
+
+                            <!--AD HOC REQUEST OPTION START-->
+                            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center extra-product-padding">
+                                    
+                                <!--TILE START-->
+                                <div class="slds-visual-picker slds-visual-picker_vertical product-option">
+                                    <input type="radio" name="Ad Hoc Request" id="AdHocRequest" onclick={handleAdHocOption} checked={adHocFlag}/>
+                                    <label for="AdHocRequest">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text product-option">
+                                            <span>
+                                                <span class="slds-text-heading_medium slds-m-bottom_x-small text-decoration-none">
+                                                    Ad Hoc Request
+                                                </span>
+                                                <span class="slds-text-title">
+                                                    The first stage of the customer journey once they begin using a product or service.
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <span class="slds-icon_container slds-visual-picker__text-check">
+                                            <svg class="slds-icon slds-icon-text-check slds-icon_x-small" aria-hidden="true">
+                                                <use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                            </svg>
+                                        </span>
+                                    </label>
+                                </div>
+                                <!--TILE END-->
+
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center" if:true={adHocFlag}>
+
+                                <!--CASE FORM START-->
+                                <div class="coverage-box coverage-box-width slds-box slds-m-top--xx-small extra-product-padding">
+
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <lightning-input label="Subject" onchange={handleCaseFieldChange} required
+                                                name="subject">
+                                            </lightning-input>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <lightning-textarea label="Description" max-length="300" name="description"
+                                                onchange={handleCaseFieldChange}>
+                                            </lightning-textarea>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <!--CASE FORM END-->
+
+                            </div>
+                            <!--AD HOC REQUEST OPTION END-->
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <!--FIRST PAGE END-->
+    <!--BODY SECTION END-->
+
+    <!--FOOTER SECTION START-->
+    <footer class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+        <!-- <button class="slds-button slds-button_brand" disabled={disabledNext} onclick={handleNext}>Next</button> -->
+        <button class="slds-button slds-button_brand" disabled={disabledSave} onclick={handleSave}>Save</button>
+    </footer>
+    <!--FOOTER SECTION END-->
 </template>

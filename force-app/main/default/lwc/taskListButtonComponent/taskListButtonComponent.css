@@ -23,6 +23,13 @@ div .SMALL {
    animation-duration: 4s;
 }
 
+
+.lookup-disable:disabled{
+    background-color: dimgrey;
+    color: linen;
+    opacity: 1;
+}
+
 @keyframes border-animation{
     form{background-color: aliceblue;}
     tp{background-color: aquamarine;}

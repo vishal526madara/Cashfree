@@ -8,14 +8,27 @@
  * Ver   Date         Author           Modification
  * 1.0   25-01-2023   Saurav Kashyap   Initial Version
 **/
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { NavigationMixin } from 'lightning/navigation';
+import { getRecord } from 'lightning/uiRecordApi';
 import fetchTaskType from '@salesforce/apex/TaskListButtonController.fetchTaskType';
 import fetchSubTypePicklist from '@salesforce/apex/TaskListButtonController.fetchSubTypePicklist';
 import insertTaskRecord from '@salesforce/apex/TaskListButtonController.insertTaskRecord';
 import bulkRemarkInsertion from '@salesforce/apex/TaskRemarksCustomController.bulkRemarkInsertion';
 import bulkUploadAttachment from '@salesforce/apex/TaskListButtonController.bulkUploadAttachment';
+
+import __contactName__ from '@salesforce/schema/Contact.Name';
+import __acccountName__ from '@salesforce/schema/Contact.AccountId';
+import __contactPhone__ from '@salesforce/schema/Contact.Phone';
+import __contactDepartment__ from '@salesforce/schema/Contact.Department__c';
+import __contactDesignation__ from '@salesforce/schema/Contact.Designation__c';
+import __contactEmail__ from '@salesforce/schema/Contact.Email';
+import __contactMailingAddress__ from '@salesforce/schema/Contact.MailingAddress';
+import __contactMobile__ from '@salesforce/schema/Contact.MobilePhone';
+
+
+
 
 
 
@@ -37,6 +50,16 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     LEAD_ICON = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#lead";
 
 
+
+
+    @track newContactFields = { 'contactName': __contactName__, 
+                                'accountName': __acccountName__, 
+                                'contactPhone': __contactPhone__,
+                                'contactMailingAddress':__contactMailingAddress__,
+                                'contactEmail':__contactEmail__,
+                                'contactDesignation':__contactDesignation__,
+                                'contactDepartment':__contactDepartment__,
+                                'contactMobile': __contactMobile__};
 
 
 
@@ -122,6 +145,16 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     }
 
 
+    /****
+     * @Date 06 Feb,2023
+     * @functionality: Adding contact serach function according to related object
+     *                 eg : if user select account as a related object then he/she will
+     *                 get only that account's contact record, this same goes to Opportnity 
+     *                 Object. 
+     */
+    contactPhoneSearchFilter = '';
+
+
     showAttachments = false;
     get reminderMessage() {
         return this.SALESFORCE_TASK_RECORD.dueDate != null ? "You will be reminded on " + `${this.SALESFORCE_TASK_RECORD.dueDate}` + " at 10:00 AM" : "No Reminder has been set yet";
@@ -136,6 +169,42 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
     currentTaskIconName = '';
 
+
+    /**
+     * //disable Custom Lookup
+     **/
+    disablePhoneNumber = true;
+    /*********************************************************************************/
+
+
+    /**
+     * @createdDate: 07 March, 2023
+     * @author: Vishal Hembrom
+     * @description: variables are used for store opportunityId and accountId
+     *               opportunityId is used in contact search filter value to
+     *                eg Account Id = '001C1000005caPNIAY'
+     *                accountId is used to passed record value into contact's lightning 
+     *                record form
+     * **/
+
+    opportunityId = '';
+    opportunityAccountId = '';
+    //contactAccountRecordId='';
+    //contactCreationFields = [CONTACT_LASTNAME];
+    /*********************************************************************************/
+    @wire(getRecord, { recordId: '$opportunityId', fields: ['Opportunity.Id', 'Opportunity.Name', 'Opportunity.AccountId'] })
+    wireOpportunityRecord({ error, data }) {
+        if (data) {
+            this.opportunityAccountId = data.fields.AccountId.value;
+            console.log('Wire Record::::' + this.opportunityAccountId);
+        } else {
+            console.log('Error:::' + error);
+        }
+    }
+
+
+
+    showContactFooter = false;
     connectedCallback() {
         const dateV = new Date();
         this.list(dateV);
@@ -211,19 +280,19 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     }
 
     handleStartDate(event) {
-        console.log('Time::::'+ event.detail.value);
+        console.log('Time::::' + event.detail.value);
         this.SALESFORCE_TASK_RECORD.startDate = event.detail.value;
         console.log('Undefined:::::');
-        if( this.SALESFORCE_TASK_RECORD.startDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
+        if (this.SALESFORCE_TASK_RECORD.startDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true) {
             console.log('Condition Passed::::');
             this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Fill Strat Date');
             this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
             return;
         }
-        
+
         this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('');
         this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
-        
+
 
     }
 
@@ -232,17 +301,17 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         this.SALESFORCE_TASK_RECORD.endDate = event.detail.value;
         this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('');
         this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
-        if(this.SALESFORCE_TASK_RECORD.endDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
+        if (this.SALESFORCE_TASK_RECORD.endDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true) {
             this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('Please Fill End Date');
             this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
             return;
         }
-        if(this.SALESFORCE_TASK_RECORD.eventCreation == true && this.SALESFORCE_TASK_RECORD.startDate != null && this.SALESFORCE_TASK_RECORD.endDate != null){
+        if (this.SALESFORCE_TASK_RECORD.eventCreation == true && this.SALESFORCE_TASK_RECORD.startDate != null && this.SALESFORCE_TASK_RECORD.endDate != null) {
             let numericValue = new Date(this.SALESFORCE_TASK_RECORD.endDate).getDay() - new Date(this.SALESFORCE_TASK_RECORD.startDate).getDay();
-            console.log('Numeric Number::::'+ numericValue);
-            if(numericValue<0){
-            this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('End date can not be less than Start Date');
-            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+            console.log('Numeric Number::::' + numericValue);
+            if (numericValue < 0) {
+                this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('End date can not be less than Start Date');
+                this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
             }
             return
         }
@@ -311,27 +380,42 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         console.log('Function Called::::');
         //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger');
         //this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-dropdown-trigger_click');
-        if(!this.showRelatedObjectButton){
-        this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-is-open');
-        this.showRelatedObjectButton = true;
-        }else{
+        if (!this.showRelatedObjectButton) {
+            this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.add('slds-is-open');
+            this.showRelatedObjectButton = true;
+        } else {
             this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
-            this.showRelatedObjectButton = false; 
+            this.showRelatedObjectButton = false;
         }
     }
 
-     handleSelectRelatedObjectName(event) {
-         console.log('Function 56789876');
+    handleSelectRelatedObjectName(event) {
+        let obejctName = event.currentTarget.dataset.id;
+
+
+        //  console.log('Function Called::::'+ this.disablePhoneNumber);
+        //  console.log('Function 56789876::::'+typeof obejctName +' '+ obejctName);
+        //  if(obejctName.localeCompare('Lead')){
+        //     console.log('Function Passed Value::::');
+        //     this.disablePhoneNumber = false;
+        //  }else{
+        //     this.disablePhoneNumber = false;
+        //  }
         this.template.querySelector(`[data-id="iconrelatedobject"]`).classList.remove('slds-is-open');
-        this.showRelatedObjectButton = false; 
+        this.showRelatedObjectButton = false;
         console.log('Function Call Successfull');
         let objectEvent = new CustomEvent("", {
             detail: {
                 value: event.currentTarget.dataset.id
             },
         });
-         this.handleObjectSelect(objectEvent);
-        console.log('Value::::', event.currentTarget.dataset.id);
+        this.handleObjectSelect(objectEvent);
+        if (obejctName.localeCompare('Lead')) {
+            this.disablePhoneNumber = true;
+        } else {
+            this.disablePhoneNumber = false;
+        }
+        console.log('Disable Phone NUmber::::' + this.disablePhoneNumber);
     }
 
     handleRemoveRelatedObject() {
@@ -369,12 +453,12 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     fetchTaskTypePickListValues() {
         this.load = true;
         this.isMainPageVisible = false;
-         fetchTaskType()
+        fetchTaskType()
             .then(result => {
                 this.taskTypeList = result;
                 for (let i = 0; i < this.taskTypeList.length; i++) {
-                     this.taskTypeList[i].icon_name = this.checkTaskType(this.taskTypeList[i].value); 
-                     console.log('Icon Name:::::'+ this.taskTypeList[i].icon_name);  
+                    this.taskTypeList[i].icon_name = this.checkTaskType(this.taskTypeList[i].value);
+                    console.log('Icon Name:::::' + this.taskTypeList[i].icon_name);
                 }
                 this.isMainPageVisible = true;
                 this.load = false;
@@ -389,52 +473,52 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
             })
     }
 
-    checkTaskType(taskType){
-                    /*TASK_CALL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
-                    TASK_MEET = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
-                    TASK_EMAIL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#email";
-                    TASK_INTERNAL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
-                    TASK_NOTE = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#note";
-                    */
-                    switch (taskType) {
-                        case 'Call': return this.TASK_CALL;
-                        case 'Meet': return  this.TASK_MEET;
-                        case 'Email': return  this.TASK_EMAIL;
-                        case 'Internal': return  this.TASK_INTERNAL;
-                        case 'Note': return  this.TASK_NOTE;
-                    }
+    checkTaskType(taskType) {
+        /*TASK_CALL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+        TASK_MEET = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+        TASK_EMAIL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#email";
+        TASK_INTERNAL = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#call";
+        TASK_NOTE = "/apexpages/slds/latest/assets/icons/standard-sprite/svg/symbols.svg#note";
+        */
+        switch (taskType) {
+            case 'Call': return this.TASK_CALL;
+            case 'Meet': return this.TASK_MEET;
+            case 'Email': return this.TASK_EMAIL;
+            case 'Internal': return this.TASK_INTERNAL;
+            case 'Note': return this.TASK_NOTE;
+        }
 
     }
 
 
-    handleCreateEvent(event){
+    handleCreateEvent(event) {
         // const inputBox = event.currentTarget;
         // inputBox.setCustomvalidity('Test Message');
         // inputBox.reportValidity();
         console.log('Test::::');
-        console.log('Boolean Value:::'+ event.target.checked);
-        console.log('Boolean Data::::'+  this.SALESFORCE_TASK_RECORD.eventCreation);
+        console.log('Boolean Value:::' + event.target.checked);
+        console.log('Boolean Data::::' + this.SALESFORCE_TASK_RECORD.eventCreation);
         let eventUserInput = event.target.checked;
-        if(eventUserInput){
+        if (eventUserInput) {
             this.SALESFORCE_TASK_RECORD.eventCreation = true;
             this.template.querySelector(`[data-error="startdateerror"]`).required = true;
             this.template.querySelector(`[data-error="enddateerror"]`).required = true;
-            console.log('Condition Passed:::'+ this.SALESFORCE_TASK_RECORD.eventCreation);
+            console.log('Condition Passed:::' + this.SALESFORCE_TASK_RECORD.eventCreation);
             //this.template.querySelector(`[data-error="startdateerror"]`).message-when-bad-input = 'Please Select Start Date Time';
             //this.template.querySelector(`[data-error="startdateerror"]`).focus();
             //this.template.querySelector(`[data-error="startdateerror"]`).showHelpMessageIfInvalid();
-            if(this.SALESFORCE_TASK_RECORD.startDate == null){
-            this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Select Start Date');
-            this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
+            if (this.SALESFORCE_TASK_RECORD.startDate == null) {
+                this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Select Start Date');
+                this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
             }
 
-            if(this.SALESFORCE_TASK_RECORD.endDate == null){
+            if (this.SALESFORCE_TASK_RECORD.endDate == null) {
                 this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('Please Select End Date');
-            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+                this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
             }
 
         }
-        if(!eventUserInput){
+        if (!eventUserInput) {
             this.SALESFORCE_TASK_RECORD.eventCreation = false;
             this.template.querySelector(`[data-error="startdateerror"]`).required = false;
             this.template.querySelector(`[data-error="enddateerror"]`).required = false;
@@ -486,7 +570,6 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         console.log('Event Detail::::' + JSON.stringify(event.detail));
         this.relatedObjectValue = event.detail.value;
         this.relatedOjectName = this.relatedObjectValue;
-
         console.log('Object Name:::' + this.relatedOjectName);
 
 
@@ -506,7 +589,7 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
 
             console.log('Funnction Passed::::');
 
-             
+
             //relativeiconcolor
             //slds-icon-standard-opportunity
         } else if (this.relatedOjectName == 'Lead') {
@@ -515,26 +598,51 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
             this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-opportunity');
             this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.remove('slds-icon-standard-account');
             this.template.querySelector(`[data-icon-color="relativeiconcolor"]`).classList.add('slds-icon-standard-lead');
-           
+
             //slds-icon-standard-lead
         }
         this.template.querySelector(`[data-id="relatedCustomLookup"]`).handleRemovePill();
-       
+
         console.log('Related Oject Function Called::::');
 
     }
 
     handleRelatedLookupSelected(event) {
-        console.log('Event Phone Number::::', event.detail.Name);
+
         this.SALESFORCE_TASK_RECORD.relatedToId = event.detail.Id;
         this.defaultRelatedObjectRecordName = event.detail.Name;
+
+
+        if (this.relatedOjectName == 'Account') {
+
+            this.contactPhoneSearchFilter = 'AccountId = \'' + this.SALESFORCE_TASK_RECORD.relatedToId + '\'';
+        }
+        if (this.relatedOjectName == 'Opportunity') {
+            this.opportunityId = event.detail.Id;
+            if (this.opportunityAccountId != '') {
+
+                this.contactPhoneSearchFilter = 'AccountId = \'' + this.opportunityAccountId + '\'';
+            }
+        }
+        if (this.relatedOjectName == 'Lead') {
+            this.contactPhoneSearchFilter = '';
+        }
+        this.disablePhoneNumber = false;
         //this.contactSearchFilter = 'Phone LIKE \'%'+ this.defaultRelatedObjectRecordName + '%\'';
         console.log('Lookup Selected:::' + JSON.stringify(event.detail));
     }
 
     handleRelatedNoLookupSelected(event) {
+        console.log('Function Called:::');
         this.SALESFORCE_TASK_RECORD.relatedToId = null;
+        this.contactPhoneSearchFilter = '';
         this.defaultRelatedObjectRecordName = '';
+        this.disablePhoneNumber = true;
+
+        this.template.querySelector(`[data-id="relatedobjectphonenumber"]`).handleRemovePill();
+        // this.SALESFORCE_TASK_RECORD.contactRecordId = null;
+        // this.defaultContactObjectRecordName = '';
+        console.log('Phone Number Contact Disable::::' + this.disablePhoneNumber);
     }
 
     handleContactLookupSelected(event) {
@@ -543,6 +651,7 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
     }
 
     handleContactNoLookupSelected(event) {
+        console.log('Function Calledd:::1234');
         this.SALESFORCE_TASK_RECORD.contactRecordId = null;
         this.defaultContactObjectRecordName = '';
     }
@@ -575,6 +684,7 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
         this.isMainPageVisible = false;
         this.showContactRecordForm = true;
         this.formHeaderTile = 'Create New Contact';
+        this.showContactFooter = true;
     }
 
 
@@ -669,32 +779,32 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
             return;
         }
 
-        if(this.SALESFORCE_TASK_RECORD.startDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
-          this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Fill Start Date');
-           this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
-           this.showEventMessage('Record Field', 'Please Enter Start Date', 'warning', 'pester');
+        if (this.SALESFORCE_TASK_RECORD.startDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true) {
+            this.template.querySelector(`[data-error="startdateerror"]`).setCustomValidity('Please Fill Start Date');
+            this.template.querySelector(`[data-error="startdateerror"]`).reportValidity();
+            this.showEventMessage('Record Field', 'Please Enter Start Date', 'warning', 'pester');
             this.load = false;
             return;
         }
 
-        if(this.SALESFORCE_TASK_RECORD.endDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true){
+        if (this.SALESFORCE_TASK_RECORD.endDate == null && this.SALESFORCE_TASK_RECORD.eventCreation == true) {
             this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('Please Fill End Date');
             this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
             this.showEventMessage('Record Field', 'Please Enter End Date', 'warning', 'pester');
             this.load = false;
             return;
         }
-        if(this.SALESFORCE_TASK_RECORD.eventCreation == true && this.SALESFORCE_TASK_RECORD.startDate != null && this.SALESFORCE_TASK_RECORD.endDate != null){
+        if (this.SALESFORCE_TASK_RECORD.eventCreation == true && this.SALESFORCE_TASK_RECORD.startDate != null && this.SALESFORCE_TASK_RECORD.endDate != null) {
             let numericValue = new Date(this.SALESFORCE_TASK_RECORD.endDate).getDay() - new Date(this.SALESFORCE_TASK_RECORD.startDate).getDay();
-            console.log('Numeric Number::::'+ numericValue);
-            if(numericValue<0){
-            this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('End date can not be less than Start Date');
-            this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
-            this.showEventMessage('Record Field', 'End Date can not be less than Start Date', 'warning', 'pester');
-            this.load = false;
-            return
+            console.log('Numeric Number::::' + numericValue);
+            if (numericValue < 0) {
+                this.template.querySelector(`[data-error="enddateerror"]`).setCustomValidity('End date can not be less than Start Date');
+                this.template.querySelector(`[data-error="enddateerror"]`).reportValidity();
+                this.showEventMessage('Record Field', 'End Date can not be less than Start Date', 'warning', 'pester');
+                this.load = false;
+                return
             }
-            
+
         }
         console.log('Final List::::' + JSON.stringify(this.SALESFORCE_TASK_RECORD));
         insertTaskRecord({ jsonInput: JSON.stringify(this.SALESFORCE_TASK_RECORD) })
@@ -883,5 +993,16 @@ export default class TaskListButtonComponent extends NavigationMixin(LightningEl
                 actionName: 'view'
             },
         });
+    }
+
+
+    handleCancelOperation() {
+
+        var url = window.location.href;
+        console.log('Window Url COm:::::' + url);
+        console.log('Url Substring::' + url.substring(0, url.lastIndexOf('/') + 1));
+        var value = url.substring(0, url.lastIndexOf('/') + 1);
+        window.history.back();
+        return false;
     }
 }

@@ -1,220 +1,141 @@
 <template>
-  <article class="slds-card">
-    <div class="slds-grid slds-wrap">
-      <div
-        class="slds-col slds-size_1-of-1 slds-border--bottom slds-theme_shade slds-p-around--x-small"
-      >
-        <h1>
-          <span class="checklist-task">Start Onboarding</span>
-          <span if:true={showOnboardingButton} style="float: right">
-            <lightning-button
-              label="Initiate Onboarding"
-              onclick={showQuestionaireFunc}
-            >
-            </lightning-button>
-          </span>
-        </h1>
-      </div>
-      <div
-        class="slds-col slds-size_1-of-1 slds-p-around_x-small slds-border_bottom"
-      >
-        <div class="slds-grid slds-grid_vertical">
-          <div class="slds-col">
-            <span>
-              <div class="slds-media slds-media_center">
-                <div class="slds-media__figure slds-align_absolute-center">
-                  <div class="slds-progress-ring slds-progress-ring_small">
-                    <div
-                      class="slds-progress-ring__progress"
-                      role="progressbar"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      aria-valuenow="100"
-                    >
-                      <svg viewBox="-1 -1 2 2">
-                        <path
-                          class="slds-progress-ring__path"
-                          id="GetAccountDetails"
-                          d="M 1 0 A 1 1 0 0 1 1.00 0.00 L 0 0"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="slds-progress-ring__content">
-                      <lightning-icon
-                        if:false={getAccDetails}
-                        icon-name="utility:chevronright"
-                        size="large"
-                        title="Incomplete"
-                        style="--sds-c-icon-color-foreground-default: #dddbda"
-                      >
-                      </lightning-icon>
-                      <lightning-icon
-                        class="my-icon"
-                        if:true={getAccDetails}
-                        icon-name="action:check"
-                        size="xx-small"
-                        title="Completed"
-                      >
-                      </lightning-icon>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="slds-media__body"
-                  style="cursor: pointer"
-                  onpointerover={handlepointerover}
-                >
-                  <div class="slds-grid slds-grid_vertical">
-                    <div
-                      class="accBold slds-col"
-                      style="font-size: 1.04rem; font-weight: 300"
-                      onclick={handleGetAccDetails}
-                    >
-                      Get Account Details
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-          <div class="slds-col slds-p-top_x-small">
-            <span>
-              <div class="slds-media slds-media_center">
-                <div class="slds-media__figure slds-align_absolute-center">
-                  <div class="slds-progress-ring slds-progress-ring_small">
-                    <div
-                      class="slds-progress-ring__progress"
-                      role="progressbar"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      aria-valuenow="100"
-                    >
-                      <svg viewBox="-1 -1 2 2">
-                        <path
-                          class="slds-progress-ring__path"
-                          id="checkDiviation"
-                          d="M 1 0 A 1 1 0 0 1 1.00 0.00 L 0 0"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="slds-progress-ring__content">
-                      <template if:false={noCheck}>
-                        <lightning-icon
-                          if:false={checkDiviation}
-                          icon-name="utility:chevronright"
-                          size="large"
-                          title="Not Selected"
-                          style="--sds-c-icon-color-foreground-default: #dddbda"
-                        >
-                        </lightning-icon>
-
-                        <lightning-icon
-                          class="my-icon"
-                          if:true={checkDiviation}
-                          icon-name="action:check"
-                          size="xx-small"
-                          title=""
-                        >
-                        </lightning-icon>
-                      </template>
-
-                      <template if:true={noCheck}>
-                        <lightning-icon
-                          if:false={noCheck}
-                          icon-name="utility:chevronright"
-                          size="large"
-                          title="Not Selected"
-                          style="--sds-c-icon-color-foreground-default: #dddbda"
-                        >
-                        </lightning-icon>
-
-                        <lightning-icon
-                          class="my-icon"
-                          if:true={noCheck}
-                          icon-name="action:close"
-                          size="xx-small"
-                          title=""
-                        >
-                        </lightning-icon>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-                <div class="slds-media__body" style="cursor: pointer">
-                  <div class="slds-grid slds-grid_vertical">
-                    <div
-                      class="checkBold slds-col"
-                      style="font-size: 1.04rem; font-weight: 300"
-                      onclick={handleCheckDeviation}
-                    >
-                      Check Deviation
-                      <span class="slds-badge .slds-badge_lightest"
-                        >{statusCheckDeviation}</span
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-          <div if:true={hideNeedApproval}>
-            <div class="slds-col slds-p-top_x-small">
-              <span>
-                <div class="slds-media slds-media_center">
-                  <div class="slds-media__figure slds-align_absolute-center">
-                    <div class="slds-progress-ring slds-progress-ring_small">
-                      <div
-                        class="slds-progress-ring__progress"
-                        role="progressbar"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        aria-valuenow="100"
-                      >
-                        <svg viewBox="-1 -1 2 2">
-                          <path
-                            class="slds-progress-ring__path"
-                            id="needApprovalchecked"
-                            d="M 1 0 A 1 1 0 0 1 1.00 0.00 L 0 0"
-                          ></path>
-                        </svg>
-                      </div>
-                      <div class="slds-progress-ring__content">
-                        <lightning-icon
-                          if:false={needApprovalchecked}
-                          icon-name="utility:chevronright"
-                          size="large"
-                          title="Need Approval"
-                          style="--sds-c-icon-color-foreground-default: #dddbda"
-                        >
-                        </lightning-icon>
-                        <lightning-icon
-                          class="my-icon"
-                          if:true={needApprovalchecked}
-                          icon-name="action:check"
-                          size="xx-small"
-                          title="Approved"
-                        >
-                        </lightning-icon>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="slds-media__body" style="cursor: pointer">
-                    <div class="slds-grid slds-grid_vertical">
-                      <div
-                        class="needBold slds-col"
-                        style="font-size: 1.04rem; font-weight: 300"
-                        onclick={handleNeedApproval}
-                      >
-                        Needs Approval
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </span>
+    <article class="slds-card">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-border--bottom slds-theme_shade slds-p-around--x-small">
+                <h1><span class="checklist-task">Start Onboarding</span>
+                    <span if:true={showOnboardingButton} style="float: right;">
+                        <lightning-button label="Initiate Onboarding" onclick={showQuestionaireFunc}>
+                        </lightning-button>
+                    </span>
+                </h1>
             </div>
-          </div>
-          <div class="slds-col slds-p-top_x-small" if:true={checkDiviation}>
-            <!--<span>
+            <div class="slds-col slds-size_1-of-1 slds-p-around_x-small slds-border_bottom">
+                <div class="slds-grid slds-grid_vertical">
+                    <div class="slds-col">
+                        <span>
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure slds-align_absolute-center">
+                                    <div class="slds-progress-ring  slds-progress-ring_small">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0"
+                                            aria-valuemax="100" aria-valuenow="100">
+                                            <svg viewBox="-1 -1 2 2">
+                                                <path class="slds-progress-ring__path" id="GetAccountDetails"
+                                                    d="M 1 0 A 1 1 0 0 1 1.00 0.00 L 0 0"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="slds-progress-ring__content">
+                                            <lightning-icon if:false={getAccDetails} icon-name="utility:chevronright"
+                                                size="large" title="Incomplete"
+                                                style="--sds-c-icon-color-foreground-default: #dddbda;">
+                                            </lightning-icon>
+                                            <lightning-icon class="my-icon" if:true={getAccDetails}
+                                                icon-name="action:check" size="xx-small" title="Completed">
+                                            </lightning-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body" style="cursor: pointer;"
+                                    onpointerover={handlepointerover}>
+                                    <div class="slds-grid slds-grid_vertical">
+                                        <div class="accBold slds-col" style="font-size: 1.04rem;font-weight: 300;"
+                                            onclick={handleGetAccDetails}>
+                                            Get Account Details
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-p-top_x-small">
+                        <span>
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure slds-align_absolute-center">
+                                    <div class="slds-progress-ring  slds-progress-ring_small">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0"
+                                            aria-valuemax="100" aria-valuenow="100">
+                                            <svg viewBox="-1 -1 2 2">
+                                                <path class="slds-progress-ring__path" id="checkDiviation"
+                                                    d="M 1 0 A 1 1 0 0 1 1.00 0.00 L 0 0"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="slds-progress-ring__content">
+
+                                            <template if:false={noCheck}>
+
+                                                <lightning-icon if:false={checkDiviation}
+                                                    icon-name="utility:chevronright" size="large" title="Not Selected"
+                                                    style="--sds-c-icon-color-foreground-default: #dddbda;">
+                                                </lightning-icon>
+
+                                                <lightning-icon class="my-icon" if:true={checkDiviation}
+                                                    icon-name="action:check" size="xx-small" title="">
+                                                </lightning-icon>
+                                            </template>
+
+                                            <template if:true={noCheck}>
+
+                                                <lightning-icon if:false={noCheck} icon-name="utility:chevronright"
+                                                    size="large" title="Not Selected"
+                                                    style="--sds-c-icon-color-foreground-default: #dddbda;">
+                                                </lightning-icon>
+
+                                                <lightning-icon class="my-icon" if:true={noCheck}
+                                                    icon-name="action:close" size="xx-small" title="">
+                                                </lightning-icon>
+
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body" style="cursor: pointer;">
+                                    <div class="slds-grid slds-grid_vertical">
+                                        <div class="checkBold slds-col" style="font-size: 1.04rem;font-weight: 300;"
+                                            onclick={handleCheckDeviation}>
+                                            Check Deviation  <span class="slds-badge .slds-badge_lightest">{statusCheckDeviation}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                   <div if:true={hideNeedApproval}>
+                    <div  class="slds-col slds-p-top_x-small">
+                        <span>
+                            <div class="slds-media slds-media_center">
+                                <div class="slds-media__figure slds-align_absolute-center">
+                                    <div class="slds-progress-ring  slds-progress-ring_small">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0"
+                                            aria-valuemax="100" aria-valuenow="100">
+                                            <svg viewBox="-1 -1 2 2">
+                                                <path class="slds-progress-ring__path" id="needApprovalchecked"
+                                                    d="M 1 0 A 1 1 0 0 1 1.00 0.00 L 0 0"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="slds-progress-ring__content">
+                                            <lightning-icon if:false={needApprovalchecked}
+                                                icon-name="utility:chevronright" size="large" title="Need Approval"
+                                                style="--sds-c-icon-color-foreground-default: #dddbda;">
+                                            </lightning-icon>
+                                            <lightning-icon class="my-icon" if:true={needApprovalchecked}
+                                                icon-name="action:check" size="xx-small" title="Approved">
+                                            </lightning-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body" style="cursor: pointer;">
+                                    <div class="slds-grid slds-grid_vertical">
+                                        <div class="needBold slds-col" style="font-size: 1.04rem;font-weight: 300;"
+                                            onclick={handleNeedApproval}>
+                                            Needs Approval
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div> 
+                    <div class="slds-col slds-p-top_x-small" if:true={checkDiviation}>
+                        <!--<span>
                             <div class="slds-grid slds-p-around--xx-small slds-p-left--medium slds-wrap">
                                 <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
                                     <div class="slds-grid slds-wrap">
@@ -248,8 +169,8 @@
                                 </div>
                             </div>
                         </span>-->
-          </div>
-          <!-- <div class="slds-col slds-p-top_x-small" if:true={checkDiviation}>
+                    </div>
+                    <!-- <div class="slds-col slds-p-top_x-small" if:true={checkDiviation}>
                         <span>
                         <div class="slds-grid slds-p-around--xx-small slds-p-left--medium slds-wrap">
                             <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
@@ -266,7 +187,7 @@
                         </div>
                         </span>
                     </div> -->
-          <!-- <div class ="slds-col slds-p-top_x-small" if:true={showrows}>
+                    <!-- <div class ="slds-col slds-p-top_x-small" if:true={showrows}>
                     <span>
                         <div class="slds-media slds-media_center">
                             <div class="slds-media__figure slds-align_absolute-center">
@@ -304,344 +225,237 @@
                             <lightning-button label="Initiate Onboaring" onclick={handleInitiateOnboarding}></lightning-button>   
                         </span>
                     </div> -->
-        </div>
-      </div>
-    </div>
-  </article>
-  <template if:true={accDetailPopover}>
-    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
-      <div class="slds-modal__container .check-out-width-desktop">
-        <header class="slds-modal__header slds-modal__header_empty">
-          <button
-            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-            title="Close"
-            onclick={handleClosePopoverModal}
-          >
-            <lightning-icon
-              icon-name="utility:close"
-              variant="inverse"
-              size="small"
-            >
-            </lightning-icon>
-            <span class="slds-assistive-text">Close</span>
-          </button>
-        </header>
-        <div class="slds-modal__header">
-          <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
-            Account Details
-          </h1>
-        </div>
-        <div
-          class="slds-modal__content slds-p-around_medium"
-          style="overflow: unset"
-          id="modal-content-id-1"
-        >
-          <!-- Start Seciton 1-->
-          <div class="slds-grid slds-wrap">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <div class="slds-form-element">
-                  <label class="slds-form-element__label" for="text-input-id-48"
-                    >Division</label
-                  >
-                  <div class="slds-form-element__control">
-                    <input
-                      type="text"
-                      placeholder=""
-                      disabled=""
-                      class="slds-input"
-                      value={oppData.Account.Division__c}
-                    />
-                  </div>
                 </div>
-              </span>
             </div>
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <div class="slds-form-element">
-                  <label class="slds-form-element__label" for="text-input-id-48"
-                    >Sales Manager</label
-                  >
-                  <div class="slds-form-element__control">
-                    <input
-                      type="text"
-                      placeholder=""
-                      disabled=""
-                      class="slds-input"
-                      value={oppData.Owner.Name}
-                    />
-                  </div>
+        </div>
+    </article>
+    <template if:true={accDetailPopover}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container .check-out-width-desktop">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={handleClosePopoverModal}>
+                        <lightning-icon icon-name="utility:close" variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Account Details</h1>
                 </div>
-              </span>
-            </div>
-          </div>
-          <!-- End Seciton 1-->
+                <div class="slds-modal__content slds-p-around_medium" style="overflow:unset" id="modal-content-id-1">
 
-          <!-- Start Seciton 2-->
-          <div class="slds-grid slds-wrap slds-p-top_x-small">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="Account Name"
-                  value={oppData.Account.Name}
-                  disabled=""
-                >
-                </lightning-input>
-              </span>
-            </div>
-            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
-              <span>
-                <lightning-combobox
-                  label="Entity Type"
-                  value={oppData.Account.Ownership}
-                  data-id="AccountName"
-                  options={ownershipPicklist}
-                  onchange={handleEntityTypeChange}
-                  required
-                >
-                </lightning-combobox>
-              </span>
-            </div>
-          </div>
-          <!-- End Seciton 2-->
+                   
+                        <!-- Start Seciton 1-->
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label" for="text-input-id-48">Division</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" placeholder="" disabled="" class="slds-input"
+                                                value={oppData.Account.Division__c} />
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <div class="slds-form-element">
+                                        <label class="slds-form-element__label" for="text-input-id-48">Sales
+                                            Manager</label>
+                                        <div class="slds-form-element__control">
+                                            <input type="text" placeholder="" disabled="" class="slds-input"
+                                                value={oppData.Owner.Name} />
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- End Seciton 1-->
 
-          <!-- Start Seciton 3-->
-          <div class="slds-grid slds-wrap slds-p-top_x-small">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-combobox
-                  name="LOB"
-                  label="LOB"
-                  data-id="LOB"
-                  placeholder="Select LOB"
-                  onselect={handleEntityTypeChange}
-                  options={LOBPICKLIST}
-                  value={oppData.Account.Industry}
-                  onchange={handleLobChange}
-                  required
-                >
-                </lightning-combobox>
-              </span>
-            </div>
+                        <!-- Start Seciton 2-->
+                        <div class="slds-grid slds-wrap slds-p-top_x-small">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="Account Name" value={oppData.Account.Name} disabled="">
+                                    </lightning-input>
+                                </span>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                                <span>
+                                    <lightning-combobox label="Entity Type" value={oppData.Account.Ownership}
+                                        data-id="AccountName" options={ownershipPicklist}
+                                        onchange={handleEntityTypeChange} required>
+                                    </lightning-combobox>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- End Seciton 2-->
 
-            <template if:true={subLobVisibilty}>
-              <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
-                <span>
-                  <lightning-combobox
-                    label="SUB LOB"
-                    options={subDefaultPickList}
-                    placeholder="Select Sub Lob"
-                    value={defaultSubLob}
-                    required
-                  >
-                  </lightning-combobox
-                  ><!---->
-                </span>
-              </div>
-            </template>
 
-            <template if:false={subLobVisibilty}>
-              <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
-                <span>
-                  <lightning-combobox
-                    name="SUB LOB"
-                    label="SUB LOB"
-                    data-id="SUB_LOB"
-                    placeholder="Select Sub Lob"
-                    value={oppData.Account.Sub_LOB__c}
-                    onchange={handleEntityTypeChange}
-                    options={SUBLOBPICKLIST}
-                    required
-                  >
-                  </lightning-combobox>
-                </span>
-              </div>
-            </template>
-            <!-- value={oppData.Account.Ownership}
+                        <!-- Start Seciton 3-->
+                        <div class="slds-grid slds-wrap slds-p-top_x-small">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-combobox name="LOB" label="LOB" data-id="LOB" placeholder="Select LOB"
+                                        onselect={handleEntityTypeChange} options={LOBPICKLIST}
+                                        value={oppData.Account.Industry} onchange={handleLobChange} required>
+                                    </lightning-combobox>
+                                </span>
+                            </div>
+
+                            <template if:true={subLobVisibilty}>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                                    <span>
+                                        <lightning-combobox label="SUB LOB" options={subDefaultPickList}
+                                            placeholder="Select Sub Lob"  value={defaultSubLob} required>
+                                        </lightning-combobox><!---->
+                                    </span>
+                                </div>
+                            </template>
+
+                            <template if:false={subLobVisibilty}>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                                    <span>
+                                        <lightning-combobox name="SUB LOB" label="SUB LOB" data-id="SUB_LOB"
+                                            placeholder="Select Sub Lob" value={oppData.Account.Sub_LOB__c}
+                                            onchange={handleEntityTypeChange} options={SUBLOBPICKLIST} required>
+                                        </lightning-combobox>
+                                    </span>
+                                </div>
+                            </template>
+                            <!-- value={oppData.Account.Ownership}
                         onchange={handleEntityTypeChange} -->
-          </div>
-          <!-- End Seciton 3-->
 
-          <!-- Start Seciton 4-->
-          <div class="slds-grid slds-wrap slds-p-top_x-small">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="Account Phone"
-                  data-id="phone"
-                  onchange={handleEntityTypeChange}
-                  value={oppData.Account.Phone}
-                >
-                </lightning-input>
-              </span>
-            </div>
+                        </div>
+                        <!-- End Seciton 3-->
 
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="Support Email"
-                  data-id="support_email"
-                  onchange={handleEntityTypeChange}
-                  value={oppData.Account.Support_Email__c}
-                >
-                </lightning-input>
-              </span>
-            </div>
-          </div>
 
-          <!-- End Seciton 4-->
+                        <!-- Start Seciton 4-->
+                        <div class="slds-grid slds-wrap slds-p-top_x-small">
 
-          <!-- Start Seciton 5-->
-          <div class="slds-grid slds-wrap slds-p-top_x-small">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="Registered Name"
-                  data-id="Registered_Name"
-                  onchange={handleEntityTypeChange}
-                  value={oppData.Account.Registered_Name__c}
-                >
-                </lightning-input>
-              </span>
-            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="Account Phone" data-id="phone"
+                                        onchange={handleEntityTypeChange} value={oppData.Account.Phone}>
+                                    </lightning-input>
+                                </span>
+                            </div>
 
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <template if:true={showRequiredFields}>
-                  <lightning-input
-                    label="Merchant SIte Url"
-                    data-id="Merchant_Site_Url"
-                    required="true"
-                    onchange={handleEntityTypeChange}
-                    value={oppData.Account.Merchant_Site_Url__c}
-                  >
-                  </lightning-input>
-                </template>
-                <template if:false={showRequiredFields}>
-                  <lightning-input
-                    label="Merchant SIte Url"
-                    data-id="Merchant_Site_Url"
-                    onchange={handleEntityTypeChange}
-                    value={oppData.Account.Merchant_Site_Url__c}
-                  >
-                  </lightning-input>
-                </template>
-              </span>
-            </div>
-          </div>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="Support Email" data-id="support_email"
+                                        onchange={handleEntityTypeChange} value={oppData.Account.Support_Email__c}>
+                                    </lightning-input>
+                                </span>
+                            </div>
 
-          <!-- End Seciton 5-->
+                        </div>
 
-          <!-- Start Seciton 6-->
-          <div class="slds-grid slds-wrap slds-p-top_x-small">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="Account Holder Name"
-                  data-id="Account_Holder_Name"
-                  onchange={handleEntityTypeChange}
-                  value={oppData.Account.Account_Holder_Name__c}
-                >
-                </lightning-input>
-              </span>
-            </div>
+                        <!-- End Seciton 4-->
 
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="Owner/Director PAN Number"
-                  data-id="Owner_PAN_Number"
-                  onchange={handleEntityTypeChange}
-                  placeholder="PAN Number"
-                  pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
-                  message-when-pattern-mismatch="Please Enter Valid PAN Number"
-                  value={oppData.Account.Owner_Director_PAN_Number__c}
-                  required
-                >
-                </lightning-input>
-              </span>
-            </div>
-          </div>
+                        <!-- Start Seciton 5-->
+                        <div class="slds-grid slds-wrap slds-p-top_x-small">
 
-          <!-- End Seciton 6-->
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="Registered Name" data-id="Registered_Name"
+                                        onchange={handleEntityTypeChange} value={oppData.Account.Registered_Name__c}>
+                                    </lightning-input>
+                                </span>
+                            </div>
 
-          <!-- Start Seciton 7-->
-          <div class="slds-grid slds-wrap slds-p-top_x-small">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="Business PAN Number"
-                  data-id="PAN"
-                  onchange={handleEntityTypeChange}
-                  value={oppData.Account.PAN__c}
-                  placeholder="PAN Number"
-                  pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
-                  message-when-pattern-mismatch="Please Enter Valid PAN Number"
-                  required
-                >
-                </lightning-input>
-              </span>
-            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <template if:true={showRequiredFields}>
+                                        <lightning-input label="Merchant SIte Url" data-id="Merchant_Site_Url"
+                                            required="true" onchange={handleEntityTypeChange}
+                                            value={oppData.Account.Merchant_Site_Url__c}>
+                                        </lightning-input>
+                                    </template>
+                                    <template if:false={showRequiredFields}>
+                                        <lightning-input label="Merchant SIte Url" data-id="Merchant_Site_Url"
+                                            onchange={handleEntityTypeChange}
+                                            value={oppData.Account.Merchant_Site_Url__c}>
+                                        </lightning-input>
+                                    </template>
+                                </span>
+                            </div>
 
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="CIN"
-                  data-id="CIN"
-                  onchange={handleEntityTypeChange}
-                  value={oppData.Account.CIN__c}
-                >
-                </lightning-input>
-              </span>
-            </div>
-          </div>
+                        </div>
 
-          <!-- End Seciton 7-->
+                        <!-- End Seciton 5-->
 
-          <!-- Start Seciton 8-->
-          <div class="slds-grid slds-wrap slds-p-top_x-small">
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <lightning-input
-                  label="GST"
-                  data-id="GST"
-                  onchange={handleEntityTypeChange}
-                  value={oppData.Account.GST__c}
-                  placeholder="GST Number"
-                  pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$"
-                  message-when-pattern-mismatch="Please Enter Valid GST Number"
-                >
-                </lightning-input>
-              </span>
-            </div>
 
-            <!-- <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                        <!-- Start Seciton 6-->
+                        <div class="slds-grid slds-wrap slds-p-top_x-small">
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="Account Holder Name" data-id="Account_Holder_Name"
+                                        onchange={handleEntityTypeChange}
+                                        value={oppData.Account.Account_Holder_Name__c}>
+                                    </lightning-input>
+                                </span>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="Owner/Director PAN Number" data-id="Owner_PAN_Number"
+                                        onchange={handleEntityTypeChange} placeholder="PAN Number"
+                                        pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                                        message-when-pattern-mismatch="Please Enter Valid PAN Number"
+                                        value={oppData.Account.Owner_Director_PAN_Number__c} required>
+                                    </lightning-input>
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <!-- End Seciton 6-->
+
+
+                        <!-- Start Seciton 7-->
+                        <div class="slds-grid slds-wrap slds-p-top_x-small">
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="Business PAN Number" data-id="PAN"
+                                        onchange={handleEntityTypeChange} value={oppData.Account.PAN__c}
+                                        placeholder="PAN Number" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                                        message-when-pattern-mismatch="Please Enter Valid PAN Number" required>
+                                    </lightning-input>
+                                </span>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="CIN" data-id="CIN" onchange={handleEntityTypeChange}
+                                        value={oppData.Account.CIN__c}>
+                                    </lightning-input>
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <!-- End Seciton 7-->
+
+
+                        <!-- Start Seciton 8-->
+                        <div class="slds-grid slds-wrap slds-p-top_x-small">
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <lightning-input label="GST" data-id="GST" onchange={handleEntityTypeChange}
+                                        value={oppData.Account.GST__c} placeholder="GST Number"
+                                        pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$"
+                                        message-when-pattern-mismatch="Please Enter Valid GST Number">
+                                    </lightning-input>
+                                </span>
+                            </div>
+
+                            <!-- <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
                             <span>
                                 <lightning-input label="Email" data-id="Email" onchange={handleEntityTypeChange}
                                     value={oppData.Account.PAN__c} placeholder="Email Address..."
@@ -650,315 +464,204 @@
                             </span>
                         </div> -->
 
-            <div
-              class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small"
-            >
-              <span>
-                <template if:true={showRequiredFields}>
-                  <lightning-input
-                    label="Website"
-                    data-id="Website"
-                    onchange={handleEntityTypeChange}
-                    value={oppData.Account.Website}
-                    placeholder="Website"
-                    required="true"
-                  >
-                  </lightning-input>
-                </template>
-                <template if:false={showRequiredFields}>
-                  <lightning-input
-                    label="Website"
-                    data-id="Website"
-                    onchange={handleEntityTypeChange}
-                    value={oppData.Account.Website}
-                    placeholder="Website"
-                  >
-                  </lightning-input>
-                </template>
-              </span>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-p-right--xx-small">
+                                <span>
+                                    <template if:true={showRequiredFields}>
+                                        <lightning-input label="Website" data-id="Website"
+                                            onchange={handleEntityTypeChange} value={oppData.Account.Website}
+                                            placeholder="Website" required="true">
+                                        </lightning-input>
+                                    </template>
+                                    <template if:false={showRequiredFields}>
+                                        <lightning-input label="Website" data-id="Website"
+                                            onchange={handleEntityTypeChange} value={oppData.Account.Website}
+                                            placeholder="Website">
+                                        </lightning-input>
+                                    </template>
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <!-- End Seciton 8-->
+
+                    
+                    
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={handleClosePopoverModal}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={handleSaveAccDetails}>Save</button>
+                </div>
             </div>
-          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={showPopover}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 35%">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={handleClosePopoverModal}>
+                        <lightning-icon icon-name="utility:close" variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
 
-          <!-- End Seciton 8-->
-        </div>
-        <div class="slds-modal__footer">
-          <button
-            class="slds-button slds-button_neutral"
-            aria-label="Cancel and close"
-            onclick={handleClosePopoverModal}
-          >
-            Cancel
-          </button>
-          <button
-            class="slds-button slds-button_brand"
-            onclick={handleSaveAccDetails}
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </section>
-    <div class="slds-backdrop slds-backdrop_open"></div>
-  </template>
-  <template if:true={showPopover}>
-    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
-      <div class="slds-modal__container" style="width: 35%">
-        <header class="slds-modal__header slds-modal__header_empty">
-          <button
-            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-            title="Close"
-            onclick={handleClosePopoverModal}
-          >
-            <lightning-icon
-              icon-name="utility:close"
-              variant="inverse"
-              size="small"
-            >
-            </lightning-icon>
-            <span class="slds-assistive-text">Close</span>
-          </button>
-        </header>
+                <!-- BODY SECTION START-->
+                <div class="slds-modal__content slds-p-around_medium" style="overflow:unset">
 
-        <!-- BODY SECTION START-->
-        <div
-          class="slds-modal__content slds-p-around_medium"
-          style="overflow: unset"
-        >
-          <div class="slds-media">
-            <div class="slds-media__body">
-              <div class="slds-media">
-                <div class="slds-media__figure">
-                  <span class="slds-icon_container">
-                    <svg
-                      class="slds-icon slds-icon_small slds-icon-text-default"
-                      aria-hidden="true"
-                    >
-                      <use
-                        xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#prompt"
-                      ></use>
-                    </svg>
-                    <span class="slds-assistive-text"></span>
-                  </span>
+                    <div class="slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container">
+                                        <svg class="slds-icon slds-icon_small slds-icon-text-default"
+                                            aria-hidden="true">
+                                            <use
+                                                xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#prompt">
+                                            </use>
+                                        </svg>
+                                        <span class="slds-assistive-text"></span>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body" if:true={checkDeviationPopover}>
+                                    <h2 class="slds-popover_prompt__heading">Check Deviation</h2>
+                                    <lightning-combobox value={selectedDeviation} options={options}
+                                        onchange={handleDeviationChange}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-media__body" if:true={okayforOnboardingPopover}>
+                                    <h2 class="slds-popover_prompt__heading">Are you Okay for Onboarding</h2>
+                                    <lightning-combobox value={value} options={options} onchange={handleOnboarding}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-media__body" if:true={approvalPopover}>
+                                    <h2 class="slds-popover_prompt__heading">Select Approval</h2>
+                                    <lightning-combobox value={value} options={approvalPicklist}
+                                        onchange={handleApprovalChange}>
+                                    </lightning-combobox>
+                                    <lightning-textarea required value="" placeholder="" label="Approval Comments"
+                                        maxlength="200"
+                                        message-when-too-long="A maximum of 200 characters are allowed in a tweet."
+                                        message-when-value-missing="An empty comment cannot be posted."
+                                        onchange={handleCommentChange}>
+                                    </lightning-textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="slds-media__body" if:true={checkDeviationPopover}>
-                  <h2 class="slds-popover_prompt__heading">Check Deviation</h2>
-                  <lightning-combobox
-                    value={selectedDeviation}
-                    options={options}
-                    onchange={handleDeviationChange}
-                  >
-                  </lightning-combobox>
+                <!-- BODY SECTION END-->
+
+                <!-- FOOTER SECTION START-->
+                <div class="slds-modal__footer">
+                    <div class="slds-grid slds-grid_vertical-align-center">
+                        <button class="slds-button slds-button_neutral slds-col_bump-right"
+                            onclick={handleClosePopoverModal}>
+                            Cancel
+                        </button>
+                        <button if:true={checkDeviationPopover} class="slds-button slds-button_brand"
+                            onclick={handleSavecheckDeviation}>Save</button>
+                        <button if:true={okayforOnboardingPopover} class="slds-button slds-button_brand"
+                            onclick={handleSaveokayforOnboarding}>Save</button>
+                        <button if:true={approvalPopover} class="slds-button slds-button_brand"
+                            onclick={handleSaveApproval}>Save</button>
+                    </div>
                 </div>
-                <div
-                  class="slds-media__body"
-                  if:true={okayforOnboardingPopover}
-                >
-                  <h2 class="slds-popover_prompt__heading">
-                    Are you Okay for Onboarding
-                  </h2>
-                  <lightning-combobox
-                    value={value}
-                    options={options}
-                    onchange={handleOnboarding}
-                  >
-                  </lightning-combobox>
-                </div>
-                <div class="slds-media__body" if:true={approvalPopover}>
-                  <h2 class="slds-popover_prompt__heading">Select Approval</h2>
-                  <lightning-combobox
-                    value={value}
-                    options={approvalPicklist}
-                    onchange={handleApprovalChange}
-                  >
-                  </lightning-combobox>
-                  <lightning-textarea
-                    required
-                    value=""
-                    placeholder=""
-                    label="Approval Comments"
-                    maxlength="200"
-                    message-when-too-long="A maximum of 200 characters are allowed in a tweet."
-                    message-when-value-missing="An empty comment cannot be posted."
-                    onchange={handleCommentChange}
-                  >
-                  </lightning-textarea>
-                </div>
-              </div>
+                <!--POPOVER FOOTER SECTION END-->
             </div>
-          </div>
-        </div>
-        <!-- BODY SECTION END-->
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
 
-        <!-- FOOTER SECTION START-->
-        <div class="slds-modal__footer">
-          <div class="slds-grid slds-grid_vertical-align-center">
-            <button
-              class="slds-button slds-button_neutral slds-col_bump-right"
-              onclick={handleClosePopoverModal}
-            >
-              Cancel
-            </button>
-            <button
-              if:true={checkDeviationPopover}
-              class="slds-button slds-button_brand"
-              onclick={handleSavecheckDeviation}
-            >
-              Save
-            </button>
-            <button
-              if:true={okayforOnboardingPopover}
-              class="slds-button slds-button_brand"
-              onclick={handleSaveokayforOnboarding}
-            >
-              Save
-            </button>
-            <button
-              if:true={approvalPopover}
-              class="slds-button slds-button_brand"
-              onclick={handleSaveApproval}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-        <!--POPOVER FOOTER SECTION END-->
-      </div>
-    </section>
-    <div class="slds-backdrop slds-backdrop_open"></div>
-  </template>
 
-  <!--Question Section Modal for Onboarding Checklist starting point-->
-  <template if:true={showQuestionaire}>
-    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
-      <div class="slds-modal__container" style="width: 60rem">
-        <header class="slds-modal__header slds-modal__header_empty">
-          <button
-            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-            title="Close"
-            onclick={hideModalBox}
-          >
-            <lightning-icon
-              icon-name="utility:close"
-              variant="inverse"
-              size="small"
-            >
-            </lightning-icon>
-            <span class="slds-assistive-text">Close</span>
-          </button>
-        </header>
-        <header class="slds-modal__header">
-          <h2 class="slds-modal__title slds-hyphenate">Onboarding Checklist</h2>
-        </header>
-        <div class="slds-modal__content slds-p-around_medium">
-          <template if:true={showOnboardingChecklist}>
-            <template for:each={displayQuestionList} for:item="question">
-              <div key={question.QuestionId}>
-                <div style="display: none">{recordId}</div>
-                <div if:true={question.IsPicklist} style="margin-top: 10px">
-                  <lightning-combobox
-                    name={question.QuestionName}
-                    label={question.QuestionName}
-                    placeholder="Select Response"
-                    options={question.ResponseOptions}
-                    data-id={question.QuestionId}
-                    value={question.QuestionResponse}
-                    onchange={handleResponseChange}
-                    required
-                  >
-                  </lightning-combobox>
+    <!--Question Section Modal for Onboarding Checklist starting point-->
+    <template if:true={showQuestionaire}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 60rem;">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={hideModalBox}>
+                        <lightning-icon icon-name="utility:close" variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title slds-hyphenate">Onboarding Checklist</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:true={showOnboardingChecklist}>
+                        <template for:each={displayQuestionList} for:item="question">
+                            
+                            <div key={question.QuestionId}>
+                                <div style="display: none;">
+                                    {recordId}
+                                </div>
+                                <div if:true={question.IsPicklist} style="margin-top: 10px;">
+                                    <lightning-combobox
+                                        name={question.QuestionName} label={question.QuestionName} 
+                                        placeholder="Select Response" options={question.ResponseOptions} data-id={question.QuestionId}
+                                        value={question.QuestionResponse} onchange={handleResponseChange} required>
+                                    </lightning-combobox>
+                                </div> 
+                                <div if:false={question.IsPicklist} style="margin-top: 10px;">
+                                    <lightning-input type="text" label={question.QuestionName} data-id={question.QuestionId} placeholder="type here..." required></lightning-input>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={showOnboardingChecklist}>
+                        <c-illustration-component display-text="No Checklist Found!"></c-illustration-component>
+                    </template>
                 </div>
-                <div if:false={question.IsPicklist} style="margin-top: 10px">
-                  <lightning-input
-                    type="text"
-                    label={question.QuestionName}
-                    data-id={question.QuestionId}
-                    placeholder="type here..."
-                    required
-                  ></lightning-input>
-                </div>
-              </div>
-            </template>
-          </template>
-          <template if:false={showOnboardingChecklist}>
-            <c-illustration-component
-              display-text="No Checklist Found!"
-            ></c-illustration-component>
-          </template>
-        </div>
-        <template if:true={displayNext}>
-          <footer class="slds-modal__footer">
-            <button
-              class="slds-button slds-button_neutral"
-              onclick={hideModalBox}
-            >
-              Cancel
-            </button>
-            <button
-              class="slds-button slds-button_neutral"
-              onclick={handleInitiateOnboarding}
-            >
-              Next
-            </button>
-            <!--<button class="slds-button slds-button_neutral" onclick={onHandleSave} >Save</button>-->
-          </footer>
-        </template>
-        <template if:false={displayNext}>
-          <footer class="slds-modal__footer">
-            <button
-              class="slds-button slds-button_neutral"
-              onclick={hideModalBox}
-            >
-              Cancel
-            </button>
-            <button class="slds-button slds-button_neutral" disabled>
-              Next
-            </button>
-          </footer>
-        </template>
-      </div>
-    </section>
-    <div class="slds-backdrop slds-backdrop_open"></div>
-  </template>
-  <!--Question Section Modal for Onboarding Checklist ending point-->
+                <template if:true={displayNext}>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                        <button class="slds-button slds-button_neutral" onclick={handleInitiateOnboarding}>Next</button>
+                        <!--<button class="slds-button slds-button_neutral" onclick={onHandleSave} >Save</button>-->
+                    </footer>
+                </template>
+                <template if:false={displayNext}>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                        <button class="slds-button slds-button_neutral" disabled>Next</button>
+                    </footer>
+                </template>
+                
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </template>
+    <!--Question Section Modal for Onboarding Checklist ending point-->
 
-  <template if:true={showInitiateOnboardingPopover}>
-    <section
-      role="dialog"
-      tabindex="-1"
-      class="slds-modal slds-fade-in-open slds-modal_large"
-    >
-      <div class="slds-modal__container" style="width: 60rem">
-        <header class="slds-modal__header slds-modal__header_empty">
-          <button
-            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-            title="Close"
-            onclick={handleCloseInitiateOnboardingPopover}
-          >
-            <lightning-icon
-              icon-name="utility:close"
-              variant="inverse"
-              size="small"
-            >
-            </lightning-icon>
-            <span class="slds-assistive-text">Close</span>
-          </button>
-        </header>
-        <div
-          class="slds-modal__content slds-p-around_none"
-          style="height: auto; overflow: unset"
-        >
-          <c-initial-on-boarding-component
-            record-id={recordId}
-            oninitiatebutton={handleVisibiltyInitiateOnboarding}
-            onclose={handleCloseInitiateOnboardingPopover}
-            default-subject-name={defaultSubjectName}
-            ondisplayquestion={showQuestionaireFunc}
-            answerresult={displayQuestionList}
-          >
-          </c-initial-on-boarding-component>
-        </div>
-      </div>
-    </section>
-    <div class="slds-backdrop slds-backdrop_open"></div>
-  </template>
+
+    <template if:true={showInitiateOnboardingPopover}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container" style="width: 60rem;">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={handleCloseInitiateOnboardingPopover}>
+                        <lightning-icon icon-name="utility:close" variant="inverse" size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_none" style="height:auto;overflow:unset;">
+                    <c-initial-on-boarding-component record-id={recordId}
+                        oninitiatebutton={handleVisibiltyInitiateOnboarding}
+                        onclose={handleCloseInitiateOnboardingPopover} 
+                        default-subject-name={defaultSubjectName}
+                        ondisplayquestion={showQuestionaireFunc}
+                        answerresult={displayQuestionList}
+                        >
+                    </c-initial-on-boarding-component>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
 </template>

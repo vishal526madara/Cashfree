@@ -1,112 +1,112 @@
-.textarea-height {
-  --sds-c-textarea-sizing-min-height: 80px;
+.textarea-height{
+    --sds-c-textarea-sizing-min-height: 80px;
 }
 
-.loading-section {
-  position: relative;
+.loading-section{
+    position: relative;
 }
 
-.page-header-section {
-  font-size: 16px;
-  font-weight: 500;
+.page-header-section{
+    font-size: 16px;
+    font-weight: 500;
 }
 
-.progress-section {
-  border-bottom: 2px solid #e5e5e5;
-  padding: 20px 0 30px 0;
+.progress-section{
+    border-bottom: 2px solid #e5e5e5;
+    padding: 20px 0 30px 0;
 }
 
-.step-label {
-  position: absolute;
-  transform: translateX(-50%);
-  margin-top: 20px;
-  white-space: nowrap;
-  margin-left: 10px;
-  font-weight: 500;
+.step-label{
+    position: absolute;
+    transform: translateX(-50%);
+    margin-top: 20px;
+    white-space: nowrap;
+    margin-left: 10px;
+    font-weight: 500;
 }
 
-.new-checklist-button {
-  font-size: 12px;
-  font-weight: 600;
-  --slds-c-button-line-height: 15px;
+.new-checklist-button{
+    font-size: 12px;
+    font-weight: 600;
+    --slds-c-button-line-height: 15px;
 }
 
-.popover-position {
-  z-index: 9002;
-  top: 30%;
+.popover-position{
+    z-index: 9002;
+    top: 30%;
 }
 
-.template-header {
-  font-size: 2.45rem;
-  font-weight: 300;
+.template-header{
+    font-size: 2.45rem;
+    font-weight: 300;
 }
 
-.template-name {
-  font-size: 1.5rem;
-  font-weight: 300;
+.template-name{
+    font-size: 1.5rem;
+    font-weight: 300;
 }
 
-.column-checklist {
-  font-size: 12px;
-  color: #475f7b;
-  font-weight: 500;
-  --lwc-colorTextLabel: #475f7b;
-  --lwc-fontSize3: 12px;
+.column-checklist{
+    font-size: 12px;
+    color: #475F7B;
+    font-weight: 500;
+    --lwc-colorTextLabel: #475F7B;
+    --lwc-fontSize3: 12px;
 }
 
-.open-data {
-  background-color: #fff;
-  color: #2e78bf;
-  border: #2e78bf solid 1px;
-  border-radius: 10px;
-  width: 30px;
-  height: 15px;
-  margin: auto;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+.open-data{
+    background-color: #fff;
+    color: #2E78BF;
+    border: #2E78BF solid 1px;
+    border-radius: 10px;
+    width: 30px;
+    height: 15px;
+    margin: auto;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
 }
 
-.inprogress-data {
-  background-color: #2e78bf;
-  border: #2e78bf solid 1px;
-  color: #fff;
-  border-radius: 10px;
-  width: 30px;
-  height: 15px;
-  margin: auto;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+.inprogress-data{
+    background-color: #2E78BF;
+    border: #2E78BF solid 1px;
+    color: #fff;
+    border-radius: 10px;
+    width: 30px;
+    height: 15px;
+    margin: auto;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
 }
 
-.complete-data {
-  border: #09d009 solid 1px;
-  color: #09d009;
-  border-radius: 10px;
-  width: 30px;
-  height: 15px;
-  margin: auto;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+.complete-data{
+    border: #09d009 solid 1px;
+    color: #09d009;
+    border-radius: 10px;
+    width: 30px;
+    height: 15px;
+    margin: auto;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
 }
 
-.checklist-table {
-  font-size: 10px;
-  line-height: 25px;
+.checklist-table{
+    font-size: 10px;
+    line-height: 25px;
 }
 
-.task-section-bar {
-  background-color: #edf5fc;
+.task-section-bar{
+    background-color: #edf5fc;
 }
 
-.task-due-field {
-  color: #97a3ad;
-  font-size: 0.75rem;
+.task-due-field{
+    color: #97A3AD;
+    font-size: 0.75rem;
 }
 
 .slds-modal__container {
-  max-width: 80rem !important;
-  width: 80% !important;
+    max-width: 80rem !important;
+    width: 80% !important;
 }

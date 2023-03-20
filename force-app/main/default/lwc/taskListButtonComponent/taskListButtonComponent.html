@@ -301,7 +301,7 @@
                                     search-placeholder={relatedOjectName} default-name={defaultRelatedObjectRecordName}
                                     icon-name={relatedObjectIconName} data-id="relatedCustomLookup"
                                     onlookupselected={handleRelatedLookupSelected}
-                                    nolookupselected={handleRelatedNoLookupSelected}></c-custom-lookup-component>
+                                    onnolookupselected={handleRelatedNoLookupSelected}></c-custom-lookup-component>
                                 </div>
                               </div>
                             </div>
@@ -335,9 +335,9 @@
                             </c-custom-lookup-component>
                           </div>
                           <!-- <template if:true={visibleAssignee}> -->
-                            <div class="slds-form-element__help" id="error-message-id-65">
-                              Please Select Owner
-                            </div>
+                          <div class="slds-form-element__help" id="error-message-id-65">
+                            Please Select Owner
+                          </div>
                           <!-- </template> -->
                         </div>
                       </div>
@@ -346,10 +346,11 @@
                       <!--Phone Number Record Section-->
                       <div class="slds-col slds-size--1-of-2 slds-p-horizontal_medium">
                         <div class="slds-form-element__label">Phone Number</div>
-                        <div style="display: flex; flex-direction: column">
+                        <div class="lookup-disable" style="display: flex; flex-direction: column">
                           <c-contact-custom-lookup obj-name="Contact" search-placeholder="Please Enter Phone Number"
                             default-name={defaultContactObjectRecordName} icon-name="utility:call"
-                            onlookupselected={handleContactLookupSelected}
+                            onlookupselected={handleContactLookupSelected} disabled={disablePhoneNumber}
+                            filter={contactPhoneSearchFilter} data-id="relatedobjectphonenumber"
                             nolookupselected={handleContactNoLookupSelected}></c-contact-custom-lookup>
 
                           <div class="slds-grid slds-wrap" style="width: 100%">
@@ -561,10 +562,87 @@
 
           <!--   Create New Contact  -->
           <template if:true={showContactRecordForm}>
-            <div class="slds-p-around_medium">
-              <lightning-record-form object-api-name="Contact" oncancel={handleCancelContactRecord} columns="2"
-                onsuccess={handleCreateContactRecord} layout-type="Full" record-id={contactId}>
-              </lightning-record-form>
+            <!-- <div class="slds-p-around_medium"> -->
+            <div class="slds-p-right--x-small slds-p-left_x-small slds-p-top--x-small slds-size--1-of-1">
+
+              <!-- <lightning-record-form object-api-name="Contact" oncancel={handleCancelContactRecord} columns="2"
+                onsuccess={handleCreateContactRecord} record-id={contactId} layout-type="Full"
+                 mode="edit">
+              </lightning-record-form> -->
+
+              <lightning-record-edit-form object-api-name="Contact" oncancel={handleCancelContactRecord} columns="2"
+                onsuccess={handleCreateContactRecord} layout-type="Full">
+                <!--Section 1-->
+                <h3 class="slds-section__title slds-theme_shade slds-m-bottom--medium">
+                  <span class="slds-p-horizontal_small">Contact Information</span>
+                </h3>
+
+                <div class="slds-grid slds-gutters">
+                  <div class="slds-col">
+                    <lightning-input-field field-name={newContactFields.contactName}></lightning-input-field>
+                  </div>
+                </div>
+
+
+                <h3 class="slds-section__title slds-theme_shade slds-m-bottom--medium slds-m-top_medium">
+                  <span class="slds-p-horizontal_small">Professional Information</span>
+                </h3>
+                <!--Section 2-->
+                <div class="slds-grid slds-gutters">
+                  <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={newContactFields.accountName}
+                      value={SALESFORCE_TASK_RECORD.relatedToId} disabled></lightning-input-field>
+                  </div>
+                  <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={newContactFields.contactPhone}></lightning-input-field>
+                  </div>
+                </div>
+
+                <!--Section 3-->
+                <div class="slds-grid slds-gutters">
+                  <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={newContactFields.contactEmail}></lightning-input-field>
+                  </div>
+                  <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={newContactFields.contactMobile}></lightning-input-field>
+                  </div>
+                </div>
+
+
+
+                <!--Section 4-->
+                <div class="slds-grid slds-gutters">
+                  <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={newContactFields.contactDesignation}></lightning-input-field>
+                  </div>
+                  <div class="slds-col slds-size_1-of-2">
+                    <lightning-input-field field-name={newContactFields.contactDepartment}></lightning-input-field>
+                  </div>
+                </div>
+
+
+                <h3 class="slds-section__title slds-theme_shade slds-m-bottom--medium slds-m-top_medium">
+                  <span class="slds-p-horizontal_small">Address Information</span>
+                </h3>
+                <!--Section 5-->
+                <div class="slds-grid slds-gutters">
+                  <div class="slds-col">
+                    <lightning-input-field field-name={newContactFields.contactMailingAddress}></lightning-input-field>
+                  </div>
+                </div>
+
+                <!-- <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+              <lightning-button type="cancel" variant="brand" label="Cancel" onclick={handleCancelContactRecord}></lightning-button> -->
+
+                <footer class="slds-modal__footer">
+                  <lightning-button class="slds-m-top_small slds-p-around--xx-small" variant="brand" type="submit"
+                    name="save" label="Save">
+                  </lightning-button>
+                  <lightning-button class="slds-m-top_small" onclick={handleCancelContactRecord} name="cancel"
+                    label="Cancel"></lightning-button>
+                </footer>
+              </lightning-record-edit-form>
+
             </div>
           </template>
           <!-- Create New Contact -->
@@ -581,6 +659,18 @@
               Save
             </button>
           </template>
+
+
+          <!-- <template if:true={showContactFooter}> 
+            <button class="slds-button slds-button_neutral" onclick={handleCancelContactRecord} title="Cancel">
+              Cancel
+            </button>
+            <button class="slds-button slds-button_brand" type="submit" onclick={handleCreateContactRecord} title="Save">
+              Save
+            </button>
+          </template> -->
+
+
         </footer>
         <!-- Modal/Popup Box LWC footer ends here -->
       </div>
