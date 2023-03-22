@@ -69,14 +69,8 @@ public without sharing class CashfreeDataSync {
             "message": "Data synced successfully"
             }
      *******************************************************************************/
-  public static String accountDataSync(
-    DataSyncWrapper.DataRequest cashfreeAccountRecords
-  ) {
-    List<Account> accList = [
-      SELECT Id
-      FROM Account
-      WHERE MID__c = :String.valueOf(cashfreeAccountRecords.merchantId)
-    ];
+  public static String accountDataSync(DataSyncWrapper.DataRequest cashfreeAccountRecords) {
+    List<Account> accList = [Select Id From Account Where MID__c =: String.valueOf(cashfreeAccountRecords.merchantId)];
     String result = 'Fail';
     try {
       System.debug('Wrapper Data:::::' + cashfreeAccountRecords);
@@ -88,7 +82,7 @@ public without sharing class CashfreeDataSync {
         String jsonInput = JSON.serialize(cashfreeAccountRecords);
         CashfreeAPIUtil.CombinedWrapper cashfreejsonwebtoken = CashfreeAPIUtil.generateJWTToken();
         Blob authorixationHeader = Blob.valueOf(cashfreejsonwebtoken.jwtToken);
-
+        
         String jsonAuthCode = 'Bearer ' + cashfreejsonwebtoken.jwtToken;
         // Blob headerValue = Blob.valueOf('Test' + ':' + 'test');
         // String authorizationHeader = 'BASIC ' + EncodingUtil.base64Encode(headerValue);
@@ -107,50 +101,26 @@ public without sharing class CashfreeDataSync {
         HttpResponse response = http.send(request);
         System.debug('Check Status Code::::' + response.getStatusCode());
         if (response.getStatusCode() == 200) {
-          API_Logger__c apiLog = API_Logger.createAPI_Logger(
-            'CashfreeDataSync',
-            jsonInput,
-            response.getBody(),
-            cashfreEndpoint,
-            String.valueOf(response.getStatusCode()),
-            accList.size() != 0 ? accList[0].Id : null
-          );
-          insert apiLog;
+          API_Logger__c apiLog =  API_Logger.createAPI_Logger('CashfreeDataSync',jsonInput,response.getBody(),cashfreEndpoint,String.valueOf(response.getStatusCode()),accList.size()!=0?accList[0].Id:null);
+          Insert apiLog;
 
-          DataSyncWrapper.DataResponse responseResult = (DataSyncWrapper.DataResponse) JSON.deserializeStrict(
-            response.getBody(),
-            DataSyncWrapper.DataResponse.class
-          );
-          System.debug('Resulted Data:::::' + responseResult);
+          DataSyncWrapper.DataResponse responseResult = (DataSyncWrapper.DataResponse) JSON.deserializeStrict(response.getBody(), DataSyncWrapper.DataResponse.class);
+          System.debug('Resulted Data:::::'+ responseResult);
           result = 'Pass';
           return result;
         } else {
-          API_Logger__c apiLog = API_Logger.createAPI_Logger(
-            'CashfreeDataSync',
-            jsonInput,
-            response.getBody(),
-            cashfreEndpoint,
-            String.valueOf(response.getStatusCode()),
-            accList.size() != 0 ? accList[0].Id : null
-          );
-          insert apiLog;
+         API_Logger__c apiLog =  API_Logger.createAPI_Logger('CashfreeDataSync',jsonInput,response.getBody(),cashfreEndpoint,String.valueOf(response.getStatusCode()),accList.size()!=0?accList[0].Id:null);
+         Insert apiLog;
         }
       }
 
       return result;
     } catch (Exception e) {
-      Error_Log__c errorLog = ErrorLogger.createErrorLogger(
-        'CashfreeDataSync',
-        'accountDataSync',
-        e.getTypeName(),
-        e.getMessage(),
-        e.getLineNumber(),
-        accList.size() != 0 ? accList[0].Id : null
-      );
-      insert errorLog;
+      Error_Log__c errorLog = ErrorLogger.createErrorLogger('CashfreeDataSync','accountDataSync',e.getTypeName(),e.getMessage(),e.getLineNumber(),accList.size()!=0?accList[0].Id:null);
+      Insert errorLog;
 
       System.debug('Exception::::' + e.getMessage());
       return result;
-    }
+   }
   }
 }
